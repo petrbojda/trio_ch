@@ -12,7 +12,7 @@ def main(conf_data):
         lst_det_left = dc.DetectionList()
         lst_det_left.append_from_m_file(leftradar_path, True, conf_data["EGO_car_width"])
 
-        LR_data = lst_det_left.get_array_detections_opt(beam = [2], rng=(30,150), az=(0.6,0.8))
+        LR_data = lst_det_left.get_array_detections_selected(beam = [2], rng=(30,150), az=(0.6,0.8))
 
         print("LR : N of Det: ", len(LR_data["mcc"]), "starting MCC: ", min(LR_data["mcc"]), "ending MCC: ",
               max(LR_data["mcc"]))
@@ -31,7 +31,7 @@ def main(conf_data):
         lst_det_right = dc.DetectionList()
         lst_det_right.append_from_m_file(rightradar_path, True, conf_data["EGO_car_width"])
 
-        RR_data = lst_det_right.get_array_detections_opt(beam = [2])
+        RR_data = lst_det_right.get_array_detections_selected(beam = [2])
 
         print("RR : N of Det: ", len(RR_data["mcc"]), "starting MCC: ", min(RR_data["mcc"]), "ending MCC: ",
                   max(RR_data["mcc"]))

@@ -99,6 +99,16 @@ class DetectionList(list):
         else:
             az_i = self._azimuth_interval
 
+        if 'selection' in kwarg:
+            beam = kwarg['selection']['beam_tp'] if kwarg['selection']['beam_tp'] else [0,1,2,3]
+            mcc_i = kwarg['selection']['mcc_tp'] if kwarg['selection']['mcc_tp'] else self._mcc_interval
+            x_i = kwarg['selection']['x_tp'] if kwarg['selection']['x_tp'] else self._x_interval
+            y_i = kwarg['selection']['y_tp'] if kwarg['selection']['y_tp'] else self._y_interval
+            rng_i = kwarg['selection']['rng_tp'] if kwarg['selection']['rng_tp'] else self._rng_interval
+            vel_i = kwarg['selection']['vel_tp'] if kwarg['selection']['vel_tp'] else self._vel_interval
+            az_i = kwarg['selection']['az_tp'] if kwarg['selection']['az_tp'] else self._azimuth_interval
+
+
         r_sel = [elem._rng for elem in self if (elem._beam in beam and
                                                 mcc_i[0] <= elem._mcc <= mcc_i[1] and
                                                 x_i[0] <= elem._x <= x_i[1] and

@@ -8,6 +8,11 @@ import numpy as np
 def main(conf_data):
     lst_det_left = None
     lst_det_right = None
+
+    selection = {"beam_tp":conf_data["beams_tp"],
+                 "mcc_tp":None, "x_tp":None, "y_tp":None,
+                 "rng_tp":None, "vel_tp":(-78,-73), "az_tp":None}
+
     # Load Data from .mat files
     if conf_data["filename_LeftRadar"]:
         l = []
@@ -55,8 +60,8 @@ def main(conf_data):
             output_path = ''.join(l)
         else:
             output_path = None
-
-        rplt.grid_plot_histograms(lst_det_left, lst_det_right, conf_data["beams_tp"], i_prev, i, output_path)
+        selection["mcc_tp"] = (i_prev,i)
+        rplt.static_plot_grid_hist_selections(lst_det_left, lst_det_right, selection, output_path)
 
         i_prev = i
 

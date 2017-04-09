@@ -42,7 +42,11 @@ def main(conf_data):
     else:
         output_path = None
 
-    rplt.static_plot(lst_det_left, lst_det_right, conf_data["beams_tp"], output_path)
+    selection = {"beam_tp":conf_data["beams_tp"],
+                 "mcc_tp":None, "x_tp":None, "y_tp":None,
+                 "rng_tp":None, "vel_tp":None, "az_tp":None}
+
+    rplt.static_plot_selections(lst_det_left, lst_det_right, selection, output_path)
 
 
 if __name__ == "__main__":

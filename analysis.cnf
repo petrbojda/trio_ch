@@ -1,0 +1,62 @@
+# Configuration file to set appropriate paths to data and modules.
+# Created as a part of the project at the Czech Technical University
+# by Petr Bojda, 3-2-2017. 
+
+[Datasets]
+data_new: data01/
+data_old: data00/
+
+
+[Paths]
+home_dir: /home/petr/Projects/TRIO/
+data_dir: /home/petr/Projects/TRIO/data/
+modules_dir: /home/petr/Projects/TRIO/srcpy/
+
+[Available_scenarios]
+# List of available scenarios 
+	number: 4
+	sc_0: BSDH
+	sc_1: BSDL
+	sc_2: HWY
+	sc_3: TBH
+
+[BSDH]
+# 1st scenario - BSDH
+	left_radar: CVUT_WORK_BSDH_left_LeftRadar_RADAR
+	right_radar:
+	left_dgps: CVUT_WORK_BSDH_left_DGPS
+	right_dgps:
+	both_dgps:
+
+[BSDL]
+# 2nd scenario - BSDL
+	left_radar: CVUT_WORK_BSDL_left_t35_LeftRadar_RADAR
+	right_radar: CVUT_WORK_BSDL_right_t45_RightRadar_RADAR
+	left_dgps: CVUT_WORK_BSDL_left_t35_DGPS
+	right_dgps: CVUT_WORK_BSDL_right_t45_DGPS
+	both_dgps:
+
+[HWY]
+# 3rd scenario - Highway
+	left_radar: CVUT_WORK_Highway_LeftRadar_RADAR
+	right_radar: CVUT_WORK_Highway_RightRadar_RADAR
+	left_dgps:
+	right_dgps:
+	both_dgps:
+
+[TBH]
+# 4th scenario - TBH
+	left_radar: CVUT_WORK_Target_behind_host_LeftRadar_RADAR
+	right_radar: CVUT_WORK_Target_behind_host_RightRadar_RADAR
+	left_dgps:
+	right_dgps:
+	both_dgps: CVUT_WORK_Target_behind_host_DGPS
+
+
+[Geometry]
+# Car parameters
+	EGO_car_width: 1.88
+	EGO_car_length: 4.69
+	EGO_track_center: -1.43
+	Target_car_width: 2.17
+	Target_car_length: 4.52

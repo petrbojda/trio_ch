@@ -20,7 +20,6 @@ def static_plot_grid_hist_selections(lst_det_left, lst_det_right, selection, fna
 						"y": ,
 						"beam": ,
 						"mcc":  	}
-
 	"""
     ###### Plot starts here:
     cms = matplotlib.cm
@@ -260,6 +259,7 @@ def static_plot_selections(lst_det_left, lst_det_right, selection, fname_det):
 
     f1ax1 = f1.add_subplot(111)
     f1ax1.grid(True)
+    f1ax1.axis([-40, 100, -80, 80])
     plt.title('Detections', loc='left')
 
     number_of_dets_left_processed = 0

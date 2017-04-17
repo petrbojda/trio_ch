@@ -5,7 +5,7 @@ import argparse
 
 
 class DetectionPoint(object):
-    def __init__(self, mcc=0, time=0, beam=0,
+    def __init__(self, mcc=0, beam=0,
                  nodet_permcc=0, trackID=0, rng=0,
                  vel=0, azimuth=0, left=True, car_width=1.88):
         self._y_correction_dir = -1 if left else 1
@@ -29,6 +29,7 @@ class DetectionList(list):
         self._vel_interval = (0,0)
         self._rng_interval = (0,0)
         self._mcc_interval = (0,0)
+
 
     def append_from_m_file(self, data_path, left, car_width):
         radar_data = sio.loadmat(data_path)
@@ -168,6 +169,71 @@ class DetectionList(list):
                       "mcc": np.array(mcc_sel)}
 
         return radar_data
+
+    def append_list_detections_selection(self, radar_data_list, **kwarg):
+
+        if 'beam' in kwarg:
+            beam = kwarg['beam']
+        else:
+            beam = [0,1,2,3]
+
+        if 'mcc' in kwarg:
+            mcc_i = kwarg['mcc'] if (len(kwarg['mcc']) == 2) else (kwarg['mcc'],kwarg['mcc'])
+        else:
+            mcc_i = radar_data_list._mcc_interval
+
+        if 'x' in kwarg:
+            x_i = kwarg['x'] if (len(kwarg['x']) == 2) else (kwarg['x'],kwarg['x'])
+        else:
+            x_i = radar_data_list._x_interval
+
+        if 'y' in kwarg:
+            y_i = kwarg['y'] if (len(kwarg['y']) == 2) else (kwarg['y'],kwarg['y'])
+        else:
+            y_i = radar_data_list._y_interval
+
+        if 'rng' in kwarg:
+            rng_i = kwarg['rng'] if (len(kwarg['rng']) == 2) else (kwarg['rng'],kwarg['rng'])
+        else:
+            rng_i = radar_data_list._rng_interval
+
+        if 'vel' in kwarg:
+            vel_i = kwarg['vel'] if (len(kwarg['vel']) == 2) else (kwarg['vel'],kwarg['vel'])
+        else:
+            vel_i = radar_data_list._vel_interval
+
+        if 'az' in kwarg:
+            az_i = kwarg['az'] if (len(kwarg['az']) == 2) else (kwarg['az'],kwarg['az'])
+        else:
+            az_i = radar_data_list._azimuth_interval
+
+        if 'selection' in kwarg:
+            beam = kwarg['selection']['beam_tp'] if kwarg['selection']['beam_tp'] else [0,1,2,3]
+            mcc_i = kwarg['selection']['mcc_tp'] if kwarg['selection']['mcc_tp'] else radar_data_list._mcc_interval
+            x_i = kwarg['selection']['x_tp'] if kwarg['selection']['x_tp'] else radar_data_list._x_interval
+            y_i = kwarg['selection']['y_tp'] if kwarg['selection']['y_tp'] else radar_data_list._y_interval
+            rng_i = kwarg['selection']['rng_tp'] if kwarg['selection']['rng_tp'] else radar_data_list._rng_interval
+            vel_i = kwarg['selection']['vel_tp'] if kwarg['selection']['vel_tp'] else radar_data_list._vel_interval
+            az_i = kwarg['selection']['az_tp'] if kwarg['selection']['az_tp'] else radar_data_list._azimuth_interval
+
+
+        for elem in radar_data_list:
+            if (elem._beam in beam and
+                            mcc_i[0] <= elem._mcc <= mcc_i[1] and
+                            x_i[0] <= elem._x <= x_i[1] and
+                            y_i[0] <= elem._y <= y_i[1] and
+                            rng_i[0] <= elem._rng <= rng_i[1] and
+                            vel_i[0] <= elem._vel <= vel_i[1] and
+                            az_i[0] <= elem._azimuth <= az_i[1]):
+                self.append(elem)
+
+
+        self._y_interval = (min([elem._y for elem in self]),max([elem._y for elem in self]))
+        self._x_interval = (min([elem._x for elem in self]),max([elem._x for elem in self]))
+        self._azimuth_interval = (min([elem._azimuth for elem in self]),max([elem._azimuth for elem in self]))
+        self._vel_interval = (min([elem._vel for elem in self]),max([elem._vel for elem in self]))
+        self._rng_interval = (min([elem._rng for elem in self]),max([elem._rng for elem in self]))
+        self._mcc_interval = (min([elem._mcc for elem in self]),max([elem._mcc for elem in self]))
 
 
 def cnf_file_read(cnf_file):

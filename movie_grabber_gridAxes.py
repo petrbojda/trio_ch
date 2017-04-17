@@ -11,7 +11,7 @@ def main(conf_data):
 
     selection = {"beam_tp":conf_data["beams_tp"],
                  "mcc_tp":None, "x_tp":None, "y_tp":None,
-                 "rng_tp":None, "vel_tp":(-78,-73), "az_tp":None}
+                 "rng_tp":None, "vel_tp":(-5,5), "az_tp":None}
 
     # Load Data from .mat files
     if conf_data["filename_LeftRadar"]:

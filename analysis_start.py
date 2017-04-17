@@ -3,6 +3,7 @@
 import data_containers as dc
 import radar_plots as rplt
 
+import cProfile, pstats, io
 
 def main(conf_data):
     # Load Data from .mat file
@@ -48,9 +49,18 @@ def main(conf_data):
 
     rplt.static_plot_selections(lst_det_left, lst_det_right, selection, output_path)
 
+pr = cProfile.Profile()
+pr.enable()
 
 if __name__ == "__main__":
     conf_data = dc.parse_CMDLine("./analysis.cnf")
 
 if conf_data:
         main(conf_data)
+
+pr.disable()
+s = io.StringIO()
+sortby = 'cumulative'
+ps = pstats.Stats(pr, stream=s).sort_stats(sortby)
+ps.print_stats()
+print (s.getvalue())

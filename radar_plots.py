@@ -7,7 +7,6 @@ from mpl_toolkits.axes_grid import Divider
 import matplotlib
 import copy
 
-
 def static_plot_grid_hist_selections(lst_det_left, lst_det_right, selection, fname_det):
     """
 	Plots data in an analytic way. Only one MCC's set of detections is depicted here.

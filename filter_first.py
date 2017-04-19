@@ -29,6 +29,7 @@ def main(conf_data):
     lst_det = dc.DetectionList()
     lst_det.append_from_m_file(radar_path, True, conf_data["EGO_car_width"])
 
+    ############  Select an arrea to track (filter out unwanted detections)
     lst_det_s = dc.DetectionList()
     lst_det_s.append_list_detections_selection(lst_det, selection=selection)
 

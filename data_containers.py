@@ -253,9 +253,6 @@ def cnf_file_read(cnf_file):
     path_new_data = path_data + new_data_folder
     path_old_data = path_data + old_data_folder
 
-    print("New data folder:", path_new_data)
-    print("Old data folder:", path_old_data)
-
     # Determines the list of available scenarios
     n_o_sc = int(config.get('Available_scenarios', 'number'))
     lst_scenarios_names = []
@@ -291,6 +288,7 @@ def cnf_file_scenario_select(cnf_file, scenario):
 
 
 def parse_CMDLine(cnf_file):
+    global path_data_folder
     conf_data = cnf_file_read(cnf_file)
     # Parses a set of input arguments comming from a command line
     parser = argparse.ArgumentParser(
@@ -323,23 +321,17 @@ def parse_CMDLine(cnf_file):
     argv = parser.parse_args()
 
     if argv.beam:
-        print("Beams to process:", argv.beam)
         beams_tp = [int(s) for s in argv.beam.split(',')]
         beams_tp.sort()
-        for n_beams in range(0, 4):
-            if beams_tp.count(n_beams):
-                print("Beam", n_beams, "will be processed:", beams_tp.count(n_beams), "times.")
     else:
         beams_tp = [0, 1, 2, 3]
 
     if argv.radar:
-        print("Radar to process:", argv.radar)
         radar_tp = argv.radar
     else:
         radar_tp = "B"
 
     if argv.dataset:
-        print("Dataset to process:", argv.dataset)
         dataset = argv.dataset
     else:
         dataset = "new"
@@ -367,6 +359,9 @@ def parse_CMDLine(cnf_file):
 
         data_filenames = cnf_file_scenario_select(cnf_file, argv.scenario)
 
+        print("Dataset to process:", dataset)
+        print("Data files are stored in:", path_data_folder)
+
         print("Data for the scenario are in:")
         print('\t \t left_radar:', data_filenames["filename_LeftRadar"])
         print('\t \t right_radar:', data_filenames["filename_RightRadar"])
@@ -374,6 +369,7 @@ def parse_CMDLine(cnf_file):
         print('\t \t right_dgps:', data_filenames["filename_RightDGPS"])
         print('\t \t both_dgps:', data_filenames["filename_BothDGPS"])
 
+        print("Radar to process:", radar_tp)
         for n_beams in range(0, 4):
             if beams_tp.count(n_beams):
                 print("Beam", n_beams, "will be processed:", beams_tp.count(n_beams), "times.")

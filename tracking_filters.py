@@ -3,6 +3,7 @@ import numpy as np
 
 #class Tracker(object):
  #   def __init__(self):
+ """ Class to encapsulate estimator - tracker is defined here"""
 
 
 

@@ -29,33 +29,41 @@ def main(conf_data):
     lst_det = dc.DetectionList()
     lst_det.append_from_m_file(radar_path, True, conf_data["EGO_car_width"])
 
-    ############  Select an arrea to track (filter out unwanted detections)
+    ##  Select an area to track (In terms of any parameter - beam, x, y, vel, ...)
     lst_det_s = dc.DetectionList()
-    lst_det_s.append_list_detections_selection(lst_det, selection=selection)
+    lst_det_s.extend_with_selection(lst_det, selection=selection)
 
+    ##  Define the range of MCCs to do the filtering
     mcc_interval = lst_det_s.get_mcc_interval()
     mcc_start = mcc_interval[0] +100
     mcc_end = mcc_start + 15
 
-    trackers = []
+    trackers = []       # List of trackers - empty for now
 
-    ############ Filtering loop
+    ##  Filtering loop
     trk_counter = 0
-    for i1 in range(mcc_start, mcc_end):
+    for i1 in range(mcc_start, mcc_end):    # Iterate through the set of MCCs within a range
         print("A new burst starts here, mcc:", i1)
-        lst_det_i = [elem for elem in lst_det_s if elem._mcc == i1]
+        lst_det_i=[elem for elem in lst_det_s if elem._mcc == i1] # Get list of detections for MCC
         print("detections in this run",len(lst_det_i))
-        no_det = len(lst_det_i)
-        for i2 in list(range(0,no_det)):
-            print("counter",trk_counter)
-            print("trackers",len(trackers))
-            trackers.append(tf.Tracker(i1))
-            trackers[trk_counter].update_track()
-            trk_counter += 1
+        no_det = len(lst_det_i)             # Number of detections in the list
+        for i2 in list(range(0,no_det)):    # Iterate through the set of detections in a single MCC
+            print("detection at x:",lst_det_i[i2]._x,"y:",lst_det_i[i2]._y,"vel:",lst_det_i[i2]._vel)
+
+            if trk_counter == 0:
+                trackers.append(tf.Tracker(i1))
+                trackers[0].append_detection(lst_det_i[i2])
+                trk_counter += 1
+            else:
+                for i3 in list(range(0,trk_counter)):   # Iterate through trackers to assign the detection
+                    gate = trackers[i3].get_predicted_gate()
+                    print("Tracker number:",i3,"selection gate",gate)
+
+
+
     print("counter",trk_counter)
     print("trackers",len(trackers))
-    print("detections in selection",len(lst_det_s))
-
+    print("detections in the selection",len(lst_det_s))
 
 
 if __name__ == "__main__":

@@ -9,6 +9,7 @@ def main(conf_data):
                  "rng_tp":None, "vel_tp":(-5,5), "az_tp":None}
 
     if conf_data["filename_LeftRadar"]:
+        
         l = []
         l.append(conf_data["path_data_folder"])
         l.append(conf_data["filename_LeftRadar"])

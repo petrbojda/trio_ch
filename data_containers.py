@@ -171,7 +171,7 @@ class DetectionList(list):
 
         return radar_data
 
-    def append_list_detections_selection(self, radar_data_list, **kwarg):
+    def extend_with_selection(self, radar_data_list, **kwarg):
 
         if 'beam' in kwarg:
             beam = kwarg['beam']

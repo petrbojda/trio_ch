@@ -31,7 +31,7 @@ def main(conf_data):
 
     ############  Select an arrea to track (filter out unwanted detections)
     lst_det_s = dc.DetectionList()
-    lst_det_s.append_list_detections_selection(lst_det, selection=selection)
+    lst_det_s.extend_with_selection(lst_det, selection=selection)
 
     mcc_interval = lst_det_s.get_mcc_interval()
     mcc_start = mcc_interval[0]

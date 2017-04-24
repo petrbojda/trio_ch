@@ -52,7 +52,7 @@ class Tracker(object):
     def append_detection(self,detection):
         self._list_detections.append(detection)
 
-    def append_detection_list(self,radar_data_list, **kwarg):
+    def extend_detection_list(self,radar_data_list, **kwarg):
         self._list_detections.append_list_detections_selection(radar_data_list, **kwarg)
 
     def update_track(self):
@@ -68,8 +68,9 @@ class Tracker(object):
         else:
             print("Track is empty")
 
-    def get_predicted_window(self,mcc):
 
+
+    def get_predicted_gate(self,mcc):
 
         return(gate)
 

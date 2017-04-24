@@ -31,6 +31,7 @@ class DetectionList(list):
         self._mcc_interval = (0,0)
 
 
+
     def append_from_m_file(self, data_path, left, car_width):
         radar_data = sio.loadmat(data_path)
         detections = radar_data["Detections"]

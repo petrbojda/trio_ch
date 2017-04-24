@@ -98,7 +98,8 @@ class Tracker(object):
         return self._list_tpts[-1].mcc
 
     def get_predicted_gate(self):
-        return self._selection_gate
+        gate = {'gate':self._selection_gate,'center':self._expected_TP}
+        return gate
 
 
 def calc_gate(center_point,d_x,d_y):

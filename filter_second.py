@@ -49,7 +49,7 @@ def main(conf_data):
         no_det = len(lst_det_i)             # Number of detections in the list
         for i2 in list(range(0,no_det)):    # Iterate through the set of detections in a single MCC
             print("detection at x:",lst_det_i[i2]._x,"y:",lst_det_i[i2]._y,"vel:",lst_det_i[i2]._vel)
-
+            print("beam of detection:",lst_det_i[i2]._beam)
             if trk_counter == 0:
                 trackers.append(tf.Tracker(i1))
                 trackers[0].append_detection(lst_det_i[i2])

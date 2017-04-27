@@ -18,6 +18,12 @@ class Tracker(object):
     """ Class to encapsulate an estimator - tracker is defined here"""
     def __init__(self,start_mcc, **kwarg):
 
+        """
+
+        :rtype: object
+        :param start_mcc:
+        :param kwarg:
+        """
         if 'beta' in kwarg:
             beta = float(kwarg['beta'])
         else:

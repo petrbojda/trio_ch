@@ -8,6 +8,18 @@ class DetectionPoint(object):
     def __init__(self, mcc=0, beam=0,
                  nodet_permcc=0, trackID=0, rng=0,
                  vel=0, azimuth=0, left=True, car_width=1.88):
+        """
+
+        :param mcc:
+        :param beam:
+        :param nodet_permcc:
+        :param trackID:
+        :param rng:
+        :param vel:
+        :param azimuth:
+        :param left:
+        :param car_width:
+        """
         self._y_correction_dir = -1 if left else 1
         self._mcc = mcc
         self._beam = beam

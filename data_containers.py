@@ -34,6 +34,9 @@ class DetectionPoint(object):
 
 class DetectionList(list):
     def __init__(self):
+        """
+
+        """
         super().__init__()
         self._y_interval = (0,0)
         self._x_interval = (0,0)
@@ -42,9 +45,13 @@ class DetectionList(list):
         self._rng_interval = (0,0)
         self._mcc_interval = (0,0)
 
-
-
     def append_from_m_file(self, data_path, left, car_width):
+        """
+
+        :param data_path:
+        :param left:
+        :param car_width:
+        """
         radar_data = sio.loadmat(data_path)
         detections = radar_data["Detections"]
         no_d = len(detections)
@@ -67,9 +74,17 @@ class DetectionList(list):
         self._mcc_interval = (min([elem._mcc for elem in self]),max([elem._mcc for elem in self]))
 
     def get_mcc_interval(self):
+        """
+
+        :return:
+        """
         return self._mcc_interval
 
     def get_max_of_detections_per_mcc(self):
+        """
+
+        :return:
+        """
         max_detections_at = max([elem._mcc for elem in self], key=[elem._mcc for elem in self].count)
         max_no_detections = [elem._mcc for elem in self].count(max_detections_at)
         return max_no_detections, max_detections_at
@@ -78,6 +93,11 @@ class DetectionList(list):
 
     def get_array_detections_selected(self, **kwarg):
 
+        """
+
+        :param kwarg:
+        :return:
+        """
         if 'beam' in kwarg:
             beam = kwarg['beam']
         else:
@@ -185,6 +205,11 @@ class DetectionList(list):
 
     def extend_with_selection(self, radar_data_list, **kwarg):
 
+        """
+
+        :param radar_data_list:
+        :param kwarg:
+        """
         if 'beam' in kwarg:
             beam = kwarg['beam']
         else:
@@ -251,6 +276,11 @@ class DetectionList(list):
 
 def cnf_file_read(cnf_file):
     # Reads the configuration file
+    """
+
+    :param cnf_file:
+    :return:
+    """
     config = configparser.ConfigParser()
     config.read(cnf_file)  # "./analysis.cnf"
 
@@ -283,6 +313,12 @@ def cnf_file_read(cnf_file):
 
 
 def cnf_file_scenario_select(cnf_file, scenario):
+    """
+
+    :param cnf_file:
+    :param scenario:
+    :return:
+    """
     config = configparser.ConfigParser()
     config.read(cnf_file)  # "./analysis.cnf"
 
@@ -301,6 +337,11 @@ def cnf_file_scenario_select(cnf_file, scenario):
 
 
 def parse_CMDLine(cnf_file):
+    """
+
+    :param cnf_file:
+    :return:
+    """
     global path_data_folder
     conf_data = cnf_file_read(cnf_file)
     # Parses a set of input arguments comming from a command line

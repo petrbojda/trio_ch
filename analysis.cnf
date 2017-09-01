@@ -8,9 +8,9 @@ data_old: data00/
 
 
 [Paths]
-home_dir: /home/petr/Projects/TRIO/
-data_dir: /home/petr/Projects/TRIO/data/
-modules_dir: /home/petr/Projects/TRIO/srcpy/
+home_dir: /home/petr/Projects/TRIO/Radar/
+data_dir: /home/petr/Projects/TRIO/Radar/data/
+modules_dir: /home/petr/Projects/TRIO/Radar/srcpy/
 
 [Available_scenarios]
 # List of available scenarios 

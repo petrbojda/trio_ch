@@ -342,24 +342,57 @@ class ReferenceList(list):
         return self._mcc_interval
 
 
-    def get_array_references_selected(self, mcc_i):
+    def get_array_references_selected(self, **kwarg):
+
+        if 'mccL' in kwarg:
+            mccL_i = kwarg['mccL'] if (len(kwarg['mccL']) == 2) else (kwarg['mccL'],kwarg['mccL'])
+        else:
+            mccL_i = self._mccL_interval
+
+        if 'mccR' in kwarg:
+            mccR_i = kwarg['mccR'] if (len(kwarg['mccR']) == 2) else (kwarg['mccR'],kwarg['mccR'])
+        else:
+            mccR_i = self._mccL_interval
+
+        mccL_sel = [elem._mccL for elem in self if ( mccL_i[0] <= elem._mccL <= mccL_i[1] and
+                                                     mccR_i[0] <= elem._mccR <= mccR_i[1] )]
+        mccR_sel = [elem._mccR for elem in self if ( mccL_i[0] <= elem._mccL <= mccL_i[1] and
+                                                     mccR_i[0] <= elem._mccR <= mccR_i[1] )]
+        TAR_dist_sel = [elem._TAR_dist for elem in self if ( mccL_i[0] <= elem._mccL <= mccL_i[1] and
+                                                             mccR_i[0] <= elem._mccR <= mccR_i[1] )]
+        TAR_distX_sel = [elem._TAR_distX for elem in self if ( mccL_i[0] <= elem._mccL <= mccL_i[1] and
+                                                               mccR_i[0] <= elem._mccR <= mccR_i[1] )]
+        TAR_distY_sel = [elem._TAR_distY for elem in self if ( mccL_i[0] <= elem._mccL <= mccL_i[1] and
+                                                               mccR_i[0] <= elem._mccR <= mccR_i[1] )]
+        TAR_velX_sel = [elem._TAR_velX for elem in self if ( mccL_i[0] <= elem._mccL <= mccL_i[1] and
+                                                             mccR_i[0] <= elem._mccR <= mccR_i[1] )]
+        TAR_velY_sel = [elem._TAR_velY for elem in self if ( mccL_i[0] <= elem._mccL <= mccL_i[1] and
+                                                             mccR_i[0] <= elem._mccR <= mccR_i[1] )]
+        TAR_hdg_sel = [elem._TAR_hdg for elem in self if ( mccL_i[0] <= elem._mccL <= mccL_i[1] and
+                                                           mccR_i[0] <= elem._mccR <= mccR_i[1] )]
+        EGO_velX_sel = [elem._EGO_velX for elem in self if ( mccL_i[0] <= elem._mccL <= mccL_i[1] and
+                                                             mccR_i[0] <= elem._mccR <= mccR_i[1] )]
+        EGO_velY_sel = [elem._EGO_velY for elem in self if ( mccL_i[0] <= elem._mccL <= mccL_i[1] and
+                                                               mccR_i[0] <= elem._mccR <= mccR_i[1] )]
+        EGO_accX_sel = [elem._EGO_accX for elem in self if ( mccL_i[0] <= elem._mccL <= mccL_i[1] and mccR_i[0] <= elem._mccR <= mccR_i[1] )]
+        EGO_accY_sel = [elem._EGO_accY for elem in self if ( mccL_i[0] <= elem._mccL <= mccL_i[1] and mccR_i[0] <= elem._mccR <= mccR_i[1] )]
+        EGO_hdg_sel = [elem._EGO_hdg for elem in self if ( mccL_i[0] <= elem._mccL <= mccL_i[1] and mccR_i[0] <= elem._mccR <= mccR_i[1] )]
 
 
-        r_sel = [elem._rng for elem in self if (mcc_i[0] <= elem._mcc <= mcc_i[1] )]
-        v_sel = [elem._vel for elem in self if  (mcc_i[0] <= elem._mcc <= mcc_i[1] )]
-        az_sel = [elem._azimuth for elem in self if  (mcc_i[0] <= elem._mcc <= mcc_i[1] )]
-        mcc_sel = [elem._mcc for elem in self if  (mcc_i[0] <= elem._mcc <= mcc_i[1] )]
-        x_sel = [elem._x for elem in self if  (mcc_i[0] <= elem._mcc <= mcc_i[1] )]
-        y_sel = [elem._y for elem in self if  (mcc_i[0] <= elem._mcc <= mcc_i[1] )]
-        beam_sel = [elem._beam for elem in self if  (mcc_i[0] <= elem._mcc <= mcc_i[1] )]
 
-        DGPS_data = {"range": np.array(r_sel),
-                      "azimuth": np.array(az_sel),
-                      "velocity": np.array(v_sel),
-                      "x": np.array(x_sel),
-                      "y": np.array(y_sel),
-                      "beam": np.array(beam_sel),
-                      "mcc": np.array(mcc_sel)}
+        DGPS_data = { "mccL": np.array(mccL_sel),
+                      "mccR": np.array(mccR_sel),
+                      "TAR_dist": np.array(TAR_dist_sel),
+                      "TAR_distX": np.array(TAR_distX_sel),
+                      "TAR_distY": np.array(TAR_distY_sel),
+                      "TAR_velX": np.array(TAR_velX_sel),
+                      "TAR_velY": np.array(TAR_velY_sel),
+                      "TAR_hdg": np.array(TAR_hdg_sel),
+                      "EGO_velX": np.array(EGO_velX_sel),
+                      "EGO_velY": np.array(EGO_velY_sel),
+                      "EGO_accX": np.array(EGO_accX_sel),
+                      "EGO_accY": np.array(EGO_accY_sel),
+                      "EGO_hdg": np.array(EGO_hdg_sel)}
 
         return DGPS_data
 

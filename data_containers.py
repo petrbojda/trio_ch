@@ -6,8 +6,8 @@ import argparse
 
 class DetectionPoint(object):
     def __init__(self, mcc=0, beam=0,
-                 nodet_permcc=0, trackID=0, rng=0,
-                 vel=0, azimuth=0, left=True, car_width=1.88):
+                 nodet_permcc=0, trackID=0, rng=0.0,
+                 vel=0.0, azimuth=0.0, left=True, car_width=1.88):
         """
 
         :param mcc:
@@ -272,6 +272,100 @@ class DetectionList(list):
         self._vel_interval = (min([elem._vel for elem in self]),max([elem._vel for elem in self]))
         self._rng_interval = (min([elem._rng for elem in self]),max([elem._rng for elem in self]))
         self._mcc_interval = (min([elem._mcc for elem in self]),max([elem._mcc for elem in self]))
+
+
+
+
+class ReferencePoint(object):
+    def __init__(self, mccL=0, mccR=0, TAR_dist=0.0, TAR_distX=0.0,TAR_distY=0.0,
+                 TAR_velX=0.0, TAR_velY=0.0, TAR_hdg=0.0,
+                 EGO_velX=0.0, EGO_velY=0.0, EGO_accX=0.0, EGO_accY=0.0, EGO_hdg=0.0,):
+
+        self._mccL = mccL
+        self._mccR = mccR
+        self._TAR_dist = TAR_dist
+        self._TAR_distX = TAR_distX
+        self._TAR_distY = TAR_distY
+        self._TAR_velX = TAR_velX
+        self._TAR_velY = TAR_velY
+        self._TAR_hdg = TAR_hdg
+        self._EGO_velX = EGO_velX
+        self._EGO_velY = EGO_velY
+        self._EGO_accX = EGO_accX
+        self._EGO_accY = EGO_accY
+        self._EGO_hdg = EGO_hdg
+
+
+class ReferenceList(list):
+    def __init__(self):
+
+        super().__init__()
+        self._mccL_interval = (0,0)
+        self._mccR_interval = (0,0)
+
+    def append_from_m_file(self, data_path):
+        """
+
+        :param data_path:
+        :param left:
+        :param car_width:
+        """
+        DGPS_data = sio.loadmat(data_path)
+
+        no_dL = len(DGPS_data["MCC_LeftRadar"])
+        no_dR = len(DGPS_data["MCC_RightRadar"])
+        no_d = max(no_dL,no_dR)
+        for itr in range(0, no_d - 1):
+            self.append(ReferencePoint(mccL=int(DGPS_data[itr,"MCC_LeftRadar"]),
+                                       mccR=int(DGPS_data[itr,"MCC_RightRadar"]),
+                                       TAR_dist=float(DGPS_data[itr,"TARGET_dist"]),
+                                       TAR_distX=float(DGPS_data[itr,"TARGET_distX"]),
+                                       TAR_distY=float(DGPS_data[itr,"TARGET_distY"]),
+                                       TAR_velX=float(DGPS_data[itr,"TARGET_AbsVel_x"]),
+                                       TAR_velY=float(DGPS_data[itr,"TARGET_AbsVel_y"]),
+                                       TAR_hdg=float(DGPS_data[itr,"TARGET_Heading"]),
+                                       EGO_velX=float(DGPS_data[itr,"EGO_AbsVel_x"]),
+                                       EGO_velY=float(DGPS_data[itr,"EGO_AbsVel_y"]),
+                                       EGO_accX=float(DGPS_data[itr,"EGO_Acc_x"]),
+                                       EGO_accY=float(DGPS_data[itr,"EGO_Acc_y"]),
+                                       EGO_hdg=float(DGPS_data[itr,"EGO_Heading"])
+                                       ))
+
+        self._mccL_interval = (min([elem._mccL for elem in self]),max([elem._mccL for elem in self]))
+        self._mccR_interval = (min([elem._mccR for elem in self]),max([elem._mccR for elem in self]))
+
+    def get_mcc_interval(self):
+        """
+
+        :return:
+        """
+        return self._mcc_interval
+
+
+    def get_array_references_selected(self, mcc_i):
+
+
+        r_sel = [elem._rng for elem in self if (mcc_i[0] <= elem._mcc <= mcc_i[1] )]
+        v_sel = [elem._vel for elem in self if  (mcc_i[0] <= elem._mcc <= mcc_i[1] )]
+        az_sel = [elem._azimuth for elem in self if  (mcc_i[0] <= elem._mcc <= mcc_i[1] )]
+        mcc_sel = [elem._mcc for elem in self if  (mcc_i[0] <= elem._mcc <= mcc_i[1] )]
+        x_sel = [elem._x for elem in self if  (mcc_i[0] <= elem._mcc <= mcc_i[1] )]
+        y_sel = [elem._y for elem in self if  (mcc_i[0] <= elem._mcc <= mcc_i[1] )]
+        beam_sel = [elem._beam for elem in self if  (mcc_i[0] <= elem._mcc <= mcc_i[1] )]
+
+        DGPS_data = {"range": np.array(r_sel),
+                      "azimuth": np.array(az_sel),
+                      "velocity": np.array(v_sel),
+                      "x": np.array(x_sel),
+                      "y": np.array(y_sel),
+                      "beam": np.array(beam_sel),
+                      "mcc": np.array(mcc_sel)}
+
+        return DGPS_data
+
+
+
+
 
 
 def cnf_file_read(cnf_file):

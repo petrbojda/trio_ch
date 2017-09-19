@@ -27,6 +27,7 @@ modules_dir: /home/petr/Projects/TRIO/Radar/srcpy/
 	left_dgps: CVUT_WORK_BSDH_left_DGPS
 	right_dgps:
 	both_dgps:
+	DGPS_xcompensation: 17
 
 [BSDL]
 # 2nd scenario - BSDL
@@ -35,6 +36,7 @@ modules_dir: /home/petr/Projects/TRIO/Radar/srcpy/
 	left_dgps: CVUT_WORK_BSDL_left_t35_DGPS
 	right_dgps: CVUT_WORK_BSDL_right_t45_DGPS
 	both_dgps:
+	DGPS_xcompensation: 17
 
 [HWY]
 # 3rd scenario - Highway
@@ -43,6 +45,7 @@ modules_dir: /home/petr/Projects/TRIO/Radar/srcpy/
 	left_dgps:
 	right_dgps:
 	both_dgps:
+	DGPS_xcompensation:
 
 [TBH]
 # 4th scenario - TBH
@@ -51,6 +54,7 @@ modules_dir: /home/petr/Projects/TRIO/Radar/srcpy/
 	left_dgps:
 	right_dgps:
 	both_dgps: CVUT_WORK_Target_behind_host_DGPS
+	DGPS_xcompensation: 0
 
 
 [Geometry]

@@ -315,44 +315,70 @@ class ReferenceList(list):
         no_dL = len(DGPS_data["MCC_LeftRadar"])
         no_dR = len(DGPS_data["MCC_RightRadar"])
         no_d = max(no_dL,no_dR)
+
+        print("DGPSdata Left:",len(DGPS_data["MCC_LeftRadar"]))
+        print("DGPSdata Left list:",int(DGPS_data["MCC_LeftRadar"][20]))
         for itr in range(0, no_d - 1):
-            self.append(ReferencePoint(mccL=int(DGPS_data[itr,"MCC_LeftRadar"]),
-                                       mccR=int(DGPS_data[itr,"MCC_RightRadar"]),
-                                       TAR_dist=float(DGPS_data[itr,"TARGET_dist"]),
-                                       TAR_distX=float(DGPS_data[itr,"TARGET_distX"]),
-                                       TAR_distY=float(DGPS_data[itr,"TARGET_distY"]),
-                                       TAR_velX=float(DGPS_data[itr,"TARGET_AbsVel_x"]),
-                                       TAR_velY=float(DGPS_data[itr,"TARGET_AbsVel_y"]),
-                                       TAR_hdg=float(DGPS_data[itr,"TARGET_Heading"]),
-                                       EGO_velX=float(DGPS_data[itr,"EGO_AbsVel_x"]),
-                                       EGO_velY=float(DGPS_data[itr,"EGO_AbsVel_y"]),
-                                       EGO_accX=float(DGPS_data[itr,"EGO_Acc_x"]),
-                                       EGO_accY=float(DGPS_data[itr,"EGO_Acc_y"]),
-                                       EGO_hdg=float(DGPS_data[itr,"EGO_Heading"])
+            self.append(ReferencePoint(mccL=int(DGPS_data["MCC_LeftRadar"][itr]),
+                                       mccR=int(DGPS_data["MCC_RightRadar"][itr]),
+                                       TAR_dist=float(DGPS_data["TARGET_dist"][itr]),
+                                       TAR_distX=float(DGPS_data["TARGET_distX"][itr]),
+                                       TAR_distY=float(DGPS_data["TARGET_distY"][itr]),
+                                       TAR_velX=float(DGPS_data["TARGET_AbsVel_x"][itr]),
+                                       TAR_velY=float(DGPS_data["TARGET_AbsVel_y"][itr]),
+                                       TAR_hdg=float(DGPS_data["TARGET_Heading"][itr]),
+                                       EGO_velX=float(DGPS_data["EGO_AbsVel_x"][itr]),
+                                       EGO_velY=float(DGPS_data["EGO_AbsVel_y"][itr]),
+                                       EGO_accX=float(DGPS_data["EGO_Acc_x"][itr]),
+                                       EGO_accY=float(DGPS_data["EGO_Acc_y"][itr]),
+                                       EGO_hdg=float(DGPS_data["EGO_Heading"][itr])
                                        ))
 
         self._mccL_interval = (min([elem._mccL for elem in self]),max([elem._mccL for elem in self]))
         self._mccR_interval = (min([elem._mccR for elem in self]),max([elem._mccR for elem in self]))
 
-    def get_mcc_interval(self):
+    def get_mccL_interval(self):
         """
 
         :return:
         """
-        return self._mcc_interval
+        return self._mccL_interval
+
+    def get_mccR_interval(self):
+        """
+
+        :return:
+        """
+        return self._mccR_interval
+
+    def get_mccB_interval(self):
+        """
+
+        :return:
+        """
+        mcc_min = min(self._mccL_interval[0],self._mccR_interval[0])
+        mcc_max = max(self._mccL_interval[1],self._mccR_interval[1])
+        mccB = (mcc_min,mcc_max)
+        return mccB
 
 
     def get_array_references_selected(self, **kwarg):
 
         if 'mccL' in kwarg:
-            mccL_i = kwarg['mccL'] if (len(kwarg['mccL']) == 2) else (kwarg['mccL'],kwarg['mccL'])
+            if kwarg['mccL']:
+                mccL_i = kwarg['mccL'] if (len(kwarg['mccL']) == 2) else (kwarg['mccL'],kwarg['mccL'])
+            else:
+                mccL_i = self._mccL_interval
         else:
             mccL_i = self._mccL_interval
 
         if 'mccR' in kwarg:
-            mccR_i = kwarg['mccR'] if (len(kwarg['mccR']) == 2) else (kwarg['mccR'],kwarg['mccR'])
+            if kwarg['mccR']:
+                mccR_i = kwarg['mccR'] if (len(kwarg['mccR']) == 2) else (kwarg['mccR'],kwarg['mccR'])
+            else:
+                mccR_i = self._mccR_interval
         else:
-            mccR_i = self._mccL_interval
+            mccR_i = self._mccR_interval
 
         mccL_sel = [elem._mccL for elem in self if ( mccL_i[0] <= elem._mccL <= mccL_i[1] and
                                                      mccR_i[0] <= elem._mccR <= mccR_i[1] )]

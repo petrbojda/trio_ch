@@ -34,6 +34,46 @@ def main(conf_data):
     else:
         lst_det_right = None
 
+    if conf_data["filename_LeftDGPS"]:
+        l = []
+        l.append(conf_data["path_data_folder"])
+        l.append(conf_data["filename_LeftDGPS"])
+        leftDGPS_path = ''.join(l)
+
+        lst_ref_left = dc.ReferenceList()
+        lst_ref_left.append_from_m_file(leftDGPS_path)
+        mcc_intervalDGPS_left = lst_ref_left.get_mccL_interval()
+        print("MCC Left DGPS starts at: ", mcc_intervalDGPS_left[0], "and ends at: ", mcc_intervalDGPS_left[1])
+    else:
+        lst_ref_left = None
+
+    if conf_data["filename_RightDGPS"]:
+        l = []
+        l.append(conf_data["path_data_folder"])
+        l.append(conf_data["filename_RightDGPS"])
+        rightDGPS_path = ''.join(l)
+
+        lst_ref_right = dc.ReferenceList()
+        lst_ref_right.append_from_m_file(rightDGPS_path)
+        mcc_intervalDGPS_right = lst_ref_right.get_mccR_interval()
+        print("MCC Left DGPS starts at: ", mcc_intervalDGPS_right[0], "and ends at: ", mcc_intervalDGPS_right[1])
+    else:
+        lst_ref_right = None
+
+    if conf_data["filename_BothDGPS"]:
+        l = []
+        l.append(conf_data["path_data_folder"])
+        l.append(conf_data["filename_BothDGPS"])
+        bothDGPS_path = ''.join(l)
+
+        lst_ref_both = dc.ReferenceList()
+        lst_ref_both.append_from_m_file(bothDGPS_path)
+        mcc_intervalDGPS_both = lst_ref_both.get_mccB_interval()
+        print("MCC Both DGPS starts at: ", mcc_intervalDGPS_both[0], "and ends at: ", mcc_intervalDGPS_both[1])
+    else:
+        lst_ref_both = None
+
+
     if conf_data["output_folder"]:
         l = []
         l.append(conf_data["output_folder"])
@@ -47,7 +87,10 @@ def main(conf_data):
                  "mcc_tp":None, "x_tp":None, "y_tp":None,
                  "rng_tp":None, "vel_tp":None, "az_tp":None}
 
-    rplt.static_plot_selections(lst_det_left, lst_det_right, selection, output_path)
+    #rplt.static_plot_selections(lst_det_left, lst_det_right, selection, output_path)
+    rplt.static_plotREF_selections(lst_det_left, lst_det_right,
+                                   lst_ref_left,lst_ref_right,lst_ref_both,
+                                   selection, output_path)
 
 pr = cProfile.Profile()
 pr.enable()
@@ -63,4 +106,4 @@ s = io.StringIO()
 sortby = 'cumulative'
 ps = pstats.Stats(pr, stream=s).sort_stats(sortby)
 ps.print_stats()
-print (s.getvalue())
+#print (s.getvalue())

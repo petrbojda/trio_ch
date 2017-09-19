@@ -350,4 +350,155 @@ def static_plot_selections(lst_det_left, lst_det_right, selection, fname_det):
     else:
         plt.show()
 
+def static_plotREF_selections(lst_det_left, lst_det_right,
+                                   lst_ref_left,lst_ref_right,lst_ref_both,
+                                   selection, fname_det):
+    """
+	Plots data in an analytic way. Complete set of detections for all MCCs is depicted here.
+	Input data dictionaries:
+		Both left and right radars of the same structure
+		radar_data = { 	"range": ,
+						"azimuth": ,
+						"velocity": ,
+						"x": ,
+						"y": ,
+						"beam": ,
+						"mcc":  	}
 
+	"""
+
+    ###### Plot starts here:
+    cms = matplotlib.cm
+    color_map_left = cms.Blues
+    color_map_right = cms.RdPu
+    color_map_ref = cms.Greens
+
+    if fname_det:
+        f1 = plt.figure(1, (23, 13), dpi=300)
+    else:
+        f1 = plt.figure(1, (15, 8))
+
+    f1ax1 = f1.add_subplot(111)
+    f1ax1.grid(True)
+    f1ax1.axis([-40, 100, -80, 80])
+    plt.title('Detections', loc='left')
+
+    number_of_dets_left_processed = 0
+    number_of_dets_right_processed = 0
+    #################### Left radar plot
+    if lst_det_left:
+        if selection["beam_tp"].count(0):
+            selection_tp = copy.deepcopy(selection)
+            selection_tp["beam_tp"] = [0]
+            LR0_data = lst_det_left.get_array_detections_selected(selection=selection_tp)
+
+            f1ax1.plot(LR0_data["x"], LR0_data["y"],
+                       color=color_map_left(0.2), marker='o', ls='None', label='Left RDR, beam 0')
+            number_of_dets_left_processed += np.size(LR0_data["mcc"])
+
+        if selection["beam_tp"].count(1):
+            selection_tp = copy.deepcopy(selection)
+            selection_tp["beam_tp"] = [1]
+            LR1_data = lst_det_left.get_array_detections_selected(selection=selection_tp)
+            f1ax1.plot(LR1_data["x"], LR1_data["y"],
+                       color=color_map_left(0.4), marker='o', ls='None', label='Left RDR, beam 1')
+            number_of_dets_left_processed += np.size(LR1_data["mcc"])
+
+        if selection["beam_tp"].count(2):
+            selection_tp = copy.deepcopy(selection)
+            selection_tp["beam_tp"] = [2]
+            LR2_data = lst_det_left.get_array_detections_selected(selection=selection_tp)
+            f1ax1.plot(LR2_data["x"], LR2_data["y"],
+                       color=color_map_left(0.6), marker='o', ls='None', label='Left RDR, beam 2')
+            number_of_dets_left_processed += np.size(LR2_data["mcc"])
+
+        if selection["beam_tp"].count(3):
+            selection_tp = copy.deepcopy(selection)
+            selection_tp["beam_tp"] = [3]
+            LR3_data = lst_det_left.get_array_detections_selected(selection=selection_tp)
+            f1ax1.plot(LR3_data["x"], LR3_data["y"],
+                       color=color_map_left(0.8), marker='o', ls='None', label='Left RDR, beam 3')
+            number_of_dets_left_processed += np.size(LR3_data["mcc"])
+
+        plt.draw()
+
+    #################### Right radar plot
+    if lst_det_right:
+
+        if selection["beam_tp"].count(0):
+            selection_tp = copy.deepcopy(selection)
+            selection_tp["beam_tp"] = [0]
+            RR0_data = lst_det_right.get_array_detections_selected(selection=selection_tp)
+            f1ax1.plot(RR0_data["x"], RR0_data["y"],
+                       color=color_map_right(0.2), marker='o', ls='None', label='Right RDR, beam 0')
+            number_of_dets_right_processed += np.size(RR0_data["mcc"])
+
+        if selection["beam_tp"].count(1):
+            selection_tp = copy.deepcopy(selection)
+            selection_tp["beam_tp"] = [1]
+            RR1_data = lst_det_right.get_array_detections_selected(selection=selection_tp)
+            f1ax1.plot(RR1_data["x"], RR1_data["y"],
+                       color=color_map_right(0.4), marker='o', ls='None', label='Right RDR, beam 1')
+            number_of_dets_right_processed += np.size(RR1_data["mcc"])
+
+        if selection["beam_tp"].count(2):
+            selection_tp = copy.deepcopy(selection)
+            selection_tp["beam_tp"] = [2]
+            RR2_data = lst_det_right.get_array_detections_selected(selection=selection_tp)
+            f1ax1.plot(RR2_data["x"], RR2_data["y"],
+                       color=color_map_right(0.6), marker='o', ls='None', label='Right RDR, beam 2')
+            number_of_dets_right_processed += np.size(RR2_data["mcc"])
+
+        if selection["beam_tp"].count(3):
+            selection_tp = copy.deepcopy(selection)
+            selection_tp["beam_tp"] = [3]
+            RR3_data = lst_det_right.get_array_detections_selected(selection=selection_tp)
+            f1ax1.plot(RR3_data["x"], RR3_data["y"],
+                       color=color_map_right(0.8), marker='o', ls='None', label='Right RDR, beam 3')
+            number_of_dets_right_processed += np.size(RR3_data["mcc"])
+
+        plt.draw()
+
+    #################### Reference plot
+    x_compensation = 17
+
+    if lst_ref_left:
+        mcc_tp = selection["mcc_tp"]
+
+        DGPSLeft_data = lst_ref_left.get_array_references_selected(mccL=mcc_tp)
+        f1ax1.plot(DGPSLeft_data["TAR_distX"] + x_compensation, DGPSLeft_data["TAR_distY"],
+                   color=color_map_ref(0.7),marker='+', ls='None',label='Left DGPS')
+
+        plt.draw()
+
+    if lst_ref_right:
+        mcc_tp = selection["mcc_tp"]
+
+        DGPSRight_data = lst_ref_right.get_array_references_selected(mccL=mcc_tp)
+        f1ax1.plot(DGPSRight_data["TAR_distX"] + x_compensation, DGPSRight_data["TAR_distY"],
+                   color=color_map_ref(0.3),marker='+', ls='None',label='Right DGPS')
+
+        plt.draw()
+
+    if lst_ref_both:
+        mcc_tp = selection["mcc_tp"]
+
+        DGPSBoth_data = lst_ref_both.get_array_references_selected(mccL=mcc_tp)
+        f1ax1.plot(DGPSBoth_data["TAR_distX"] + x_compensation, DGPSBoth_data["TAR_distY"],
+                   color=color_map_ref(1.0),marker='+', ls='None',label='Both DGPS')
+
+        plt.draw()
+
+    ################### Legend and Title of the plot
+    lgd2 = f1ax1.legend(loc='upper right', bbox_to_anchor=(1.0, 1.0))
+
+    f1ax1.set_xlabel('x [meters]')
+    f1ax1.set_ylabel('y [meters]')
+
+    tit = "In Selected Beams: L=%d R=%d" % (number_of_dets_left_processed, number_of_dets_right_processed)
+    f1.suptitle(tit, fontsize=14, fontweight='bold')
+
+    if fname_det:
+        f1.savefig(fname_det)
+    else:
+        plt.show()

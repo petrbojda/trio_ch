@@ -87,10 +87,11 @@ def main(conf_data):
                  "mcc_tp":None, "x_tp":None, "y_tp":None,
                  "rng_tp":None, "vel_tp":None, "az_tp":None}
 
+    DGPS_xcompensation = float(conf_data["DGPS_xcompensation"])
     #rplt.static_plot_selections(lst_det_left, lst_det_right, selection, output_path)
     rplt.static_plotREF_selections(lst_det_left, lst_det_right,
                                    lst_ref_left,lst_ref_right,lst_ref_both,
-                                   selection, output_path)
+                                   selection, output_path,DGPS_xcompensation)
 
 pr = cProfile.Profile()
 pr.enable()

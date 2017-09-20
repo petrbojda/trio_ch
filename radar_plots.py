@@ -352,7 +352,7 @@ def static_plot_selections(lst_det_left, lst_det_right, selection, fname_det):
 
 def static_plotREF_selections(lst_det_left, lst_det_right,
                                    lst_ref_left,lst_ref_right,lst_ref_both,
-                                   selection, fname_det):
+                                   selection, fname_det, DGPS_xcompensation):
     """
 	Plots data in an analytic way. Complete set of detections for all MCCs is depicted here.
 	Input data dictionaries:
@@ -460,13 +460,13 @@ def static_plotREF_selections(lst_det_left, lst_det_right,
         plt.draw()
 
     #################### Reference plot
-    x_compensation = 0
+
 
     if lst_ref_left:
         mcc_tp = selection["mcc_tp"]
 
         DGPSLeft_data = lst_ref_left.get_array_references_selected(mccL=mcc_tp)
-        f1ax1.plot(abs(DGPSLeft_data["TAR_distX"] + x_compensation), DGPSLeft_data["TAR_distY"],
+        f1ax1.plot(abs(DGPSLeft_data["TAR_distX"] + DGPS_xcompensation), DGPSLeft_data["TAR_distY"],
                    color=color_map_ref(0.7),marker='+', ls='None',label='Left DGPS')
 
         plt.draw()
@@ -475,7 +475,7 @@ def static_plotREF_selections(lst_det_left, lst_det_right,
         mcc_tp = selection["mcc_tp"]
 
         DGPSRight_data = lst_ref_right.get_array_references_selected(mccL=mcc_tp)
-        f1ax1.plot(abs(DGPSRight_data["TAR_distX"] + x_compensation), DGPSRight_data["TAR_distY"],
+        f1ax1.plot(abs(DGPSRight_data["TAR_distX"] + DGPS_xcompensation), DGPSRight_data["TAR_distY"],
                    color=color_map_ref(0.3),marker='+', ls='None',label='Right DGPS')
 
         plt.draw()
@@ -484,7 +484,7 @@ def static_plotREF_selections(lst_det_left, lst_det_right,
         mcc_tp = selection["mcc_tp"]
 
         DGPSBoth_data = lst_ref_both.get_array_references_selected(mccL=mcc_tp)
-        f1ax1.plot(abs(DGPSBoth_data["TAR_distX"] + x_compensation), DGPSBoth_data["TAR_distY"],
+        f1ax1.plot(abs(DGPSBoth_data["TAR_distX"] + DGPS_xcompensation), DGPSBoth_data["TAR_distY"],
                    color=color_map_ref(1.0),marker='+', ls='None',label='Both DGPS')
 
         plt.draw()

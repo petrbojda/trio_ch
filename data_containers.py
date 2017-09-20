@@ -8,18 +8,7 @@ class DetectionPoint(object):
     def __init__(self, mcc=0, beam=0,
                  nodet_permcc=0, trackID=0, rng=0.0,
                  vel=0.0, azimuth=0.0, left=True, car_width=1.88):
-        """
 
-        :param mcc:
-        :param beam:
-        :param nodet_permcc:
-        :param trackID:
-        :param rng:
-        :param vel:
-        :param azimuth:
-        :param left:
-        :param car_width:
-        """
         self._y_correction_dir = -1 if left else 1
         self._mcc = mcc
         self._beam = beam
@@ -31,12 +20,42 @@ class DetectionPoint(object):
         self._x = self._rng * np.cos(self._azimuth)
         self._y = self._y_correction_dir * (self._rng * np.sin(self._azimuth) + car_width / 2)
 
+class ReferencePoint(object):
+    def __init__(self, mccL=0, mccR=0, TAR_dist=0.0, TAR_distX=0.0,TAR_distY=0.0,
+                 TAR_velX=0.0, TAR_velY=0.0, TAR_hdg=0.0,
+                 EGO_velX=0.0, EGO_velY=0.0, EGO_accX=0.0, EGO_accY=0.0, EGO_hdg=0.0,):
+
+        self._mccL = mccL
+        self._mccR = mccR
+        self._TAR_dist = TAR_dist
+        self._TAR_distX = TAR_distX
+        self._TAR_distY = TAR_distY
+        self._TAR_velX = TAR_velX
+        self._TAR_velY = TAR_velY
+        self._TAR_hdg = TAR_hdg
+        self._EGO_velX = EGO_velX
+        self._EGO_velY = EGO_velY
+        self._EGO_accX = EGO_accX
+        self._EGO_accY = EGO_accY
+        self._EGO_hdg = EGO_hdg
+
+class TrackPoint(object):
+    def __init__(self,mcc,x,y,dx,dy,beam):
+        self.mcc = mcc
+        self.x = x
+        self.dx = dx
+        self.y = y
+        self.dy = dy
+        self._beam = beam
+
+    def get_array(self):
+        x = np.array([self.x,self.dx,self.y,self.dy])
+        return x.reshape(4,1)
+
 
 class DetectionList(list):
     def __init__(self):
-        """
 
-        """
         super().__init__()
         self._y_interval = (0,0)
         self._x_interval = (0,0)
@@ -46,12 +65,7 @@ class DetectionList(list):
         self._mcc_interval = (0,0)
 
     def append_from_m_file(self, data_path, left, car_width):
-        """
 
-        :param data_path:
-        :param left:
-        :param car_width:
-        """
         radar_data = sio.loadmat(data_path)
         detections = radar_data["Detections"]
         no_d = len(detections)
@@ -74,30 +88,18 @@ class DetectionList(list):
         self._mcc_interval = (min([elem._mcc for elem in self]),max([elem._mcc for elem in self]))
 
     def get_mcc_interval(self):
-        """
 
-        :return:
-        """
         return self._mcc_interval
 
     def get_max_of_detections_per_mcc(self):
-        """
 
-        :return:
-        """
         max_detections_at = max([elem._mcc for elem in self], key=[elem._mcc for elem in self].count)
         max_no_detections = [elem._mcc for elem in self].count(max_detections_at)
+
         return max_no_detections, max_detections_at
-
-
 
     def get_array_detections_selected(self, **kwarg):
 
-        """
-
-        :param kwarg:
-        :return:
-        """
         if 'beam' in kwarg:
             beam = kwarg['beam']
         else:
@@ -141,7 +143,6 @@ class DetectionList(list):
             rng_i = kwarg['selection']['rng_tp'] if kwarg['selection']['rng_tp'] else self._rng_interval
             vel_i = kwarg['selection']['vel_tp'] if kwarg['selection']['vel_tp'] else self._vel_interval
             az_i = kwarg['selection']['az_tp'] if kwarg['selection']['az_tp'] else self._azimuth_interval
-
 
         r_sel = [elem._rng for elem in self if (elem._beam in beam and
                                                 mcc_i[0] <= elem._mcc <= mcc_i[1] and
@@ -205,11 +206,6 @@ class DetectionList(list):
 
     def extend_with_selection(self, radar_data_list, **kwarg):
 
-        """
-
-        :param radar_data_list:
-        :param kwarg:
-        """
         if 'beam' in kwarg:
             beam = kwarg['beam']
         else:
@@ -254,7 +250,6 @@ class DetectionList(list):
             vel_i = kwarg['selection']['vel_tp'] if kwarg['selection']['vel_tp'] else radar_data_list._vel_interval
             az_i = kwarg['selection']['az_tp'] if kwarg['selection']['az_tp'] else radar_data_list._azimuth_interval
 
-
         for elem in radar_data_list:
             if (elem._beam in beam and
                             mcc_i[0] <= elem._mcc <= mcc_i[1] and
@@ -265,7 +260,6 @@ class DetectionList(list):
                             az_i[0] <= elem._azimuth <= az_i[1]):
                 self.append(elem)
 
-
         self._y_interval = (min([elem._y for elem in self]),max([elem._y for elem in self]))
         self._x_interval = (min([elem._x for elem in self]),max([elem._x for elem in self]))
         self._azimuth_interval = (min([elem._azimuth for elem in self]),max([elem._azimuth for elem in self]))
@@ -273,27 +267,6 @@ class DetectionList(list):
         self._rng_interval = (min([elem._rng for elem in self]),max([elem._rng for elem in self]))
         self._mcc_interval = (min([elem._mcc for elem in self]),max([elem._mcc for elem in self]))
 
-
-
-
-class ReferencePoint(object):
-    def __init__(self, mccL=0, mccR=0, TAR_dist=0.0, TAR_distX=0.0,TAR_distY=0.0,
-                 TAR_velX=0.0, TAR_velY=0.0, TAR_hdg=0.0,
-                 EGO_velX=0.0, EGO_velY=0.0, EGO_accX=0.0, EGO_accY=0.0, EGO_hdg=0.0,):
-
-        self._mccL = mccL
-        self._mccR = mccR
-        self._TAR_dist = TAR_dist
-        self._TAR_distX = TAR_distX
-        self._TAR_distY = TAR_distY
-        self._TAR_velX = TAR_velX
-        self._TAR_velY = TAR_velY
-        self._TAR_hdg = TAR_hdg
-        self._EGO_velX = EGO_velX
-        self._EGO_velY = EGO_velY
-        self._EGO_accX = EGO_accX
-        self._EGO_accY = EGO_accY
-        self._EGO_hdg = EGO_hdg
 
 
 class ReferenceList(list):
@@ -304,12 +277,7 @@ class ReferenceList(list):
         self._mccR_interval = (0,0)
 
     def append_from_m_file(self, data_path):
-        """
 
-        :param data_path:
-        :param left:
-        :param car_width:
-        """
         DGPS_data = sio.loadmat(data_path)
 
         no_dL = len(DGPS_data["MCC_LeftRadar"])
@@ -338,24 +306,15 @@ class ReferenceList(list):
         self._mccR_interval = (min([elem._mccR for elem in self]),max([elem._mccR for elem in self]))
 
     def get_mccL_interval(self):
-        """
 
-        :return:
-        """
         return self._mccL_interval
 
     def get_mccR_interval(self):
-        """
 
-        :return:
-        """
         return self._mccR_interval
 
     def get_mccB_interval(self):
-        """
 
-        :return:
-        """
         mcc_min = min(self._mccL_interval[0],self._mccR_interval[0])
         mcc_max = max(self._mccL_interval[1],self._mccR_interval[1])
         mccB = (mcc_min,mcc_max)
@@ -404,8 +363,6 @@ class ReferenceList(list):
         EGO_accY_sel = [elem._EGO_accY for elem in self if ( mccL_i[0] <= elem._mccL <= mccL_i[1] and mccR_i[0] <= elem._mccR <= mccR_i[1] )]
         EGO_hdg_sel = [elem._EGO_hdg for elem in self if ( mccL_i[0] <= elem._mccL <= mccL_i[1] and mccR_i[0] <= elem._mccR <= mccR_i[1] )]
 
-
-
         DGPS_data = { "mccL": np.array(mccL_sel),
                       "mccR": np.array(mccR_sel),
                       "TAR_dist": np.array(TAR_dist_sel),
@@ -423,17 +380,36 @@ class ReferenceList(list):
         return DGPS_data
 
 
+class Track(list):
+    def __init__(self):
+        super().__init__()
+        self._y_predicted = (0,0)
+        self._x_predicted = (0,0)
+        self._trackID = (0,0)
+        self._velx_interval = (0,0)
+        self._x_interval = (0,0)
+        self._vely_interval = (0,0)
+        self._y_interval = (0,0)
+        self._mcc_interval = (0,0)
+
+    def append_point(self, mcc,x,y,dx,dy,beam):
+        self.append(TrackPoint(mcc,x,y,dx,dy,beam))
+        self._y_interval = (min([elem._y for elem in self]),max([elem._y for elem in self]))
+        self._x_interval = (min([elem._x for elem in self]),max([elem._x for elem in self]))
+        self._vely_interval = (min([elem._vely for elem in self]),max([elem._vely for elem in self]))
+        self._velx_interval = (min([elem._velx for elem in self]),max([elem._velx for elem in self]))
+        self._mcc_interval = (min([elem._mcc for elem in self]),max([elem._mcc for elem in self]))
+
+    def get_mcc_interval(self):
+
+        return self._mcc_interval
 
 
 
 
 def cnf_file_read(cnf_file):
     # Reads the configuration file
-    """
 
-    :param cnf_file:
-    :return:
-    """
     config = configparser.ConfigParser()
     config.read(cnf_file)  # "./analysis.cnf"
 
@@ -466,12 +442,7 @@ def cnf_file_read(cnf_file):
 
 
 def cnf_file_scenario_select(cnf_file, scenario):
-    """
 
-    :param cnf_file:
-    :param scenario:
-    :return:
-    """
     config = configparser.ConfigParser()
     config.read(cnf_file)  # "./analysis.cnf"
 
@@ -480,21 +451,19 @@ def cnf_file_scenario_select(cnf_file, scenario):
     filename_LeftDGPS = config.get(scenario, 'left_dgps')
     filename_RightDGPS = config.get(scenario, 'right_dgps')
     filename_BothDGPS = config.get(scenario, 'both_dgps')
+    DGPS_xcompensation = config.get(scenario, 'DGPS_xcompensation')
 
     data_filenames = {"filename_LeftRadar": filename_LeftRadar,
                       "filename_RightRadar": filename_RightRadar,
                       "filename_LeftDGPS": filename_LeftDGPS,
                       "filename_RightDGPS": filename_RightDGPS,
-                      "filename_BothDGPS": filename_BothDGPS}
+                      "filename_BothDGPS": filename_BothDGPS,
+                      "DGPS_xcompensation": DGPS_xcompensation}
     return (data_filenames)
 
 
 def parse_CMDLine(cnf_file):
-    """
 
-    :param cnf_file:
-    :return:
-    """
     global path_data_folder
     conf_data = cnf_file_read(cnf_file)
     # Parses a set of input arguments comming from a command line
@@ -588,6 +557,7 @@ def parse_CMDLine(cnf_file):
                          "filename_LeftDGPS": data_filenames["filename_LeftDGPS"],
                          "filename_RightDGPS": data_filenames["filename_RightDGPS"],
                          "filename_BothDGPS": data_filenames["filename_BothDGPS"],
+                         "DGPS_xcompensation": data_filenames["DGPS_xcompensation"],
                          "EGO_car_width": conf_data["EGO_car_width"],
                          "beams_tp": beams_tp,
                          "radar_tp": radar_tp,
@@ -609,4 +579,4 @@ def parse_CMDLine(cnf_file):
         print("No scenario selected.")
         conf_data_out = False
 
-    return (conf_data_out)
+    return conf_data_out

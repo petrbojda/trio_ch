@@ -2,17 +2,6 @@ import numpy as np
 import data_containers as dc
 
 
-class TrackPoint(object):
-    def __init__(self,mcc,x,y,dx,dy):
-        self.mcc = mcc
-        self.x = x
-        self.dx = dx
-        self.y = y
-        self.dy = dy
-
-    def get_array(self):
-        x = np.array([self.x,self.dx,self.y,self.dy])
-        return x.reshape(4,1)
 
 class Tracker(object):
     """ Class to encapsulate an estimator - tracker is defined here"""

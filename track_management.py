@@ -5,6 +5,7 @@ class TrackManager(object):
 
     def __init__(self):
         super().__init__()
+        # TODO: add list of tracks
         self._Tsampling = (0,0)
         self._Vx_max = (0,0)
         self._Vy_max = (0,0)
@@ -28,3 +29,5 @@ class TrackManager(object):
         projected_point.dx = (end_point.x - start_point.x) / ts
         projected_point.dy = (end_point.x - start_point.x) / ts
         return projected_point
+
+    # TODO: add methods to assign detection to an existing track from the list or to start a new track

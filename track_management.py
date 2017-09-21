@@ -12,27 +12,30 @@ class TrackManager(list):
 
         self._flt_type = flt_type
         self._n_of_Tracks = np.array([0])
+        self._lst_not_assigned_detections = dc.DetectionList()
 
 
-    def create_new_track(self):
+    def _create_new_track(self):
         self.append(dc.Track(self._n_of_Tracks))
         self._n_of_Tracks = np.append(self._n_of_Tracks,self._n_of_Tracks[-1]+1)
 
 
-    def test_det_in_gate(gate,detection):
+    def _test_det_in_gate(self,gate,detection):
 
-        is_in_x = (gate.x-gate.dx < detection._x) and (gate.x+gate.dx > detection._x)
-        is_in_y = (gate.y-gate.dy < detection._y) and (gate.y+gate.dy > detection._y)
+        is_in_x = (gate.x-self._gate_dx < detection._x) and (gate.x+self._gate_dx > detection._x)
+        is_in_y = (gate.y-self._gate_dx < detection._y) and (gate.y+self._gate_dx > detection._y)
 
         return is_in_x and is_in_y
 
-    def calc_two_point_projection(start_point,end_point,ts):
-        projected_point = dc.TrackPoint(None,None,None,None,None)
-        projected_point.mcc = end_point.mcc + 1
-        projected_point.x = 2*end_point.x - start_point.x
-        projected_point.y = 2*end_point.y - start_point.y
-        projected_point.dx = (end_point.x - start_point.x) / ts
-        projected_point.dy = (end_point.x - start_point.x) / ts
+    def calc_two_point_projection(self,start_detection,end_detection):
+        projected_point = dc.TrackPoint(end_detection._mcc + 1,
+                                        0,0,
+                                        0,0)
+
+        projected_point.x = 2*end_detection._x - start_detection._x
+        projected_point.y = 2*end_detection._y - start_detection._y
+        projected_point.dx = (end_detection._x - start_detection._x) / self._Tsampling
+        projected_point.dy = (end_detection._y - start_detection._y) / self._Tsampling
         return projected_point
 
     def test_detections(self,mcc,noDet,lst_detections):

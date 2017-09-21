@@ -10,7 +10,8 @@ def main(conf_data):
 
     selection = {"beam_tp":conf_data["beams_tp"],
                  "mcc_tp":None, "x_tp":None, "y_tp":None,
-                 "rng_tp":None, "vel_tp":(-5,5), "az_tp":None}
+                 "rng_tp":None, "vel_tp":(-5,5), "az_tp":None,
+                 "trackID_tp":None,}
 
     tracks_left = tm.TrackManager()
     tracks_right = tm.TrackManager()

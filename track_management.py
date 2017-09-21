@@ -25,7 +25,7 @@ class TrackManager(list):
 
 
     def _test_det_in_gate(self,gate,detection):
-
+        # TODO: change the detection to some other type - point x,y for instance
         is_in_x = (gate.x-self._gate_dx < detection._x) and (gate.x+self._gate_dx > detection._x)
         is_in_y = (gate.y-self._gate_dx < detection._y) and (gate.y+self._gate_dx > detection._y)
 
@@ -43,15 +43,21 @@ class TrackManager(list):
         return projected_point
 
     def test_detections(self,mcc,noDet,lst_detections):
-
+        print ("Detections to assign, mcc:",mcc,"with ", len(lst_detections), "means NoDet",noDet)
+        print ("Detections to assign", lst_detections)
         for i1 in range(0, noDet):
+            detection = lst_detections
             if self._n_of_Tracks[-1]:
                 selTrackID = [elem.trackID for elem in self if self._test_det_in_gate(elem.get_prediction(),lst_detections[i1])]
+                # TODO: change the detection to some other type - point x,y for instance
                 print ("Detection at mcc",mcc ,"is assigned to:",selTrackID)
                 self.append_detection_to_track(selTrackID,lst_detections[i1])
                 lst_detections[i1]._trackID = selTrackID
-            else:
+
+            if lst_detections["trackID"][i1] == 0:
+                print ("not assigned detections are in a list:",self._lst_not_assigned_detections)
                 self._lst_not_assigned_detections.append(lst_detections[i1])
+                # TODO: change the detection to some other type - point x,y for instance
                 print ("Detection at mcc",mcc ,"is not assigned to an existing track")
                 self._create_new_track()
                 print ("A new track is created. ID:",self._n_of_Tracks)

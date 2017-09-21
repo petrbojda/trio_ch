@@ -63,6 +63,7 @@ class DetectionList(list):
         self._vel_interval = (0,0)
         self._rng_interval = (0,0)
         self._mcc_interval = (0,0)
+        self._trackID_interval = (0,0)
 
     def append_from_m_file(self, data_path, left, car_width):
 
@@ -86,6 +87,7 @@ class DetectionList(list):
         self._vel_interval = (min([elem._vel for elem in self]),max([elem._vel for elem in self]))
         self._rng_interval = (min([elem._rng for elem in self]),max([elem._rng for elem in self]))
         self._mcc_interval = (min([elem._mcc for elem in self]),max([elem._mcc for elem in self]))
+        self._trackID_interval = (min([elem._trackID for elem in self]),max([elem._trackID for elem in self]))
 
     def get_mcc_interval(self):
 
@@ -135,6 +137,11 @@ class DetectionList(list):
         else:
             az_i = self._azimuth_interval
 
+        if 'trackID' in kwarg:
+            trackID_i = kwarg['trackID'] if (len(kwarg['trackID']) == 2) else (kwarg['trackID'],kwarg['trackID'])
+        else:
+            trackID_i = self._trackID_interval
+
         if 'selection' in kwarg:
             beam = kwarg['selection']['beam_tp'] if kwarg['selection']['beam_tp'] else [0,1,2,3]
             mcc_i = kwarg['selection']['mcc_tp'] if kwarg['selection']['mcc_tp'] else self._mcc_interval
@@ -143,9 +150,11 @@ class DetectionList(list):
             rng_i = kwarg['selection']['rng_tp'] if kwarg['selection']['rng_tp'] else self._rng_interval
             vel_i = kwarg['selection']['vel_tp'] if kwarg['selection']['vel_tp'] else self._vel_interval
             az_i = kwarg['selection']['az_tp'] if kwarg['selection']['az_tp'] else self._azimuth_interval
+            trackID_i = kwarg['selection']['trackID_tp'] if kwarg['selection']['trackID_tp'] else self._trackID_interval
 
         r_sel = [elem._rng for elem in self if (elem._beam in beam and
                                                 mcc_i[0] <= elem._mcc <= mcc_i[1] and
+                                                trackID_i[0] <= elem._trackID <= trackID_i[1] and
                                                 x_i[0] <= elem._x <= x_i[1] and
                                                 y_i[0] <= elem._y <= y_i[1] and
                                                 rng_i[0] <= elem._rng <= rng_i[1] and
@@ -153,6 +162,7 @@ class DetectionList(list):
                                                 az_i[0] <= elem._azimuth <= az_i[1])]
         v_sel = [elem._vel for elem in self if (elem._beam in beam and
                                                 mcc_i[0] <= elem._mcc <= mcc_i[1] and
+                                                trackID_i[0] <= elem._trackID <= trackID_i[1] and
                                                 x_i[0] <= elem._x <= x_i[1] and
                                                 y_i[0] <= elem._y <= y_i[1] and
                                                 rng_i[0] <= elem._rng <= rng_i[1] and
@@ -160,6 +170,7 @@ class DetectionList(list):
                                                 az_i[0] <= elem._azimuth <= az_i[1])]
         az_sel = [elem._azimuth for elem in self if (elem._beam in beam and
                                                 mcc_i[0] <= elem._mcc <= mcc_i[1] and
+                                                trackID_i[0] <= elem._trackID <= trackID_i[1] and
                                                 x_i[0] <= elem._x <= x_i[1] and
                                                 y_i[0] <= elem._y <= y_i[1] and
                                                 rng_i[0] <= elem._rng <= rng_i[1] and
@@ -167,6 +178,7 @@ class DetectionList(list):
                                                 az_i[0] <= elem._azimuth <= az_i[1])]
         mcc_sel = [elem._mcc for elem in self if (elem._beam in beam and
                                                 mcc_i[0] <= elem._mcc <= mcc_i[1] and
+                                                trackID_i[0] <= elem._trackID <= trackID_i[1] and
                                                 x_i[0] <= elem._x <= x_i[1] and
                                                 y_i[0] <= elem._y <= y_i[1] and
                                                 rng_i[0] <= elem._rng <= rng_i[1] and
@@ -174,6 +186,7 @@ class DetectionList(list):
                                                 az_i[0] <= elem._azimuth <= az_i[1])]
         x_sel = [elem._x for elem in self if (  elem._beam in beam and
                                                 mcc_i[0] <= elem._mcc <= mcc_i[1] and
+                                                trackID_i[0] <= elem._trackID <= trackID_i[1] and
                                                 x_i[0] <= elem._x <= x_i[1] and
                                                 y_i[0] <= elem._y <= y_i[1] and
                                                 rng_i[0] <= elem._rng <= rng_i[1] and
@@ -181,6 +194,7 @@ class DetectionList(list):
                                                 az_i[0] <= elem._azimuth <= az_i[1])]
         y_sel = [elem._y for elem in self if (  elem._beam in beam and
                                                 mcc_i[0] <= elem._mcc <= mcc_i[1] and
+                                                trackID_i[0] <= elem._trackID <= trackID_i[1] and
                                                 x_i[0] <= elem._x <= x_i[1] and
                                                 y_i[0] <= elem._y <= y_i[1] and
                                                 rng_i[0] <= elem._rng <= rng_i[1] and
@@ -188,6 +202,15 @@ class DetectionList(list):
                                                 az_i[0] <= elem._azimuth <= az_i[1])]
         beam_sel = [elem._beam for elem in self if (  elem._beam in beam and
                                                 mcc_i[0] <= elem._mcc <= mcc_i[1] and
+                                                trackID_i[0] <= elem._trackID <= trackID_i[1] and
+                                                x_i[0] <= elem._x <= x_i[1] and
+                                                y_i[0] <= elem._y <= y_i[1] and
+                                                rng_i[0] <= elem._rng <= rng_i[1] and
+                                                vel_i[0] <= elem._vel <= vel_i[1] and
+                                                az_i[0] <= elem._azimuth <= az_i[1])]
+        trackID_sel = [elem._trackID for elem in self if (  elem._beam in beam and
+                                                mcc_i[0] <= elem._mcc <= mcc_i[1] and
+                                                trackID_i[0] <= elem._trackID <= trackID_i[1] and
                                                 x_i[0] <= elem._x <= x_i[1] and
                                                 y_i[0] <= elem._y <= y_i[1] and
                                                 rng_i[0] <= elem._rng <= rng_i[1] and
@@ -199,6 +222,7 @@ class DetectionList(list):
                       "velocity": np.array(v_sel),
                       "x": np.array(x_sel),
                       "y": np.array(y_sel),
+                      "trackID": np.array(trackID_sel),
                       "beam": np.array(beam_sel),
                       "mcc": np.array(mcc_sel)}
 

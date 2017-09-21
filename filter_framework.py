@@ -1,12 +1,20 @@
 #!/usr/bin/env python
 
 import data_containers as dc
-import tracking_filters as tf
+import track_management as tm
 import radar_plots as rplt
 import numpy as np
 
 
 def main(conf_data):
+
+    selection = {"beam_tp":conf_data["beams_tp"],
+                 "mcc_tp":None, "x_tp":None, "y_tp":None,
+                 "rng_tp":None, "vel_tp":(-5,5), "az_tp":None}
+
+    tracks_left = tm.TrackManager()
+    tracks_right = tm.TrackManager()
+
     # Load Data from .mat files
     if conf_data["filename_LeftRadar"]:
         l = []
@@ -15,8 +23,8 @@ def main(conf_data):
         leftradar_path = ''.join(l)
 
         lst_det_left = dc.detection_set()
-        lst_det_left.AppendFromFileMat(leftradar_path, True, conf_data["EGO_car_width"])
-        mcc_interval_left = lst_det_left.GetMCCInterval()
+        lst_det_left.append_from_m_file(leftradar_path, True, conf_data["EGO_car_width"])
+        mcc_interval_left = lst_det_left.get_mcc_interval()
         print("MCC Left starts at: ", mcc_interval_left[0],
               "and ends at: ", mcc_interval_left[1])
 
@@ -27,8 +35,8 @@ def main(conf_data):
         rightradar_path = ''.join(l)
 
         lst_det_right = dc.detection_set()
-        lst_det_right.AppendFromFileMat(rightradar_path, False, conf_data["EGO_car_width"])
-        mcc_interval_right = lst_det_right.GetMCCInterval()
+        lst_det_right.append_from_m_file(rightradar_path, False, conf_data["EGO_car_width"])
+        mcc_interval_right = lst_det_right.get_mcc_interval()
         print("MCC Right starts at: ", mcc_interval_right[0], "and ends at: ", mcc_interval_right[1])
 
     # Calculate valid mcc interval for detections to be presented
@@ -47,18 +55,16 @@ def main(conf_data):
     ############ Filtering loop
     i_prev = mcc_start
     for i in range(mcc_start, mcc_end, mcc_step):  # number of frames frames
-        if conf_data["output_folder"]:
-            fname_det = '_tmp%08d.png' % i
-            l = []
-            l.append(conf_data["output_folder"])
-            l.append(fname_det)
-            output_path = ''.join(l)
-        else:
-            output_path = None
 
-        # Here is a place where a filter and/or plot module belong(s)
-        # tf.g_h_constant_fltr(lst_det_left,lst_det_right,conf_data["beams_tp"],i_prev,i,output_path)
-        # rplt.GridPlot_hist(lst_det_left,lst_det_right,conf_data["beams_tp"],i_prev,i,output_path)
+
+        selection["mcc_tp"] = (i_prev,i)
+        #################### Left radar filter
+        if lst_det_left:
+            LR_data = lst_det_left.get_array_detections_selected(selection=selection)
+            if LR_data["mcc"].any():
+                LR_data_exists = True
+                number_of_dets_left = np.size(LR_data["mcc"])
+                tracks_left.append_detection(i,number_of_dets_left,LR_data)
 
         i_prev = i
 

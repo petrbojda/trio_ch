@@ -53,7 +53,7 @@ class Tracker(object):
         self._H = np.kron(np.eye(2),H)
 
         self._selection_gate = np.array([0,0,0,0])
-        self._expected_TP = TrackPoint(None,None,None,None,None)
+        self._expected_TP = dc.TrackPoint(None,None,None,None,None)
 
     def append_detection(self,detection):
         self._list_det.append(detection)

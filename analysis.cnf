@@ -45,7 +45,7 @@ modules_dir: /home/petr/Projects/TRIO/Radar/srcpy/
 	left_dgps:
 	right_dgps:
 	both_dgps:
-	DGPS_xcompensation:
+	DGPS_xcompensation: 0
 
 [TBH]
 # 4th scenario - TBH

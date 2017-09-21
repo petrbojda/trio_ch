@@ -46,7 +46,7 @@ class TrackPoint(object):
         self.dx = dx
         self.y = y
         self.dy = dy
-        self._beam = beam
+        self.beam = beam
 
     def get_array(self):
         x = np.array([self.x,self.dx,self.y,self.dy])
@@ -381,11 +381,11 @@ class ReferenceList(list):
 
 
 class Track(list):
-    def __init__(self):
+    def __init__(self,trackID):
         super().__init__()
         self._y_predicted = (0,0)
         self._x_predicted = (0,0)
-        self._trackID = (0,0)
+        self._trackID = trackID
         self._velx_interval = (0,0)
         self._x_interval = (0,0)
         self._vely_interval = (0,0)

@@ -383,8 +383,7 @@ class ReferenceList(list):
 class Track(list):
     def __init__(self,trackID):
         super().__init__()
-        self._y_predicted = (0,0)
-        self._x_predicted = (0,0)
+        self._prediction = TrackPoint(mcc=0,x=0,y=0,dx=0,dy=0,beam=0)
         self._trackID = trackID
         self._velx_interval = (0,0)
         self._x_interval = (0,0)
@@ -400,9 +399,27 @@ class Track(list):
         self._velx_interval = (min([elem._velx for elem in self]),max([elem._velx for elem in self]))
         self._mcc_interval = (min([elem._mcc for elem in self]),max([elem._mcc for elem in self]))
 
-    def get_mcc_interval(self):
+    def append_point_from_detection(self, detection):
+        self.append(TrackPoint(mcc=detection._mcc,
+                               x=detection._x,
+                               y=detection._y,
+                               dx=detection._dx,
+                               dy=detection._dy,
+                               beam=detection._beam))
+        self._y_interval = (min([elem._y for elem in self]),max([elem._y for elem in self]))
+        self._x_interval = (min([elem._x for elem in self]),max([elem._x for elem in self]))
+        self._vely_interval = (min([elem._vely for elem in self]),max([elem._vely for elem in self]))
+        self._velx_interval = (min([elem._velx for elem in self]),max([elem._velx for elem in self]))
+        self._mcc_interval = (min([elem._mcc for elem in self]),max([elem._mcc for elem in self]))
 
+    def get_mcc_interval(self):
         return self._mcc_interval
+
+    def get_prediction(self):
+        return self._prediction
+
+    def update_prediction(self,prediction):
+        self._prediction = prediction
 
 
 

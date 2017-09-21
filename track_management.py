@@ -40,4 +40,10 @@ class TrackManager(list):
 
     def test_detections(self,mcc,noDet,lst_detections):
 
+        for i1 in range(0, noDet):
+            if self._n_of_Tracks[-1]:
+                selTrackID = [elem._trackID for elem in self if self._test_det_in_gate(elem.get_prediction(),lst_detections[i1])]
+                print ("detekce v mcc",mcc ,"je prirazena do tracku:",selTrackID)
+                lst_detections[i1]._trackID = selTrackID
+
 

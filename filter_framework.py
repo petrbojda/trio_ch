@@ -64,7 +64,7 @@ def main(conf_data):
             if LR_data["mcc"].any():
                 LR_data_exists = True
                 number_of_dets_left = np.size(LR_data["mcc"])
-                tracks_left.append_detection(i,number_of_dets_left,LR_data)
+                tracks_left.test_detections(i,number_of_dets_left,LR_data)
 
         i_prev = i
 

@@ -22,7 +22,7 @@ def main(conf_data):
         l.append(conf_data["filename_LeftRadar"])
         leftradar_path = ''.join(l)
 
-        lst_det_left = dc.detection_set()
+        lst_det_left = dc.DetectionList()
         lst_det_left.append_from_m_file(leftradar_path, True, conf_data["EGO_car_width"])
         mcc_interval_left = lst_det_left.get_mcc_interval()
         print("MCC Left starts at: ", mcc_interval_left[0],
@@ -34,7 +34,7 @@ def main(conf_data):
         l.append(conf_data["filename_RightRadar"])
         rightradar_path = ''.join(l)
 
-        lst_det_right = dc.detection_set()
+        lst_det_right = dc.DetectionList()
         lst_det_right.append_from_m_file(rightradar_path, False, conf_data["EGO_car_width"])
         mcc_interval_right = lst_det_right.get_mcc_interval()
         print("MCC Right starts at: ", mcc_interval_right[0], "and ends at: ", mcc_interval_right[1])
@@ -55,7 +55,6 @@ def main(conf_data):
     ############ Filtering loop
     i_prev = mcc_start
     for i in range(mcc_start, mcc_end, mcc_step):  # number of frames frames
-
 
         selection["mcc_tp"] = (i_prev,i)
         #################### Left radar filter

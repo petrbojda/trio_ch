@@ -384,7 +384,7 @@ class Track(list):
     def __init__(self,trackID):
         super().__init__()
         self._prediction = TrackPoint(mcc=0,x=0,y=0,dx=0,dy=0,beam=0)
-        self._trackID = trackID
+        self.trackID = trackID
         self._velx_interval = (0,0)
         self._x_interval = (0,0)
         self._vely_interval = (0,0)

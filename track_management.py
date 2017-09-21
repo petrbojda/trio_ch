@@ -16,8 +16,12 @@ class TrackManager(list):
 
 
     def _create_new_track(self):
-        self.append(dc.Track(self._n_of_Tracks))
         self._n_of_Tracks = np.append(self._n_of_Tracks,self._n_of_Tracks[-1]+1)
+        self.append(dc.Track(self._n_of_Tracks[-1]))
+
+    def append_detection_to_track(self, trackID, detection):
+        track_sel = [elem for elem in self if (elem.trackID == trackID)]
+        track_sel.append_point_from_detection(detection)
 
 
     def _test_det_in_gate(self,gate,detection):
@@ -42,8 +46,20 @@ class TrackManager(list):
 
         for i1 in range(0, noDet):
             if self._n_of_Tracks[-1]:
-                selTrackID = [elem._trackID for elem in self if self._test_det_in_gate(elem.get_prediction(),lst_detections[i1])]
-                print ("detekce v mcc",mcc ,"je prirazena do tracku:",selTrackID)
+                selTrackID = [elem.trackID for elem in self if self._test_det_in_gate(elem.get_prediction(),lst_detections[i1])]
+                print ("Detection at mcc",mcc ,"is assigned to:",selTrackID)
+                self.append_detection_to_track(selTrackID,lst_detections[i1])
                 lst_detections[i1]._trackID = selTrackID
+            else:
+                self._lst_not_assigned_detections.append(lst_detections[i1])
+                print ("Detection at mcc",mcc ,"is not assigned to an existing track")
+                self._create_new_track()
+                print ("A new track is created. ID:",self._n_of_Tracks)
 
+            # if lst_detections[i1]._trackID == 0:
+            #     self._lst_not_assigned_detections.append(lst_detections[i1])
+            #     print ("Detection at mcc",mcc ,"is not assigned to an existing track")
+            #     self._create_new_track()
+            #     print ("A new track is created. ID:",self._n_of_Tracks)
+            # else: pass
 

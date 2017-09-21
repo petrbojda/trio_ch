@@ -65,6 +65,27 @@ class DetectionList(list):
         self._mcc_interval = (0,0)
         self._trackID_interval = (0,0)
 
+    def append_point(self, mcc,x,y,dx,dy,beam):
+        self.append(DetectionPoint(mcc,x,y,dx,dy,beam))
+        self._y_interval = (min([elem._y for elem in self]),max([elem._y for elem in self]))
+        self._x_interval = (min([elem._x for elem in self]),max([elem._x for elem in self]))
+        self._vely_interval = (min([elem._vely for elem in self]),max([elem._vely for elem in self]))
+        self._velx_interval = (min([elem._velx for elem in self]),max([elem._velx for elem in self]))
+        self._mcc_interval = (min([elem._mcc for elem in self]),max([elem._mcc for elem in self]))
+
+    def append_point_from_detection(self, detection):
+        self.append(DetectionPoint(mcc=detection._mcc,
+                               x=detection._x,
+                               y=detection._y,
+                               dx=detection._dx,
+                               dy=detection._dy,
+                               beam=detection._beam))
+        self._y_interval = (min([elem._y for elem in self]),max([elem._y for elem in self]))
+        self._x_interval = (min([elem._x for elem in self]),max([elem._x for elem in self]))
+        self._vely_interval = (min([elem._vely for elem in self]),max([elem._vely for elem in self]))
+        self._velx_interval = (min([elem._velx for elem in self]),max([elem._velx for elem in self]))
+        self._mcc_interval = (min([elem._mcc for elem in self]),max([elem._mcc for elem in self]))
+
     def append_from_m_file(self, data_path, left, car_width):
 
         radar_data = sio.loadmat(data_path)

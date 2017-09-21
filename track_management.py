@@ -25,9 +25,8 @@ class TrackManager(list):
 
 
     def _test_det_in_gate(self,gate,detection):
-        # TODO: change the detection to some other type - point x,y for instance
-        is_in_x = (gate.x-self._gate_dx < detection._x) and (gate.x+self._gate_dx > detection._x)
-        is_in_y = (gate.y-self._gate_dx < detection._y) and (gate.y+self._gate_dx > detection._y)
+        is_in_x = (gate.x-self._gate_dx < detection['x']) and (gate.x+self._gate_dx > detection['x'])
+        is_in_y = (gate.y-self._gate_dx < detection['y']) and (gate.y+self._gate_dx > detection['y'])
 
         return is_in_x and is_in_y
 
@@ -46,12 +45,13 @@ class TrackManager(list):
         print ("Detections to assign, mcc:",mcc,"with ", len(lst_detections), "means NoDet",noDet)
         print ("Detections to assign", lst_detections)
         for i1 in range(0, noDet):
-            detection = lst_detections
+            detection = {'x':lst_detections['x'][i1],'y':lst_detections['y'][i1],
+                         'mcc':lst_detections['mcc'][i1],'trackID':lst_detections['trackID'][i1]}
             if self._n_of_Tracks[-1]:
-                selTrackID = [elem.trackID for elem in self if self._test_det_in_gate(elem.get_prediction(),lst_detections[i1])]
-                # TODO: change the detection to some other type - point x,y for instance
+                selTrackID = [elem.trackID for elem in self if self._test_det_in_gate(elem.get_prediction(),detection)]
                 print ("Detection at mcc",mcc ,"is assigned to:",selTrackID)
                 self.append_detection_to_track(selTrackID,lst_detections[i1])
+                # TODO: change the detection to some other type - point x,y for instance
                 lst_detections[i1]._trackID = selTrackID
 
             if lst_detections["trackID"][i1] == 0:

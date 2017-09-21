@@ -67,7 +67,7 @@ def main(conf_data):
                 tracks_left.test_detections(i,number_of_dets_left,LR_data)
 
         i_prev = i
-
+#     TODO: graphical representation of the results
 
 if __name__ == "__main__":
     conf_data = dc.parse_CMDLine("./analysis.cnf")

@@ -40,13 +40,15 @@ class ReferencePoint(object):
         self._EGO_hdg = EGO_hdg
 
 class TrackPoint(object):
-    def __init__(self,mcc,x,y,dx,dy,beam):
+    def __init__(self,mcc,x,y,dx,dy,beam,Rvelocity,Razimuth):
         self.mcc = mcc
         self.x = x
         self.dx = dx
         self.y = y
         self.dy = dy
         self.beam = beam
+        self.Razimuth = Razimuth
+        self.Rvelocity = Rvelocity
 
     def get_array(self):
         x = np.array([self.x,self.dx,self.y,self.dy])
@@ -73,13 +75,13 @@ class DetectionList(list):
         self._velx_interval = (min([elem._velx for elem in self]),max([elem._velx for elem in self]))
         self._mcc_interval = (min([elem._mcc for elem in self]),max([elem._mcc for elem in self]))
 
-    def append_point_from_detection(self, detection):
-        self.append(DetectionPoint(mcc=detection._mcc,
-                               x=detection._x,
-                               y=detection._y,
-                               dx=detection._dx,
-                               dy=detection._dy,
-                               beam=detection._beam))
+    def append_point_from_detection(self, detection_point):
+        self.append(DetectionPoint( mcc=detection_point._mcc,
+                                    x=detection_point._x,
+                                    y=detection_point._y,
+                                    dx=detection_point._dx,
+                                    dy=detection_point._dy,
+                                    beam=detection_point._beam))
         self._y_interval = (min([elem._y for elem in self]),max([elem._y for elem in self]))
         self._x_interval = (min([elem._x for elem in self]),max([elem._x for elem in self]))
         self._vely_interval = (min([elem._vely for elem in self]),max([elem._vely for elem in self]))
@@ -428,12 +430,14 @@ class ReferenceList(list):
 class Track(list):
     def __init__(self,trackID):
         super().__init__()
-        self._prediction = TrackPoint(mcc=0,x=0,y=0,dx=0,dy=0,beam=0)
+        self._prediction = TrackPoint(mcc=0,x=0,y=0,dx=0,dy=0,beam=0,Razimuth=0,Rvelocity=0)
         self.trackID = trackID
         self._velx_interval = (0,0)
         self._x_interval = (0,0)
         self._vely_interval = (0,0)
         self._y_interval = (0,0)
+        self._Rvelocity_interval = (0, 0)
+        self._Razimuth_interval = (0, 0)
         self._mcc_interval = (0,0)
 
     def append_point(self, mcc,x,y,dx,dy,beam):
@@ -442,6 +446,8 @@ class Track(list):
         self._x_interval = (min([elem._x for elem in self]),max([elem._x for elem in self]))
         self._vely_interval = (min([elem._vely for elem in self]),max([elem._vely for elem in self]))
         self._velx_interval = (min([elem._velx for elem in self]),max([elem._velx for elem in self]))
+        self._Rvelocity_interval = (min([elem._Rvelocity for elem in self]), max([elem._Rvelocity for elem in self]))
+        self._Razimuth_interval = (min([elem._Razimuth for elem in self]), max([elem._Razimuth for elem in self]))
         self._mcc_interval = (min([elem._mcc for elem in self]),max([elem._mcc for elem in self]))
 
     def append_point_from_detection(self, detection):
@@ -450,24 +456,32 @@ class Track(list):
                                y=detection._y,
                                dx=detection._dx,
                                dy=detection._dy,
+                               Razimuth=detection._Razimuth,
+                               Rvelocity=detection._Rvelocity,
                                beam=detection._beam))
         self._y_interval = (min([elem._y for elem in self]),max([elem._y for elem in self]))
         self._x_interval = (min([elem._x for elem in self]),max([elem._x for elem in self]))
         self._vely_interval = (min([elem._vely for elem in self]),max([elem._vely for elem in self]))
         self._velx_interval = (min([elem._velx for elem in self]),max([elem._velx for elem in self]))
+        self._Rvelocity_interval = (min([elem._Rvelocity for elem in self]), max([elem._Rvelocity for elem in self]))
+        self._Razimuth_interval = (min([elem._Razimuth for elem in self]), max([elem._Razimuth for elem in self]))
         self._mcc_interval = (min([elem._mcc for elem in self]),max([elem._mcc for elem in self]))
 
     def append_point_from_radardata_str(self, detection):
-        self.append(TrackPoint(mcc=detection._mcc,
-                               x=detection._x,
-                               y=detection._y,
-                               dx=detection._dx,
-                               dy=detection._dy,
-                               beam=detection._beam))
+        self.append(TrackPoint(mcc=detection['mcc'],
+                               x=detection['x'],
+                               y=detection['y'],
+                               dx=detection['dx'],
+                               dy=detection['dy'],
+                               Razimuth=detection['Razimuth'],
+                               Rvelocity=detection['Rvelocity'],
+                               beam=detection['beam']))
         self._y_interval = (min([elem._y for elem in self]),max([elem._y for elem in self]))
         self._x_interval = (min([elem._x for elem in self]),max([elem._x for elem in self]))
         self._vely_interval = (min([elem._vely for elem in self]),max([elem._vely for elem in self]))
         self._velx_interval = (min([elem._velx for elem in self]),max([elem._velx for elem in self]))
+        self._Rvelocity_interval = (min([elem._Rvelocity for elem in self]), max([elem._Rvelocity for elem in self]))
+        self._Razimuth_interval = (min([elem._Razimuth for elem in self]), max([elem._Razimuth for elem in self]))
         self._mcc_interval = (min([elem._mcc for elem in self]),max([elem._mcc for elem in self]))
 
     # Note: radar data structure here

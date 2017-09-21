@@ -58,7 +58,7 @@ def main(conf_data):
 
     selection_pl = {"beam_tp":conf_data["beams_tp"],
                  "mcc_tp":None, "x_tp":None, "y_tp":None,
-                 "rng_tp":None, "vel_tp":None, "az_tp":None}
+                 "rng_tp":None, "vel_tp":None, "az_tp":None,"trackID_tp":None}
 
     rplt.static_plot_selections(lst_det_s, None, selection_pl, output_path)
 

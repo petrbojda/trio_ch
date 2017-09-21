@@ -12,7 +12,7 @@ class TrackManager(list):
 
         self._flt_type = flt_type
         self._n_of_Tracks = np.array([0])
-        self._lst_not_assigned_detections = dc.DetectionList()
+        self._lst_not_assigned_detections = []
 
 
     def _create_new_track(self):
@@ -46,18 +46,17 @@ class TrackManager(list):
         print ("Detections to assign", lst_detections)
         for i1 in range(0, noDet):
             detection = {'x':lst_detections['x'][i1],'y':lst_detections['y'][i1],
-                         'mcc':lst_detections['mcc'][i1],'trackID':lst_detections['trackID'][i1]}
+                         'mcc':lst_detections['mcc'][i1],'trackID':lst_detections['trackID'][i1]
+                         'Razimuth': lst_detections['Razimuth'][i1], 'Rvelocity': lst_detections['Rvelocity'][i1]}
             if self._n_of_Tracks[-1]:
                 selTrackID = [elem.trackID for elem in self if self._test_det_in_gate(elem.get_prediction(),detection)]
                 print ("Detection at mcc",mcc ,"is assigned to:",selTrackID)
                 self.append_detection_to_track(selTrackID,detection)
-                # TODO: change the detection to some other type - point x,y for instance
-                lst_detections[i1]._trackID = selTrackID
+                lst_detections["trackID"][i1] = selTrackID
 
             if lst_detections["trackID"][i1] == 0:
                 print ("not assigned detections are in a list:",self._lst_not_assigned_detections)
-                self._lst_not_assigned_detections.append(lst_detections[i1])
-                # TODO: change the detection to some other type - point x,y for instance
+                self._lst_not_assigned_detections.append(detection)
                 print ("Detection at mcc",mcc ,"is not assigned to an existing track")
                 self._create_new_track()
                 print ("A new track is created. ID:",self._n_of_Tracks)
@@ -69,3 +68,4 @@ class TrackManager(list):
             #     print ("A new track is created. ID:",self._n_of_Tracks)
             # else: pass
 
+        # TODO: write a function to test third detection in a row to fit a prediction based on detection at mcc-2 and mcc-1

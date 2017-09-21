@@ -12,8 +12,8 @@
     <option name="renderExternalDocumentation" value="true" />
   </component>
   <component name="ReSTService">
-    <option name="workdir" value="$MODULE_DIR$/doc_sphinx" />
-    <option name="DOC_DIR" value="$MODULE_DIR$/doc_sphinx" />
+    <option name="workdir" value="$MODULE_DIR$/docsphynx" />
+    <option name="DOC_DIR" value="$MODULE_DIR$/docsphynx" />
   </component>
   <component name="TestRunnerService">
     <option name="projectConfiguration" value="Nosetests" />

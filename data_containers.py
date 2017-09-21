@@ -457,6 +457,29 @@ class Track(list):
         self._velx_interval = (min([elem._velx for elem in self]),max([elem._velx for elem in self]))
         self._mcc_interval = (min([elem._mcc for elem in self]),max([elem._mcc for elem in self]))
 
+    def append_point_from_radardata_str(self, detection):
+        self.append(TrackPoint(mcc=detection._mcc,
+                               x=detection._x,
+                               y=detection._y,
+                               dx=detection._dx,
+                               dy=detection._dy,
+                               beam=detection._beam))
+        self._y_interval = (min([elem._y for elem in self]),max([elem._y for elem in self]))
+        self._x_interval = (min([elem._x for elem in self]),max([elem._x for elem in self]))
+        self._vely_interval = (min([elem._vely for elem in self]),max([elem._vely for elem in self]))
+        self._velx_interval = (min([elem._velx for elem in self]),max([elem._velx for elem in self]))
+        self._mcc_interval = (min([elem._mcc for elem in self]),max([elem._mcc for elem in self]))
+
+    # Note: radar data structure here
+        # radar_data = {"range": np.array(r_sel),
+        #               "azimuth": np.array(az_sel),
+        #               "velocity": np.array(v_sel),
+        #               "x": np.array(x_sel),
+        #               "y": np.array(y_sel),
+        #               "trackID": np.array(trackID_sel),
+        #               "beam": np.array(beam_sel),
+        #               "mcc": np.array(mcc_sel)}
+
     def get_mcc_interval(self):
         return self._mcc_interval
 

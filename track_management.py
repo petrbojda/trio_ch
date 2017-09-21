@@ -21,7 +21,7 @@ class TrackManager(list):
 
     def append_detection_to_track(self, trackID, detection):
         track_sel = [elem for elem in self if (elem.trackID == trackID)]
-        track_sel.append_point_from_detection(detection)
+        track_sel.append_point_from_radardata_str(detection)
 
 
     def _test_det_in_gate(self,gate,detection):
@@ -50,7 +50,7 @@ class TrackManager(list):
             if self._n_of_Tracks[-1]:
                 selTrackID = [elem.trackID for elem in self if self._test_det_in_gate(elem.get_prediction(),detection)]
                 print ("Detection at mcc",mcc ,"is assigned to:",selTrackID)
-                self.append_detection_to_track(selTrackID,lst_detections[i1])
+                self.append_detection_to_track(selTrackID,detection)
                 # TODO: change the detection to some other type - point x,y for instance
                 lst_detections[i1]._trackID = selTrackID
 

@@ -7,19 +7,20 @@ from mpl_toolkits.axes_grid import Divider
 import matplotlib
 import copy
 
+
 def static_plot_grid_hist_selections(lst_det_left, lst_det_right, selection, fname_det):
     """
-	Plots data in an analytic way. Only one MCC's set of detections is depicted here.
-	Input data dictionaries:
-		Both left and right radars of the same structure
-		radar_data = { 	"range": ,
-						"azimuth": , 
-						"velocity": ,
-						"x": ,
-						"y": ,
-						"beam": ,
-						"mcc":  	}
-	"""
+    Plots data in an analytic way. Only one MCC's set of detections is depicted here.
+    Input data dictionaries:
+    Both left and right radars of the same structure
+        radar_data = { 	"range": ,
+                        "azimuth": ,
+                        "velocity": ,
+                        "x": ,
+                        "y": ,
+                        "beam": ,
+                        "mcc":  	}
+    """
     ###### Plot starts here:
     cms = matplotlib.cm
     color_map_left = cms.Blues
@@ -350,9 +351,10 @@ def static_plot_selections(lst_det_left, lst_det_right, selection, fname_det):
     else:
         plt.show()
 
+
 def static_plotREF_selections(lst_det_left, lst_det_right,
-                                   lst_ref_left,lst_ref_right,lst_ref_both,
-                                   selection, fname_det, DGPS_xcompensation):
+                              lst_ref_left, lst_ref_right, lst_ref_both,
+                              selection, fname_det, DGPS_xcompensation):
     """
 	Plots data in an analytic way. Complete set of detections for all MCCs is depicted here.
 	Input data dictionaries:
@@ -467,7 +469,7 @@ def static_plotREF_selections(lst_det_left, lst_det_right,
 
         DGPSLeft_data = lst_ref_left.get_array_references_selected(mccL=mcc_tp)
         f1ax1.plot(abs(DGPSLeft_data["TAR_distX"] + DGPS_xcompensation), DGPSLeft_data["TAR_distY"],
-                   color=color_map_ref(0.7),marker='+', ls='None',label='Left DGPS')
+                   color=color_map_ref(0.7), marker='+', ls='None', label='Left DGPS')
 
         plt.draw()
 
@@ -476,7 +478,7 @@ def static_plotREF_selections(lst_det_left, lst_det_right,
 
         DGPSRight_data = lst_ref_right.get_array_references_selected(mccL=mcc_tp)
         f1ax1.plot(abs(DGPSRight_data["TAR_distX"] + DGPS_xcompensation), DGPSRight_data["TAR_distY"],
-                   color=color_map_ref(0.3),marker='+', ls='None',label='Right DGPS')
+                   color=color_map_ref(0.3), marker='+', ls='None', label='Right DGPS')
 
         plt.draw()
 
@@ -485,7 +487,7 @@ def static_plotREF_selections(lst_det_left, lst_det_right,
 
         DGPSBoth_data = lst_ref_both.get_array_references_selected(mccL=mcc_tp)
         f1ax1.plot(abs(DGPSBoth_data["TAR_distX"] + DGPS_xcompensation), DGPSBoth_data["TAR_distY"],
-                   color=color_map_ref(1.0),marker='+', ls='None',label='Both DGPS')
+                   color=color_map_ref(1.0), marker='+', ls='None', label='Both DGPS')
 
         plt.draw()
 

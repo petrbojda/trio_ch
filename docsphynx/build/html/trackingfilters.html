@@ -1,0 +1,357 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Tracking Filters Package &#8212; Automotive Rearlooking RADAR Tracker 1.2.1 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.2.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Radar Plots Package" href="radarplots.html" />
+    <link rel="prev" title="Track Management Package" href="trackmanagement.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="tracking-filters-package">
+<h1>Tracking Filters Package<a class="headerlink" href="#tracking-filters-package" title="Permalink to this headline">¶</a></h1>
+<p>The package contains two modules.</p>
+<ol class="arabic simple">
+<li><strong>EKF</strong> - to produce an extended kalman filter,</li>
+<li><strong>Fading Filter</strong> - to produce a fading memory filter.</li>
+</ol>
+<span class="target" id="module-tracking_filters"></span><div class="section" id="extended-kalman-filter">
+<h2>Extended Kalman Filter<a class="headerlink" href="#extended-kalman-filter" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="tracking_filters.ExtendedKalmanFilter">
+<em class="property">class </em><code class="descclassname">tracking_filters.</code><code class="descname">ExtendedKalmanFilter</code><span class="sig-paren">(</span><em>dim_x</em>, <em>dim_z</em>, <em>dim_u=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tracking_filters.html#ExtendedKalmanFilter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tracking_filters.ExtendedKalmanFilter" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="attribute">
+<dt id="tracking_filters.ExtendedKalmanFilter.B">
+<code class="descname">B</code><a class="headerlink" href="#tracking_filters.ExtendedKalmanFilter.B" title="Permalink to this definition">¶</a></dt>
+<dd><p>control transition matrix</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="tracking_filters.ExtendedKalmanFilter.F">
+<code class="descname">F</code><a class="headerlink" href="#tracking_filters.ExtendedKalmanFilter.F" title="Permalink to this definition">¶</a></dt>
+<dd><p>State Transition matrix</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="tracking_filters.ExtendedKalmanFilter.K">
+<code class="descname">K</code><a class="headerlink" href="#tracking_filters.ExtendedKalmanFilter.K" title="Permalink to this definition">¶</a></dt>
+<dd><p>Kalman gain</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="tracking_filters.ExtendedKalmanFilter.P">
+<code class="descname">P</code><a class="headerlink" href="#tracking_filters.ExtendedKalmanFilter.P" title="Permalink to this definition">¶</a></dt>
+<dd><p>state covariance matrix</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="tracking_filters.ExtendedKalmanFilter.Q">
+<code class="descname">Q</code><a class="headerlink" href="#tracking_filters.ExtendedKalmanFilter.Q" title="Permalink to this definition">¶</a></dt>
+<dd><p>Process uncertainty matrix</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="tracking_filters.ExtendedKalmanFilter.R">
+<code class="descname">R</code><a class="headerlink" href="#tracking_filters.ExtendedKalmanFilter.R" title="Permalink to this definition">¶</a></dt>
+<dd><p>measurement uncertainty</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="tracking_filters.ExtendedKalmanFilter.S">
+<code class="descname">S</code><a class="headerlink" href="#tracking_filters.ExtendedKalmanFilter.S" title="Permalink to this definition">¶</a></dt>
+<dd><p>system uncertainty in measurement space</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="tracking_filters.ExtendedKalmanFilter.predict">
+<code class="descname">predict</code><span class="sig-paren">(</span><em>u=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tracking_filters.html#ExtendedKalmanFilter.predict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tracking_filters.ExtendedKalmanFilter.predict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Predict next position.</p>
+<dl class="docutils">
+<dt>u <span class="classifier-delimiter">:</span> <span class="classifier">np.array</span></dt>
+<dd>Optional control vector. If non-zero, it is multiplied by B
+to create the control input into the system.</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="tracking_filters.ExtendedKalmanFilter.predict_update">
+<code class="descname">predict_update</code><span class="sig-paren">(</span><em>z</em>, <em>HJacobian</em>, <em>Hx</em>, <em>args=()</em>, <em>hx_args=()</em>, <em>u=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tracking_filters.html#ExtendedKalmanFilter.predict_update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tracking_filters.ExtendedKalmanFilter.predict_update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Performs the predict/update innovation of the extended Kalman
+filter.</p>
+<dl class="docutils">
+<dt>z <span class="classifier-delimiter">:</span> <span class="classifier">np.array</span></dt>
+<dd>measurement for this step.
+If <cite>None</cite>, only predict step is perfomed.</dd>
+<dt>HJacobian <span class="classifier-delimiter">:</span> <span class="classifier">function</span></dt>
+<dd>function which computes the Jacobian of the H matrix (measurement
+function). Takes state variable (self.x) as input, along with the
+optional arguments in args, and returns H.</dd>
+<dt>Hx <span class="classifier-delimiter">:</span> <span class="classifier">function</span></dt>
+<dd>function which takes as input the state variable (self.x) along
+with the optional arguments in hx_args, and returns the measurement
+that would correspond to that state.</dd>
+<dt>args <span class="classifier-delimiter">:</span> <span class="classifier">tuple, optional, default (,)</span></dt>
+<dd>arguments to be passed into HJacobian after the required state
+variable.</dd>
+<dt>hx_args <span class="classifier-delimiter">:</span> <span class="classifier">tuple, optional, default (,)</span></dt>
+<dd>arguments to be passed into Hx after the required state
+variable.</dd>
+<dt>u <span class="classifier-delimiter">:</span> <span class="classifier">np.array or scalar</span></dt>
+<dd>optional control vector input to the filter.</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="tracking_filters.ExtendedKalmanFilter.predict_x">
+<code class="descname">predict_x</code><span class="sig-paren">(</span><em>u=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tracking_filters.html#ExtendedKalmanFilter.predict_x"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tracking_filters.ExtendedKalmanFilter.predict_x" title="Permalink to this definition">¶</a></dt>
+<dd><p>predicts the next state of X. If you need to
+compute the next state yourself, override this function. You would
+need to do this, for example, if the usual Taylor expansion to
+generate F is not providing accurate results for you.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="tracking_filters.ExtendedKalmanFilter.update">
+<code class="descname">update</code><span class="sig-paren">(</span><em>z</em>, <em>HJacobian</em>, <em>Hx</em>, <em>R=None</em>, <em>args=()</em>, <em>hx_args=()</em>, <em>residual=&lt;ufunc 'subtract'&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tracking_filters.html#ExtendedKalmanFilter.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tracking_filters.ExtendedKalmanFilter.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Performs the update innovation of the extended Kalman filter.</p>
+<dl class="docutils">
+<dt>z <span class="classifier-delimiter">:</span> <span class="classifier">np.array</span></dt>
+<dd>measurement for this step.
+If <cite>None</cite>, only predict step is perfomed.</dd>
+<dt>HJacobian <span class="classifier-delimiter">:</span> <span class="classifier">function</span></dt>
+<dd>function which computes the Jacobian of the H matrix (measurement
+function). Takes state variable (self.x) as input, returns H.</dd>
+<dt>Hx <span class="classifier-delimiter">:</span> <span class="classifier">function</span></dt>
+<dd>function which takes as input the state variable (self.x) along
+with the optional arguments in hx_args, and returns the measurement
+that would correspond to that state.</dd>
+<dt>R <span class="classifier-delimiter">:</span> <span class="classifier">np.array, scalar, or None</span></dt>
+<dd>Optionally provide R to override the measurement noise for this
+one call, otherwise  self.R will be used.</dd>
+<dt>args <span class="classifier-delimiter">:</span> <span class="classifier">tuple, optional, default (,)</span></dt>
+<dd>arguments to be passed into HJacobian after the required state
+variable. for robot localization you might need to pass in
+information about the map and time of day, so you might have
+<cite>args=(map_data, time)</cite>, where the signature of HCacobian will
+be <cite>def HJacobian(x, map, t)</cite></dd>
+<dt>hx_args <span class="classifier-delimiter">:</span> <span class="classifier">tuple, optional, default (,)</span></dt>
+<dd>arguments to be passed into Hx function after the required state
+variable.</dd>
+<dt>residual <span class="classifier-delimiter">:</span> <span class="classifier">function (z, z2), optional</span></dt>
+<dd>Optional function that computes the residual (difference) between
+the two measurement vectors. If you do not provide this, then the
+built in minus operator will be used. You will normally want to use
+the built in unless your residual computation is nonlinear (for
+example, if they are angles)</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="tracking_filters.ExtendedKalmanFilter.x">
+<code class="descname">x</code><a class="headerlink" href="#tracking_filters.ExtendedKalmanFilter.x" title="Permalink to this definition">¶</a></dt>
+<dd><p>state estimate vector</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="tracking_filters.ExtendedKalmanFilter.y">
+<code class="descname">y</code><a class="headerlink" href="#tracking_filters.ExtendedKalmanFilter.y" title="Permalink to this definition">¶</a></dt>
+<dd><p>measurement residual (innovation)</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="fading-kalman-filter">
+<h2>Fading Kalman Filter<a class="headerlink" href="#fading-kalman-filter" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="tracking_filters.FadingKalmanFilter">
+<em class="property">class </em><code class="descclassname">tracking_filters.</code><code class="descname">FadingKalmanFilter</code><span class="sig-paren">(</span><em>alpha</em>, <em>dim_x</em>, <em>dim_z</em>, <em>dim_u=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tracking_filters.html#FadingKalmanFilter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tracking_filters.FadingKalmanFilter" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="tracking_filters.FadingKalmanFilter.batch_filter">
+<code class="descname">batch_filter</code><span class="sig-paren">(</span><em>zs</em>, <em>Rs=None</em>, <em>update_first=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tracking_filters.html#FadingKalmanFilter.batch_filter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tracking_filters.FadingKalmanFilter.batch_filter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Batch processes a sequences of measurements.</p>
+<dl class="docutils">
+<dt>zs <span class="classifier-delimiter">:</span> <span class="classifier">list-like</span></dt>
+<dd>list of measurements at each time step <cite>self.dt</cite> Missing
+measurements must be represented by ‘None’.</dd>
+<dt>Rs <span class="classifier-delimiter">:</span> <span class="classifier">list-like, optional</span></dt>
+<dd>optional list of values to use for the measurement error
+covariance; a value of None in any position will cause the filter
+to use <cite>self.R</cite> for that time step.</dd>
+<dt>update_first <span class="classifier-delimiter">:</span> <span class="classifier">bool, optional,</span></dt>
+<dd>controls whether the order of operations is update followed by
+predict, or predict followed by update. Default is predict-&gt;update.</dd>
+<dt>means: np.array((n,dim_x,1))</dt>
+<dd>array of the state for each time step after the update. Each entry
+is an np.array. In other words <cite>means[k,:]</cite> is the state at step
+<cite>k</cite>.</dd>
+<dt>covariance: np.array((n,dim_x,dim_x))</dt>
+<dd>array of the covariances for each time step after the update.
+In other words <cite>covariance[k,:,:]</cite> is the covariance at step <cite>k</cite>.</dd>
+<dt>means_predictions: np.array((n,dim_x,1))</dt>
+<dd>array of the state for each time step after the predictions. Each
+entry is an np.array. In other words <cite>means[k,:]</cite> is the state at
+step <cite>k</cite>.</dd>
+<dt>covariance_predictions: np.array((n,dim_x,dim_x))</dt>
+<dd>array of the covariances for each time step after the prediction.
+In other words <cite>covariance[k,:,:]</cite> is the covariance at step <cite>k</cite>.</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="tracking_filters.FadingKalmanFilter.get_prediction">
+<code class="descname">get_prediction</code><span class="sig-paren">(</span><em>u=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tracking_filters.html#FadingKalmanFilter.get_prediction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tracking_filters.FadingKalmanFilter.get_prediction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Predicts the next state of the filter and returns it. Does not
+alter the state of the filter.</p>
+<dl class="docutils">
+<dt>u <span class="classifier-delimiter">:</span> <span class="classifier">np.array</span></dt>
+<dd>optional control input</dd>
+<dt>(x, P)</dt>
+<dd>State vector and covariance array of the prediction.</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="tracking_filters.FadingKalmanFilter.measurement_of_state">
+<code class="descname">measurement_of_state</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tracking_filters.html#FadingKalmanFilter.measurement_of_state"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tracking_filters.FadingKalmanFilter.measurement_of_state" title="Permalink to this definition">¶</a></dt>
+<dd><p>Helper function that converts a state into a measurement.</p>
+<dl class="docutils">
+<dt>x <span class="classifier-delimiter">:</span> <span class="classifier">np.array</span></dt>
+<dd>kalman state vector</dd>
+<dt>z <span class="classifier-delimiter">:</span> <span class="classifier">np.array</span></dt>
+<dd>measurement corresponding to the given state</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="tracking_filters.FadingKalmanFilter.predict">
+<code class="descname">predict</code><span class="sig-paren">(</span><em>u=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tracking_filters.html#FadingKalmanFilter.predict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tracking_filters.FadingKalmanFilter.predict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Predict next position.</p>
+<dl class="docutils">
+<dt>u <span class="classifier-delimiter">:</span> <span class="classifier">np.array</span></dt>
+<dd>Optional control vector. If non-zero, it is multiplied by B
+to create the control input into the system.</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="tracking_filters.FadingKalmanFilter.residual_of">
+<code class="descname">residual_of</code><span class="sig-paren">(</span><em>z</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tracking_filters.html#FadingKalmanFilter.residual_of"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tracking_filters.FadingKalmanFilter.residual_of" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns the residual for the given measurement (z). Does not alter
+the state of the filter.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="tracking_filters.FadingKalmanFilter.update">
+<code class="descname">update</code><span class="sig-paren">(</span><em>z</em>, <em>R=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tracking_filters.html#FadingKalmanFilter.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tracking_filters.FadingKalmanFilter.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a new measurement (z) to the kalman filter. If z is None, nothing
+is changed.</p>
+<dl class="docutils">
+<dt>z <span class="classifier-delimiter">:</span> <span class="classifier">np.array</span></dt>
+<dd>measurement for this update.</dd>
+<dt>R <span class="classifier-delimiter">:</span> <span class="classifier">np.array, scalar, or None</span></dt>
+<dd>Optionally provide R to override the measurement noise for this
+one call, otherwise  self.R will be used.</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Tracking Filters Package</a><ul>
+<li><a class="reference internal" href="#extended-kalman-filter">Extended Kalman Filter</a></li>
+<li><a class="reference internal" href="#fading-kalman-filter">Fading Kalman Filter</a></li>
+</ul>
+</li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="modules.html">&lt;no title&gt;</a><ul>
+      <li>Previous: <a href="trackmanagement.html" title="previous chapter">Track Management Package</a></li>
+      <li>Next: <a href="radarplots.html" title="next chapter">Radar Plots Package</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/trackingfilters.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, Petr Bojda.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="_sources/trackingfilters.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

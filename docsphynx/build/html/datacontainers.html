@@ -1,0 +1,228 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Data Containers Package &#8212; Automotive Rearlooking RADAR Tracker 1.2.1 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.2.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Track Management Package" href="trackmanagement.html" />
+    <link rel="prev" title="&lt;no title&gt;" href="modules.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="data-containers-package">
+<h1>Data Containers Package<a class="headerlink" href="#data-containers-package" title="Permalink to this headline">¶</a></h1>
+<p>any classes</p>
+<div class="section" id="detectionpoint">
+<h2>DetectionPoint<a class="headerlink" href="#detectionpoint" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="data_containers.DetectionPoint">
+<em class="property">class </em><code class="descclassname">data_containers.</code><code class="descname">DetectionPoint</code><span class="sig-paren">(</span><em>mcc=0</em>, <em>beam=0</em>, <em>nodet_permcc=0</em>, <em>trackID=0</em>, <em>rng=0.0</em>, <em>vel=0.0</em>, <em>azimuth=0.0</em>, <em>left=True</em>, <em>car_width=1.88</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/data_containers.html#DetectionPoint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#data_containers.DetectionPoint" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+</dd></dl>
+
+</div>
+<div class="section" id="referencepoint">
+<h2>ReferencePoint<a class="headerlink" href="#referencepoint" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="data_containers.ReferencePoint">
+<em class="property">class </em><code class="descclassname">data_containers.</code><code class="descname">ReferencePoint</code><span class="sig-paren">(</span><em>mccL=0</em>, <em>mccR=0</em>, <em>TAR_dist=0.0</em>, <em>TAR_distX=0.0</em>, <em>TAR_distY=0.0</em>, <em>TAR_velX=0.0</em>, <em>TAR_velY=0.0</em>, <em>TAR_hdg=0.0</em>, <em>EGO_velX=0.0</em>, <em>EGO_velY=0.0</em>, <em>EGO_accX=0.0</em>, <em>EGO_accY=0.0</em>, <em>EGO_hdg=0.0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/data_containers.html#ReferencePoint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#data_containers.ReferencePoint" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+</dd></dl>
+
+</div>
+<div class="section" id="trackpoint">
+<h2>TrackPoint<a class="headerlink" href="#trackpoint" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="data_containers.TrackPoint">
+<em class="property">class </em><code class="descclassname">data_containers.</code><code class="descname">TrackPoint</code><span class="sig-paren">(</span><em>mcc=0</em>, <em>x=0</em>, <em>y=0</em>, <em>dx=0</em>, <em>dy=0</em>, <em>beam=[]</em>, <em>Rvelocity=0</em>, <em>Razimuth=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/data_containers.html#TrackPoint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#data_containers.TrackPoint" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="data_containers.TrackPoint.get_array">
+<code class="descname">get_array</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/data_containers.html#TrackPoint.get_array"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#data_containers.TrackPoint.get_array" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="detectionlist">
+<h2>DetectionList<a class="headerlink" href="#detectionlist" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="data_containers.DetectionList">
+<em class="property">class </em><code class="descclassname">data_containers.</code><code class="descname">DetectionList</code><a class="reference internal" href="_modules/data_containers.html#DetectionList"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#data_containers.DetectionList" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">list</span></code></p>
+<dl class="method">
+<dt id="data_containers.DetectionList.append_from_m_file">
+<code class="descname">append_from_m_file</code><span class="sig-paren">(</span><em>data_path</em>, <em>left</em>, <em>car_width</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/data_containers.html#DetectionList.append_from_m_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#data_containers.DetectionList.append_from_m_file" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="data_containers.DetectionList.append_point">
+<code class="descname">append_point</code><span class="sig-paren">(</span><em>mcc</em>, <em>x</em>, <em>y</em>, <em>dx</em>, <em>dy</em>, <em>beam</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/data_containers.html#DetectionList.append_point"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#data_containers.DetectionList.append_point" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="data_containers.DetectionList.append_point_from_detection">
+<code class="descname">append_point_from_detection</code><span class="sig-paren">(</span><em>detection_point</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/data_containers.html#DetectionList.append_point_from_detection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#data_containers.DetectionList.append_point_from_detection" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="data_containers.DetectionList.extend_with_selection">
+<code class="descname">extend_with_selection</code><span class="sig-paren">(</span><em>radar_data_list</em>, <em>**kwarg</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/data_containers.html#DetectionList.extend_with_selection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#data_containers.DetectionList.extend_with_selection" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="data_containers.DetectionList.get_array_detections_selected">
+<code class="descname">get_array_detections_selected</code><span class="sig-paren">(</span><em>**kwarg</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/data_containers.html#DetectionList.get_array_detections_selected"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#data_containers.DetectionList.get_array_detections_selected" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="data_containers.DetectionList.get_max_of_detections_per_mcc">
+<code class="descname">get_max_of_detections_per_mcc</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/data_containers.html#DetectionList.get_max_of_detections_per_mcc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#data_containers.DetectionList.get_max_of_detections_per_mcc" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="data_containers.DetectionList.get_mcc_interval">
+<code class="descname">get_mcc_interval</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/data_containers.html#DetectionList.get_mcc_interval"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#data_containers.DetectionList.get_mcc_interval" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="track">
+<h2>Track<a class="headerlink" href="#track" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="data_containers.Track">
+<em class="property">class </em><code class="descclassname">data_containers.</code><code class="descname">Track</code><span class="sig-paren">(</span><em>trackID</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/data_containers.html#Track"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#data_containers.Track" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">list</span></code></p>
+<dl class="method">
+<dt id="data_containers.Track.append_point">
+<code class="descname">append_point</code><span class="sig-paren">(</span><em>mcc</em>, <em>x</em>, <em>y</em>, <em>dx</em>, <em>dy</em>, <em>beam</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/data_containers.html#Track.append_point"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#data_containers.Track.append_point" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="data_containers.Track.append_point_from_detection">
+<code class="descname">append_point_from_detection</code><span class="sig-paren">(</span><em>detection</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/data_containers.html#Track.append_point_from_detection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#data_containers.Track.append_point_from_detection" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="data_containers.Track.append_point_from_radardata_str">
+<code class="descname">append_point_from_radardata_str</code><span class="sig-paren">(</span><em>detection</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/data_containers.html#Track.append_point_from_radardata_str"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#data_containers.Track.append_point_from_radardata_str" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="data_containers.Track.get_mcc_interval">
+<code class="descname">get_mcc_interval</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/data_containers.html#Track.get_mcc_interval"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#data_containers.Track.get_mcc_interval" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="data_containers.Track.get_prediction">
+<code class="descname">get_prediction</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/data_containers.html#Track.get_prediction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#data_containers.Track.get_prediction" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="data_containers.Track.update_prediction">
+<code class="descname">update_prediction</code><span class="sig-paren">(</span><em>prediction</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/data_containers.html#Track.update_prediction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#data_containers.Track.update_prediction" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Data Containers Package</a><ul>
+<li><a class="reference internal" href="#detectionpoint">DetectionPoint</a></li>
+<li><a class="reference internal" href="#referencepoint">ReferencePoint</a></li>
+<li><a class="reference internal" href="#trackpoint">TrackPoint</a></li>
+<li><a class="reference internal" href="#detectionlist">DetectionList</a></li>
+<li><a class="reference internal" href="#track">Track</a></li>
+</ul>
+</li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="modules.html">&lt;no title&gt;</a><ul>
+      <li>Previous: <a href="modules.html" title="previous chapter">&lt;no title&gt;</a></li>
+      <li>Next: <a href="trackmanagement.html" title="next chapter">Track Management Package</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/datacontainers.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, Petr Bojda.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="_sources/datacontainers.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

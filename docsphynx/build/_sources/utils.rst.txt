@@ -22,3 +22,11 @@ tracking_filters.FadingKalmanFilter
     :undoc-members:
     :show-inheritance:
 
+
+siggens.PRN_bitstreams module
+-----------------------------
+
+.. autoclass:: PRN_bitstreams
+    :members:
+    :undoc-members:
+    :show-inheritance:

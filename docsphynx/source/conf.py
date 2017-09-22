@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 #
-# Automotive Rearview RADAR Tracker documentation build configuration file, created by
+# Automotive Rearlooking RADAR Tracker documentation build configuration file, created by
 # sphinx-quickstart on Thu Sep 21 23:12:41 2017.
 #
 # This file is execfile()d with the current directory set to its
@@ -21,6 +21,11 @@
 # import sys
 # sys.path.insert(0, os.path.abspath('.'))
 
+import os
+import sys
+sys.path.insert(0, os.path.abspath('../../'))
+
+
 
 # -- General configuration ------------------------------------------------
 
@@ -36,7 +41,7 @@ extensions = ['sphinx.ext.autodoc',
     'sphinx.ext.todo',
     'sphinx.ext.imgmath',
     'sphinx.ext.viewcode',
-    'sphinx.ext.githubpages']
+    'sphinx.ext.autosummary']
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -51,7 +56,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = 'Automotive Rearview RADAR Tracker'
+project = 'Automotive Rearlooking RADAR Tracker'
 copyright = '2017, Petr Bojda'
 author = 'Petr Bojda'
 
@@ -105,7 +110,7 @@ html_static_path = ['_static']
 # -- Options for HTMLHelp output ------------------------------------------
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'AutomotiveRearviewRADARTrackerdoc'
+htmlhelp_basename = 'AutomotiveRearlookingRADARTrackerdoc'
 
 
 # -- Options for LaTeX output ---------------------------------------------
@@ -142,7 +147,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'automotiverearviewradartracker', 'Automotive Rearview RADAR Tracker Documentation',
+    (master_doc, 'automotiverearlookingradartracker', 'Automotive Rearlooking RADAR Tracker Documentation',
      [author], 1)
 ]
 
@@ -153,8 +158,8 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, 'AutomotiveRearviewRADARTracker', 'Automotive Rearview RADAR Tracker Documentation',
-     author, 'AutomotiveRearviewRADARTracker', 'One line description of project.',
+    (master_doc, 'AutomotiveRearlookingRADARTracker', 'Automotive Rear-looking RADAR Tracker Documentation',
+     author, 'AutomotiveRearlookingRADARTracker', 'One line description of project.',
      'Miscellaneous'),
 ]
 

@@ -2,7 +2,7 @@ import numpy as np
 import data_containers as dc
 import scipy.linalg as linalg
 from numpy import dot, zeros, eye, asarray
-from helpers import setter, setter_scalar, dot3, setter_1d
+from utils import setter, setter_scalar, dot3, setter_1d
 
 class ExtendedKalmanFilter(object):
 
@@ -11,8 +11,7 @@ class ExtendedKalmanFilter(object):
         various state variables to reasonable values; the defaults below will
         not give you a functional filter.
 
-        Parameters
-        ----------
+
 
         dim_x : int
             Number of state variables for the Kalman filter. For example, if
@@ -46,8 +45,7 @@ class ExtendedKalmanFilter(object):
         """ Performs the predict/update innovation of the extended Kalman
         filter.
 
-        Parameters
-        ----------
+
 
         z : np.array
             measurement for this step.
@@ -111,8 +109,7 @@ class ExtendedKalmanFilter(object):
                residual=np.subtract):
         """ Performs the update innovation of the extended Kalman filter.
 
-        Parameters
-        ----------
+
 
         z : np.array
             measurement for this step.
@@ -192,8 +189,7 @@ class ExtendedKalmanFilter(object):
     def predict(self, u=0):
         """ Predict next position.
 
-        Parameters
-        ----------
+
 
         u : np.array
             Optional control vector. If non-zero, it is multiplied by B
@@ -296,8 +292,7 @@ class FadingKalmanFilter(object):
         """ Create a Kalman filter. You are responsible for setting the
         various state variables to reasonable values; the defaults below will not give you a functional filter.
 
-        Parameters
-        ----------
+
 
         alpha : float, >= 1
             alpha controls how much you want the filter to forget past
@@ -382,8 +377,7 @@ class FadingKalmanFilter(object):
         Add a new measurement (z) to the kalman filter. If z is None, nothing
         is changed.
 
-        Parameters
-        ----------
+
 
         z : np.array
             measurement for this update.
@@ -433,8 +427,7 @@ class FadingKalmanFilter(object):
     def predict(self, u=0):
         """ Predict next position.
 
-        Parameters
-        ----------
+
 
         u : np.array
             Optional control vector. If non-zero, it is multiplied by B
@@ -451,8 +444,6 @@ class FadingKalmanFilter(object):
     def batch_filter(self, zs, Rs=None, update_first=False):
         """ Batch processes a sequences of measurements.
 
-        Parameters
-        ----------
 
         zs : list-like
             list of measurements at each time step `self.dt` Missing
@@ -467,8 +458,7 @@ class FadingKalmanFilter(object):
             controls whether the order of operations is update followed by
             predict, or predict followed by update. Default is predict->update.
 
-        Returns
-        -------
+
 
         means: np.array((n,dim_x,1))
             array of the state for each time step after the update. Each entry
@@ -527,14 +517,11 @@ class FadingKalmanFilter(object):
         """ Predicts the next state of the filter and returns it. Does not
         alter the state of the filter.
 
-        Parameters
-        ----------
 
         u : np.array
             optional control input
 
-        Returns
-        -------
+
 
         (x, P)
             State vector and covariance array of the prediction.
@@ -555,14 +542,12 @@ class FadingKalmanFilter(object):
     def measurement_of_state(self, x):
         """ Helper function that converts a state into a measurement.
 
-        Parameters
-        ----------
+
 
         x : np.array
             kalman state vector
 
-        Returns
-        -------
+
 
         z : np.array
             measurement corresponding to the given state

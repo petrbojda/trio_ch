@@ -44,7 +44,7 @@ class TrackManager(list):
         return projected_point
 
     def test_detections(self,mcc,noDet,lst_detections):
-        print ("Detections to assign, mcc:",mcc,"with ", len(lst_detections), "means NoDet",noDet)
+        print ("Detections to assign, mcc:",mcc,"with NoDet",noDet)
         print ("Detections to assign", lst_detections)
         for i1 in range(0, noDet):
             detection = {'x':lst_detections['x'][i1],'y':lst_detections['y'][i1],'beam':lst_detections['beam'][i1],

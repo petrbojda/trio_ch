@@ -36,7 +36,7 @@ modules_dir: /home/petr/Projects/TRIO/Radar/srcpy/
 	left_dgps: CVUT_WORK_BSDL_left_t35_DGPS
 	right_dgps: CVUT_WORK_BSDL_right_t45_DGPS
 	both_dgps:
-	DGPS_xcompensation: 17
+	DGPS_xcompensation: 20
 
 [HWY]
 # 3rd scenario - Highway

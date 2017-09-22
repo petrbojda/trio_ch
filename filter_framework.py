@@ -56,7 +56,7 @@ def main(conf_data):
 
     ############ Filtering loop
     i_prev = mcc_start
-    for i in range(mcc_start, mcc_end, mcc_step):  # number of frames frames
+    for i in range(mcc_start, mcc_end, mcc_step):  # number of frames
 
         selection["mcc_tp"] = (i_prev,i)
         #################### Left radar filter

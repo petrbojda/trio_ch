@@ -7,7 +7,6 @@ from mpl_toolkits.axes_grid import Divider
 import matplotlib
 import copy
 
-
 def static_plot_grid_hist_selections(lst_det_left, lst_det_right, selection, fname_det):
     """
     Plots data in an analytic way. Only one MCC's set of detections is depicted here.
@@ -21,7 +20,7 @@ def static_plot_grid_hist_selections(lst_det_left, lst_det_right, selection, fna
                         "beam": ,
                         "mcc":  	}
     """
-    ###### Plot starts here:
+    # Plot starts here:
     cms = matplotlib.cm
     color_map_left = cms.Blues
     color_map_right = cms.RdPu
@@ -68,7 +67,7 @@ def static_plot_grid_hist_selections(lst_det_left, lst_det_right, selection, fna
     number_of_dets_right = 0
     number_of_dets_right_processed = 0
 
-    #################### Left radar plot
+    # Left radar plot
     if lst_det_left:
         LR_data = lst_det_left.get_array_detections_selected(selection=selection)
         if LR_data["mcc"].any():
@@ -136,7 +135,7 @@ def static_plot_grid_hist_selections(lst_det_left, lst_det_right, selection, fna
         else:
             LR_data_exists = False
 
-    #################### Right radar plot
+    # Right radar plot
     if lst_det_right:
         RR_data = lst_det_right.get_array_detections_selected(mcc=selection['mcc_tp'])
         if RR_data["mcc"].any():
@@ -234,20 +233,19 @@ def static_plot_grid_hist_selections(lst_det_left, lst_det_right, selection, fna
 
 def static_plot_selections(lst_det_left, lst_det_right, selection, fname_det):
     """
-	Plots data in an analytic way. Complete set of detections for all MCCs is depicted here.
-	Input data dictionaries:
-		Both left and right radars of the same structure
-		radar_data = { 	"range": ,
-						"azimuth": , 
-						"velocity": ,
-						"x": ,
-						"y": ,
-						"beam": ,
-						"mcc":  	}
+    Plots data in an analytic way. Complete set of detections for all MCCs is depicted here.
+    Input data dictionaries:
+        Both left and right radars of the same structure
+        radar_data = { 	"range": ,
+                        "azimuth": ,
+                        "velocity": ,
+                        "x": ,
+                        "y": ,
+                        "beam": ,
+                        "mcc":  	}
 
-	"""
-
-    ###### Plot starts here:
+    """
+    # Plot starts here:
     cms = matplotlib.cm
     color_map_left = cms.Blues
     color_map_right = cms.RdPu
@@ -264,7 +262,7 @@ def static_plot_selections(lst_det_left, lst_det_right, selection, fname_det):
 
     number_of_dets_left_processed = 0
     number_of_dets_right_processed = 0
-    #################### Left radar plot
+    # Left radar plot
     if lst_det_left:
         if selection["beam_tp"].count(0):
             selection_tp = copy.deepcopy(selection)
@@ -301,7 +299,7 @@ def static_plot_selections(lst_det_left, lst_det_right, selection, fname_det):
 
         plt.draw()
 
-    #################### Right radar plot
+    # Right radar plot
     if lst_det_right:
 
         if selection["beam_tp"].count(0):
@@ -356,20 +354,19 @@ def static_plotREF_selections(lst_det_left, lst_det_right,
                               lst_ref_left, lst_ref_right, lst_ref_both,
                               selection, fname_det, DGPS_xcompensation):
     """
-	Plots data in an analytic way. Complete set of detections for all MCCs is depicted here.
-	Input data dictionaries:
-		Both left and right radars of the same structure
-		radar_data = { 	"range": ,
-						"azimuth": ,
-						"velocity": ,
-						"x": ,
-						"y": ,
-						"beam": ,
-						"mcc":  	}
+    Plots data in an analytic way. Complete set of detections for all MCCs is depicted here.
+    Input data dictionaries:
+        Both left and right radars of the same structure
+        radar_data = { 	"range": ,
+                        "azimuth": ,
+                        "velocity": ,
+                        "x": ,
+                        "y": ,
+                        "beam": ,
+                        "mcc":  	}
 
-	"""
-
-    ###### Plot starts here:
+    """
+    # Plot starts here:
     cms = matplotlib.cm
     color_map_left = cms.Blues
     color_map_right = cms.RdPu
@@ -387,7 +384,7 @@ def static_plotREF_selections(lst_det_left, lst_det_right,
 
     number_of_dets_left_processed = 0
     number_of_dets_right_processed = 0
-    #################### Left radar plot
+    # Left radar plot
     if lst_det_left:
         if selection["beam_tp"].count(0):
             selection_tp = copy.deepcopy(selection)
@@ -424,7 +421,7 @@ def static_plotREF_selections(lst_det_left, lst_det_right,
 
         plt.draw()
 
-    #################### Right radar plot
+    # Right radar plot
     if lst_det_right:
 
         if selection["beam_tp"].count(0):
@@ -461,9 +458,7 @@ def static_plotREF_selections(lst_det_left, lst_det_right,
 
         plt.draw()
 
-    #################### Reference plot
-
-
+    # Reference plot
     if lst_ref_left:
         mcc_tp = selection["mcc_tp"]
 
@@ -491,7 +486,7 @@ def static_plotREF_selections(lst_det_left, lst_det_right,
 
         plt.draw()
 
-    ################### Legend and Title of the plot
+    # Legend and Title of the plot
     lgd2 = f1ax1.legend(loc='upper right', bbox_to_anchor=(1.0, 1.0))
 
     f1ax1.set_xlabel('x [meters]')

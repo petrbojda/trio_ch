@@ -5,9 +5,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
     <title>radar_plots &#8212; Automotive Rearlooking RADAR Tracker 1.2.1 documentation</title>
+    
     <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
@@ -48,7 +51,6 @@
 <span class="kn">import</span> <span class="nn">matplotlib</span>
 <span class="kn">import</span> <span class="nn">copy</span>
 
-
 <div class="viewcode-block" id="static_plot_grid_hist_selections"><a class="viewcode-back" href="../radarplots.html#radar_plots.static_plot_grid_hist_selections">[docs]</a><span class="k">def</span> <span class="nf">static_plot_grid_hist_selections</span><span class="p">(</span><span class="n">lst_det_left</span><span class="p">,</span> <span class="n">lst_det_right</span><span class="p">,</span> <span class="n">selection</span><span class="p">,</span> <span class="n">fname_det</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Plots data in an analytic way. Only one MCC&#39;s set of detections is depicted here.</span>
@@ -62,7 +64,7 @@
 <span class="sd">                        &quot;beam&quot;: ,</span>
 <span class="sd">                        &quot;mcc&quot;:  	}</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c1">###### Plot starts here:</span>
+    <span class="c1"># Plot starts here:</span>
     <span class="n">cms</span> <span class="o">=</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">cm</span>
     <span class="n">color_map_left</span> <span class="o">=</span> <span class="n">cms</span><span class="o">.</span><span class="n">Blues</span>
     <span class="n">color_map_right</span> <span class="o">=</span> <span class="n">cms</span><span class="o">.</span><span class="n">RdPu</span>
@@ -109,7 +111,7 @@
     <span class="n">number_of_dets_right</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="n">number_of_dets_right_processed</span> <span class="o">=</span> <span class="mi">0</span>
 
-    <span class="c1">#################### Left radar plot</span>
+    <span class="c1"># Left radar plot</span>
     <span class="k">if</span> <span class="n">lst_det_left</span><span class="p">:</span>
         <span class="n">LR_data</span> <span class="o">=</span> <span class="n">lst_det_left</span><span class="o">.</span><span class="n">get_array_detections_selected</span><span class="p">(</span><span class="n">selection</span><span class="o">=</span><span class="n">selection</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">LR_data</span><span class="p">[</span><span class="s2">&quot;mcc&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
@@ -177,7 +179,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="n">LR_data_exists</span> <span class="o">=</span> <span class="kc">False</span>
 
-    <span class="c1">#################### Right radar plot</span>
+    <span class="c1"># Right radar plot</span>
     <span class="k">if</span> <span class="n">lst_det_right</span><span class="p">:</span>
         <span class="n">RR_data</span> <span class="o">=</span> <span class="n">lst_det_right</span><span class="o">.</span><span class="n">get_array_detections_selected</span><span class="p">(</span><span class="n">mcc</span><span class="o">=</span><span class="n">selection</span><span class="p">[</span><span class="s1">&#39;mcc_tp&#39;</span><span class="p">])</span>
         <span class="k">if</span> <span class="n">RR_data</span><span class="p">[</span><span class="s2">&quot;mcc&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
@@ -275,20 +277,19 @@
 
 <div class="viewcode-block" id="static_plot_selections"><a class="viewcode-back" href="../radarplots.html#radar_plots.static_plot_selections">[docs]</a><span class="k">def</span> <span class="nf">static_plot_selections</span><span class="p">(</span><span class="n">lst_det_left</span><span class="p">,</span> <span class="n">lst_det_right</span><span class="p">,</span> <span class="n">selection</span><span class="p">,</span> <span class="n">fname_det</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">	Plots data in an analytic way. Complete set of detections for all MCCs is depicted here.</span>
-<span class="sd">	Input data dictionaries:</span>
-<span class="sd">		Both left and right radars of the same structure</span>
-<span class="sd">		radar_data = { 	&quot;range&quot;: ,</span>
-<span class="sd">						&quot;azimuth&quot;: , </span>
-<span class="sd">						&quot;velocity&quot;: ,</span>
-<span class="sd">						&quot;x&quot;: ,</span>
-<span class="sd">						&quot;y&quot;: ,</span>
-<span class="sd">						&quot;beam&quot;: ,</span>
-<span class="sd">						&quot;mcc&quot;:  	}</span>
+<span class="sd">    Plots data in an analytic way. Complete set of detections for all MCCs is depicted here.</span>
+<span class="sd">    Input data dictionaries:</span>
+<span class="sd">        Both left and right radars of the same structure</span>
+<span class="sd">        radar_data = { 	&quot;range&quot;: ,</span>
+<span class="sd">                        &quot;azimuth&quot;: ,</span>
+<span class="sd">                        &quot;velocity&quot;: ,</span>
+<span class="sd">                        &quot;x&quot;: ,</span>
+<span class="sd">                        &quot;y&quot;: ,</span>
+<span class="sd">                        &quot;beam&quot;: ,</span>
+<span class="sd">                        &quot;mcc&quot;:  	}</span>
 
-<span class="sd">	&quot;&quot;&quot;</span>
-
-    <span class="c1">###### Plot starts here:</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Plot starts here:</span>
     <span class="n">cms</span> <span class="o">=</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">cm</span>
     <span class="n">color_map_left</span> <span class="o">=</span> <span class="n">cms</span><span class="o">.</span><span class="n">Blues</span>
     <span class="n">color_map_right</span> <span class="o">=</span> <span class="n">cms</span><span class="o">.</span><span class="n">RdPu</span>
@@ -305,7 +306,7 @@
 
     <span class="n">number_of_dets_left_processed</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="n">number_of_dets_right_processed</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="c1">#################### Left radar plot</span>
+    <span class="c1"># Left radar plot</span>
     <span class="k">if</span> <span class="n">lst_det_left</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">selection</span><span class="p">[</span><span class="s2">&quot;beam_tp&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="mi">0</span><span class="p">):</span>
             <span class="n">selection_tp</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">selection</span><span class="p">)</span>
@@ -342,7 +343,7 @@
 
         <span class="n">plt</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
 
-    <span class="c1">#################### Right radar plot</span>
+    <span class="c1"># Right radar plot</span>
     <span class="k">if</span> <span class="n">lst_det_right</span><span class="p">:</span>
 
         <span class="k">if</span> <span class="n">selection</span><span class="p">[</span><span class="s2">&quot;beam_tp&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="mi">0</span><span class="p">):</span>
@@ -397,20 +398,19 @@
                               <span class="n">lst_ref_left</span><span class="p">,</span> <span class="n">lst_ref_right</span><span class="p">,</span> <span class="n">lst_ref_both</span><span class="p">,</span>
                               <span class="n">selection</span><span class="p">,</span> <span class="n">fname_det</span><span class="p">,</span> <span class="n">DGPS_xcompensation</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">	Plots data in an analytic way. Complete set of detections for all MCCs is depicted here.</span>
-<span class="sd">	Input data dictionaries:</span>
-<span class="sd">		Both left and right radars of the same structure</span>
-<span class="sd">		radar_data = { 	&quot;range&quot;: ,</span>
-<span class="sd">						&quot;azimuth&quot;: ,</span>
-<span class="sd">						&quot;velocity&quot;: ,</span>
-<span class="sd">						&quot;x&quot;: ,</span>
-<span class="sd">						&quot;y&quot;: ,</span>
-<span class="sd">						&quot;beam&quot;: ,</span>
-<span class="sd">						&quot;mcc&quot;:  	}</span>
+<span class="sd">    Plots data in an analytic way. Complete set of detections for all MCCs is depicted here.</span>
+<span class="sd">    Input data dictionaries:</span>
+<span class="sd">        Both left and right radars of the same structure</span>
+<span class="sd">        radar_data = { 	&quot;range&quot;: ,</span>
+<span class="sd">                        &quot;azimuth&quot;: ,</span>
+<span class="sd">                        &quot;velocity&quot;: ,</span>
+<span class="sd">                        &quot;x&quot;: ,</span>
+<span class="sd">                        &quot;y&quot;: ,</span>
+<span class="sd">                        &quot;beam&quot;: ,</span>
+<span class="sd">                        &quot;mcc&quot;:  	}</span>
 
-<span class="sd">	&quot;&quot;&quot;</span>
-
-    <span class="c1">###### Plot starts here:</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Plot starts here:</span>
     <span class="n">cms</span> <span class="o">=</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">cm</span>
     <span class="n">color_map_left</span> <span class="o">=</span> <span class="n">cms</span><span class="o">.</span><span class="n">Blues</span>
     <span class="n">color_map_right</span> <span class="o">=</span> <span class="n">cms</span><span class="o">.</span><span class="n">RdPu</span>
@@ -428,7 +428,7 @@
 
     <span class="n">number_of_dets_left_processed</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="n">number_of_dets_right_processed</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="c1">#################### Left radar plot</span>
+    <span class="c1"># Left radar plot</span>
     <span class="k">if</span> <span class="n">lst_det_left</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">selection</span><span class="p">[</span><span class="s2">&quot;beam_tp&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="mi">0</span><span class="p">):</span>
             <span class="n">selection_tp</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">selection</span><span class="p">)</span>
@@ -465,7 +465,7 @@
 
         <span class="n">plt</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
 
-    <span class="c1">#################### Right radar plot</span>
+    <span class="c1"># Right radar plot</span>
     <span class="k">if</span> <span class="n">lst_det_right</span><span class="p">:</span>
 
         <span class="k">if</span> <span class="n">selection</span><span class="p">[</span><span class="s2">&quot;beam_tp&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="mi">0</span><span class="p">):</span>
@@ -502,9 +502,7 @@
 
         <span class="n">plt</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
 
-    <span class="c1">#################### Reference plot</span>
-
-
+    <span class="c1"># Reference plot</span>
     <span class="k">if</span> <span class="n">lst_ref_left</span><span class="p">:</span>
         <span class="n">mcc_tp</span> <span class="o">=</span> <span class="n">selection</span><span class="p">[</span><span class="s2">&quot;mcc_tp&quot;</span><span class="p">]</span>
 
@@ -532,7 +530,7 @@
 
         <span class="n">plt</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
 
-    <span class="c1">################### Legend and Title of the plot</span>
+    <span class="c1"># Legend and Title of the plot</span>
     <span class="n">lgd2</span> <span class="o">=</span> <span class="n">f1ax1</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;upper right&#39;</span><span class="p">,</span> <span class="n">bbox_to_anchor</span><span class="o">=</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">))</span>
 
     <span class="n">f1ax1</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;x [meters]&#39;</span><span class="p">)</span>
@@ -578,7 +576,7 @@
       &copy;2017, Petr Bojda.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.3</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.2</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
       
     </div>

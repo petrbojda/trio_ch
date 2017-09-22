@@ -1,9 +1,10 @@
 Radar Plots Package
 ===================
 The package contains two modules.
+
 1. **static_plot_grid_hist_selections** - to plot complex anlysis with statistics,
 2. **static_plot_selections** - to simple X-Y graph with selected detections,
-2. **static_plotREF_selections** - to simple X-Y graph with selected detections including DGPS reference
+3. **static_plotREF_selections** - to simple X-Y graph with selected detections including DGPS reference
 
 .. module:: radar_plots
 

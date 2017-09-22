@@ -20,10 +20,9 @@ class TrackManager(list):
         self.append(dc.Track(self._n_of_Tracks[-1]))
 
     def append_detection_to_track(self, trackID, detection):
-        track_sel = [elem for elem in self if (elem.trackID == trackID)]
-        self.track_sel.append_point_from_radardata_str(detection)
-        return track_sel
-
+        for elem in self:
+            if (elem.trackID == trackID):
+                elem.append_point_from_radardata_str(detection)
 
 
 
@@ -48,7 +47,7 @@ class TrackManager(list):
         print ("Detections to assign, mcc:",mcc,"with ", len(lst_detections), "means NoDet",noDet)
         print ("Detections to assign", lst_detections)
         for i1 in range(0, noDet):
-            detection = {'x':lst_detections['x'][i1],'y':lst_detections['y'][i1],
+            detection = {'x':lst_detections['x'][i1],'y':lst_detections['y'][i1],'beam':lst_detections['beam'][i1],
                          'mcc':lst_detections['mcc'][i1],'trackID':lst_detections['trackID'][i1],
                          'Razimuth': lst_detections['Razimuth'][i1], 'Rvelocity': lst_detections['Rvelocity'][i1]}
             if self._n_of_Tracks[-1]:
@@ -57,7 +56,8 @@ class TrackManager(list):
                 print ("Detection at mcc",mcc ,"is assigned to:",selTrackID)
                 self.append_detection_to_track(selTrackID,detection)
 
-                lst_detections["trackID"][i1] = selTrackID
+                lst_detections["trackID"][i1] = 999   # more reasonable value will be assigned in the future
+            #     TODO: assign list of trackIDs to mark the case when a detection is appended to more than just one tracks
 
             if lst_detections["trackID"][i1] == 0:
                 print ("not assigned detections are in a list:",self._lst_not_assigned_detections)

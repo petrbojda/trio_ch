@@ -40,7 +40,8 @@ class ReferencePoint(object):
         self._EGO_hdg = EGO_hdg
 
 class TrackPoint(object):
-    def __init__(self,mcc,x,y,dx,dy,beam,Rvelocity,Razimuth):
+    def __init__(self,mcc=0,x=0,y=0,dx=0,dy=0,beam=[],
+                 Rvelocity=0,Razimuth=0):
         self.mcc = mcc
         self.x = x
         self.dx = dx
@@ -454,8 +455,6 @@ class Track(list):
         self.append(TrackPoint(mcc=detection._mcc,
                                x=detection._x,
                                y=detection._y,
-                               dx=detection._dx,
-                               dy=detection._dy,
                                Razimuth=detection._Razimuth,
                                Rvelocity=detection._Rvelocity,
                                beam=detection._beam))
@@ -471,18 +470,16 @@ class Track(list):
         self.append(TrackPoint(mcc=detection['mcc'],
                                x=detection['x'],
                                y=detection['y'],
-                               dx=detection['dx'],
-                               dy=detection['dy'],
                                Razimuth=detection['Razimuth'],
                                Rvelocity=detection['Rvelocity'],
                                beam=detection['beam']))
-        self._y_interval = (min([elem._y for elem in self]),max([elem._y for elem in self]))
-        self._x_interval = (min([elem._x for elem in self]),max([elem._x for elem in self]))
-        self._vely_interval = (min([elem._vely for elem in self]),max([elem._vely for elem in self]))
-        self._velx_interval = (min([elem._velx for elem in self]),max([elem._velx for elem in self]))
-        self._Rvelocity_interval = (min([elem._Rvelocity for elem in self]), max([elem._Rvelocity for elem in self]))
-        self._Razimuth_interval = (min([elem._Razimuth for elem in self]), max([elem._Razimuth for elem in self]))
-        self._mcc_interval = (min([elem._mcc for elem in self]),max([elem._mcc for elem in self]))
+        self._y_interval = (min([elem.y for elem in self]),max([elem.y for elem in self]))
+        self._x_interval = (min([elem.x for elem in self]),max([elem.x for elem in self]))
+        # self._vely_interval = (min([elem._vely for elem in self]),max([elem._vely for elem in self]))
+        # self._velx_interval = (min([elem._velx for elem in self]),max([elem._velx for elem in self]))
+        self._Rvelocity_interval = (min([elem.Rvelocity for elem in self]), max([elem.Rvelocity for elem in self]))
+        self._Razimuth_interval = (min([elem.Razimuth for elem in self]), max([elem.Razimuth for elem in self]))
+        self._mcc_interval = (min([elem.mcc for elem in self]),max([elem.mcc for elem in self]))
 
     # Note: radar data structure here
         # radar_data = {"range": np.array(r_sel),

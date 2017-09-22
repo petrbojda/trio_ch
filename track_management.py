@@ -32,7 +32,7 @@ class TrackManager(list):
 
         return is_in_x and is_in_y
 
-    def calc_two_point_projection(self,start_detection,end_detection):
+    def _calc_two_point_projection(self,start_detection,end_detection):
         projected_point = dc.TrackPoint(end_detection._mcc + 1,
                                         0,0,
                                         0,0)

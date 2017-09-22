@@ -1,21 +1,4 @@
-# -*- coding: utf-8 -*-
 
-"""Copyright 2015 Roger R Labbe Jr.
-
-FilterPy library.
-http://github.com/rlabbe/filterpy
-
-Documentation at:
-https://filterpy.readthedocs.org
-
-Supporting book at:
-https://github.com/rlabbe/Kalman-and-Bayesian-Filters-in-Python
-
-This is licensed under an MIT license. See the readme.MD file
-for more information.
-"""
-
-#
 from numpy import array, asarray, isscalar, eye, dot
 from functools import reduce
 
@@ -37,8 +20,6 @@ def dotn(*args):
 def runge_kutta4(y, x, dx, f):
     """computes 4th order Runge-Kutta for dy/dx.
 
-    Parameters
-    ----------
 
     y : scalar
         Initial/current value for y

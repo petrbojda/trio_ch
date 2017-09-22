@@ -1,32 +1,9 @@
-Tracking Filters Package
-===============
-The package contains two modules.
-1. **EKF** - to produce an extended kalman filter, 
-2. **Fading Filter** - to produce a fading memory filter,
+Utilities Package
+=================
+The package contains helpful functions which solve different linear-algebra problems.
 
 
 
-tracking_filters.ExtendedKalmanFilter
-------------------------
-
-.. autoclass:: ExtendedKalmanFilter
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-tracking_filters.FadingKalmanFilter
---------------------------
-
-.. autoclass:: FadingKalmanFilter
-    :members:
-    :undoc-members:
-    :show-inheritance:
+.. automodule:: utils
 
 
-siggens.PRN_bitstreams module
------------------------------
-
-.. autoclass:: PRN_bitstreams
-    :members:
-    :undoc-members:
-    :show-inheritance:

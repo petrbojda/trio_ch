@@ -3,8 +3,8 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to Automotive Rearview RADAR Tracker's documentation!
-=============================================================
+Welcome to Automotive Rear-Looking RADAR Tracker's Documentation!
+=================================================================
 
 .. toctree::
    :maxdepth: 2

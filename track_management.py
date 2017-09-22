@@ -21,7 +21,10 @@ class TrackManager(list):
 
     def append_detection_to_track(self, trackID, detection):
         track_sel = [elem for elem in self if (elem.trackID == trackID)]
-        track_sel.append_point_from_radardata_str(detection)
+        self.track_sel.append_point_from_radardata_str(detection)
+        return track_sel
+
+
 
 
     def _test_det_in_gate(self,gate,detection):
@@ -46,12 +49,14 @@ class TrackManager(list):
         print ("Detections to assign", lst_detections)
         for i1 in range(0, noDet):
             detection = {'x':lst_detections['x'][i1],'y':lst_detections['y'][i1],
-                         'mcc':lst_detections['mcc'][i1],'trackID':lst_detections['trackID'][i1]
+                         'mcc':lst_detections['mcc'][i1],'trackID':lst_detections['trackID'][i1],
                          'Razimuth': lst_detections['Razimuth'][i1], 'Rvelocity': lst_detections['Rvelocity'][i1]}
             if self._n_of_Tracks[-1]:
                 selTrackID = [elem.trackID for elem in self if self._test_det_in_gate(elem.get_prediction(),detection)]
+
                 print ("Detection at mcc",mcc ,"is assigned to:",selTrackID)
                 self.append_detection_to_track(selTrackID,detection)
+
                 lst_detections["trackID"][i1] = selTrackID
 
             if lst_detections["trackID"][i1] == 0:

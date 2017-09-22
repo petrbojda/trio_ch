@@ -49,7 +49,8 @@ def main(conf_data):
         mcc_end = mcc_interval_left[1]
     else:
         mcc_start = mcc_interval_right[0]
-        mcc_end = mcc_interval_right[1]
+        # mcc_end = mcc_interval_right[1]
+        mcc_end = mcc_start + 100
     print("MCC starts at: ", mcc_start, "MCC ends at: ", mcc_end)
     mcc_step = 1
 

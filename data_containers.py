@@ -241,8 +241,8 @@ class DetectionList(list):
                                                 az_i[0] <= elem._azimuth <= az_i[1])]
 
         radar_data = {"range": np.array(r_sel),
-                      "azimuth": np.array(az_sel),
-                      "velocity": np.array(v_sel),
+                      "Razimuth": np.array(az_sel),
+                      "Rvelocity": np.array(v_sel),
                       "x": np.array(x_sel),
                       "y": np.array(y_sel),
                       "trackID": np.array(trackID_sel),

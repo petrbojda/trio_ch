@@ -1,4 +1,5 @@
 import numpy as np
+import itertools as it
 import data_containers as dc
 
 class TrackManager(list):
@@ -15,7 +16,7 @@ class TrackManager(list):
         self._lst_not_assigned_detections = []
 
 
-    def _create_new_track(self):
+    def create_new_track(self):
         self._n_of_Tracks = np.append(self._n_of_Tracks,self._n_of_Tracks[-1]+1)
         self.append(dc.Track(self._n_of_Tracks[-1]))
 
@@ -26,17 +27,14 @@ class TrackManager(list):
 
 
 
-    def _test_det_in_gate(self,gate,detection):
+    def test_det_in_gate(self,gate,detection):
         is_in_x = (gate.x-self._gate_dx < detection['x']) and (gate.x+self._gate_dx > detection['x'])
         is_in_y = (gate.y-self._gate_dx < detection['y']) and (gate.y+self._gate_dx > detection['y'])
 
         return is_in_x and is_in_y
 
-    def _calc_two_point_projection(self,start_detection,end_detection):
-        projected_point = dc.TrackPoint(end_detection._mcc + 1,
-                                        0,0,
-                                        0,0)
-
+    def calc_two_point_projection(self,start_detection,end_detection):
+        # TODO: rewrite - input should be elements of numpy arrays, not structures or classes
         projected_point.x = 2*end_detection._x - start_detection._x
         projected_point.y = 2*end_detection._y - start_detection._y
         projected_point.dx = (end_detection._x - start_detection._x) / self._Tsampling
@@ -57,14 +55,19 @@ class TrackManager(list):
                 self.append_detection_to_track(selTrackID,detection)
 
                 lst_detections["trackID"][i1] = 999   # more reasonable value will be assigned in the future
-            #     TODO: assign list of trackIDs to mark the case when a detection is appended to more than just one tracks
+            #     TODO: assign list of trackIDs to mark the case when a detection is assigned to more than just one tracks
 
             if lst_detections["trackID"][i1] == 0:
                 print ("not assigned detections are in a list:",self._lst_not_assigned_detections)
                 self._lst_not_assigned_detections.append(detection)
                 print ("Detection at mcc",mcc ,"is not assigned to an existing track")
-                self._create_new_track()
-                print ("A new track is created. ID:",self._n_of_Tracks)
+
+            if len(self._lst_not_assigned_detections['mcc']) >= 2:
+                for elem1, elem2 in it.combinations(self._lst_not_assigned_detections['x'], 2):
+                    self.calc_two_point_projection(elem1,elem2)
+                    # TODO: finish comparison of elements, rewrite method 'calc_two_point_projection'
+                    self.create_new_track()
+                    print ("A new track is created. ID:",self._n_of_Tracks)
 
             # if lst_detections[i1]._trackID == 0:
             #     self._lst_not_assigned_detections.append(lst_detections[i1])

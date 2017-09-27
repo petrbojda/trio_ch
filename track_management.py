@@ -23,7 +23,7 @@ class TrackManager(list):
     def append_detection_to_track(self, trackID, detection):
         for elem in self:
             if (elem.trackID == trackID):
-                elem.append_point_from_radardata_str(detection)
+                elem.append_point_from_detection(detection)
 
 
 
@@ -34,7 +34,7 @@ class TrackManager(list):
         return is_in_x and is_in_y
 
     def calc_two_point_projection(self,start_detection,end_detection):
-        # TODO: rewrite - input should be elements of numpy arrays, not structures or classes
+
         projected_point.x = 2*end_detection._x - start_detection._x
         projected_point.y = 2*end_detection._y - start_detection._y
         projected_point.dx = (end_detection._x - start_detection._x) / self._Tsampling
@@ -45,21 +45,23 @@ class TrackManager(list):
         print ("Detections to assign, mcc:",mcc,"with NoDet",noDet)
         print ("Detections to assign", lst_detections)
         for i1 in range(0, noDet):
-            detection = {'x':lst_detections['x'][i1],'y':lst_detections['y'][i1],'beam':lst_detections['beam'][i1],
-                         'mcc':lst_detections['mcc'][i1],'trackID':lst_detections['trackID'][i1],
-                         'Razimuth': lst_detections['Razimuth'][i1], 'Rvelocity': lst_detections['Rvelocity'][i1]}
+            # detection = {'x':lst_detections['x'][i1],'y':lst_detections['y'][i1],'beam':lst_detections['beam'][i1],
+            #              'mcc':lst_detections['mcc'][i1],'trackID':lst_detections['trackID'][i1],
+            #              'Razimuth': lst_detections['Razimuth'][i1], 'Rvelocity': lst_detections['Rvelocity'][i1]}
             if self._n_of_Tracks[-1]:
-                selTrackID = [elem.trackID for elem in self if self._test_det_in_gate(elem.get_prediction(),detection)]
+                for elem in self:
+                    if self.test_det_in_gate(elem.get_prediction(),lst_detections[i1]):
+                        selTrackID = elem.trackID
+                        print ("Detection at mcc",mcc ,"is assigned to:",selTrackID)
+                        self.append_detection_to_track(selTrackID,lst_detections[i1])
 
-                print ("Detection at mcc",mcc ,"is assigned to:",selTrackID)
-                self.append_detection_to_track(selTrackID,detection)
-
-                lst_detections["trackID"][i1] = 999   # more reasonable value will be assigned in the future
+                lst_detections[i1]._trackID = 999   # more reasonable value will be assigned in the future
             #     TODO: assign list of trackIDs to mark the case when a detection is assigned to more than just one tracks
 
-            if lst_detections["trackID"][i1] == 0:
+            if lst_detections[i1]._trackID == 0:
                 print ("not assigned detections are in a list:",self._lst_not_assigned_detections)
                 self._lst_not_assigned_detections.append(detection)
+                # TODO: rewrite '_lst_not_assigned_detections' to a structure (class) with a combination of linear predictions
                 print ("Detection at mcc",mcc ,"is not assigned to an existing track")
 
             if len(self._lst_not_assigned_detections['mcc']) >= 2:
@@ -69,11 +71,5 @@ class TrackManager(list):
                     self.create_new_track()
                     print ("A new track is created. ID:",self._n_of_Tracks)
 
-            # if lst_detections[i1]._trackID == 0:
-            #     self._lst_not_assigned_detections.append(lst_detections[i1])
-            #     print ("Detection at mcc",mcc ,"is not assigned to an existing track")
-            #     self._create_new_track()
-            #     print ("A new track is created. ID:",self._n_of_Tracks)
-            # else: pass
 
         # TODO: write a function to test third detection in a row to fit a prediction based on detection at mcc-2 and mcc-1

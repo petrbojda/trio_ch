@@ -61,11 +61,11 @@ def main(conf_data):
         selection["mcc_tp"] = (i_prev,i)
         #################### Left radar filter
         if lst_det_left:
-            LR_data = lst_det_left.get_array_detections_selected(selection=selection)
-            if LR_data["mcc"].any():
+            lst_LR_data = lst_det_left.get_lst_detections_selected(selection=selection)
+            if lst_LR_data["mcc"].any():
                 LR_data_exists = True
-                number_of_dets_left = np.size(LR_data["mcc"])
-                tracks_left.test_detections(i,number_of_dets_left,LR_data)
+                number_of_dets_left = np.size(lst_LR_data["mcc"])
+                tracks_left.test_detections(i,number_of_dets_left,lst_LR_data)
 
         i_prev = i
 #     TODO: graphical representation of the results

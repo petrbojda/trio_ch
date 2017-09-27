@@ -252,6 +252,76 @@ class DetectionList(list):
 
         return radar_data
 
+
+    def get_lst_detections_selected(self, **kwarg):
+
+        if 'beam' in kwarg:
+            beam = kwarg['beam']
+        else:
+            beam = [0,1,2,3]
+
+        if 'mcc' in kwarg:
+            mcc_i = kwarg['mcc'] if (len(kwarg['mcc']) == 2) else (kwarg['mcc'],kwarg['mcc'])
+        else:
+            mcc_i = self._mcc_interval
+
+        if 'x' in kwarg:
+            x_i = kwarg['x'] if (len(kwarg['x']) == 2) else (kwarg['x'],kwarg['x'])
+        else:
+            x_i = self._x_interval
+
+        if 'y' in kwarg:
+            y_i = kwarg['y'] if (len(kwarg['y']) == 2) else (kwarg['y'],kwarg['y'])
+        else:
+            y_i = self._y_interval
+
+        if 'rng' in kwarg:
+            rng_i = kwarg['rng'] if (len(kwarg['rng']) == 2) else (kwarg['rng'],kwarg['rng'])
+        else:
+            rng_i = self._rng_interval
+
+        if 'vel' in kwarg:
+            vel_i = kwarg['vel'] if (len(kwarg['vel']) == 2) else (kwarg['vel'],kwarg['vel'])
+        else:
+            vel_i = self._vel_interval
+
+        if 'az' in kwarg:
+            az_i = kwarg['az'] if (len(kwarg['az']) == 2) else (kwarg['az'],kwarg['az'])
+        else:
+            az_i = self._azimuth_interval
+
+        if 'trackID' in kwarg:
+            trackID_i = kwarg['trackID'] if (len(kwarg['trackID']) == 2) else (kwarg['trackID'],kwarg['trackID'])
+        else:
+            trackID_i = self._trackID_interval
+
+        if 'selection' in kwarg:
+            beam = kwarg['selection']['beam_tp'] if kwarg['selection']['beam_tp'] else [0,1,2,3]
+            mcc_i = kwarg['selection']['mcc_tp'] if kwarg['selection']['mcc_tp'] else self._mcc_interval
+            x_i = kwarg['selection']['x_tp'] if kwarg['selection']['x_tp'] else self._x_interval
+            y_i = kwarg['selection']['y_tp'] if kwarg['selection']['y_tp'] else self._y_interval
+            rng_i = kwarg['selection']['rng_tp'] if kwarg['selection']['rng_tp'] else self._rng_interval
+            vel_i = kwarg['selection']['vel_tp'] if kwarg['selection']['vel_tp'] else self._vel_interval
+            az_i = kwarg['selection']['az_tp'] if kwarg['selection']['az_tp'] else self._azimuth_interval
+            trackID_i = kwarg['selection']['trackID_tp'] if kwarg['selection']['trackID_tp'] else self._trackID_interval
+
+        lst_selected_detection = []
+
+        for elem in self:
+            if (elem._beam in beam and
+                            mcc_i[0] <= elem._mcc <= mcc_i[1] and
+                            trackID_i[0] <= elem._trackID <= trackID_i[1] and
+                            x_i[0] <= elem._x <= x_i[1] and
+                            y_i[0] <= elem._y <= y_i[1] and
+                            rng_i[0] <= elem._rng <= rng_i[1] and
+                            vel_i[0] <= elem._vel <= vel_i[1] and
+                            az_i[0] <= elem._azimuth <= az_i[1]):
+                lst_selected_detection.append(elem)
+
+        return lst_selected_detection
+
+
+
     def extend_with_selection(self, radar_data_list, **kwarg):
 
         if 'beam' in kwarg:

@@ -73,3 +73,6 @@ class TrackManager(list):
 
 
         # TODO: write a function to test third detection in a row to fit a prediction based on detection at mcc-2 and mcc-1
+
+
+        # TODO: '_lst_not_assigned_detections' is of a special class inherited from the DetectionList. An array of 3-point predictions will be its parameter updated with every new appended detection

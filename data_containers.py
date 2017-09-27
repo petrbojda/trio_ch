@@ -58,7 +58,6 @@ class TrackPoint(object):
 
 class DetectionList(list):
     def __init__(self):
-
         super().__init__()
         self._y_interval = (0,0)
         self._x_interval = (0,0)
@@ -77,12 +76,7 @@ class DetectionList(list):
         self._mcc_interval = (min([elem._mcc for elem in self]),max([elem._mcc for elem in self]))
 
     def append_point_from_detection(self, detection_point):
-        self.append(DetectionPoint( mcc=detection_point._mcc,
-                                    x=detection_point._x,
-                                    y=detection_point._y,
-                                    dx=detection_point._dx,
-                                    dy=detection_point._dy,
-                                    beam=detection_point._beam))
+        self.append(detection_point)
         self._y_interval = (min([elem._y for elem in self]),max([elem._y for elem in self]))
         self._x_interval = (min([elem._x for elem in self]),max([elem._x for elem in self]))
         self._vely_interval = (min([elem._vely for elem in self]),max([elem._vely for elem in self]))
@@ -90,7 +84,6 @@ class DetectionList(list):
         self._mcc_interval = (min([elem._mcc for elem in self]),max([elem._mcc for elem in self]))
 
     def append_from_m_file(self, data_path, left, car_width):
-
         radar_data = sio.loadmat(data_path)
         detections = radar_data["Detections"]
         no_d = len(detections)
@@ -114,14 +107,11 @@ class DetectionList(list):
         self._trackID_interval = (min([elem._trackID for elem in self]),max([elem._trackID for elem in self]))
 
     def get_mcc_interval(self):
-
         return self._mcc_interval
 
     def get_max_of_detections_per_mcc(self):
-
         max_detections_at = max([elem._mcc for elem in self], key=[elem._mcc for elem in self].count)
         max_no_detections = [elem._mcc for elem in self].count(max_detections_at)
-
         return max_no_detections, max_detections_at
 
     def get_array_detections_selected(self, **kwarg):
@@ -384,6 +374,15 @@ class DetectionList(list):
         self._vel_interval = (min([elem._vel for elem in self]),max([elem._vel for elem in self]))
         self._rng_interval = (min([elem._rng for elem in self]),max([elem._rng for elem in self]))
         self._mcc_interval = (min([elem._mcc for elem in self]),max([elem._mcc for elem in self]))
+
+
+
+class UnAssignedDetectionList(DetectionList):
+    def __init__(self):
+        super().__init__()
+    # TODO: write method to compute 3-point projections from stored detections
+
+    # TODO: Add an array of 3-point projections as a class parameter
 
 
 

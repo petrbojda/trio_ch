@@ -52,18 +52,6 @@
 <span class="kn">import</span> <span class="nn">copy</span>
 
 <div class="viewcode-block" id="static_plot_grid_hist_selections"><a class="viewcode-back" href="../radarplots.html#radar_plots.static_plot_grid_hist_selections">[docs]</a><span class="k">def</span> <span class="nf">static_plot_grid_hist_selections</span><span class="p">(</span><span class="n">lst_det_left</span><span class="p">,</span> <span class="n">lst_det_right</span><span class="p">,</span> <span class="n">selection</span><span class="p">,</span> <span class="n">fname_det</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Plots data in an analytic way. Only one MCC&#39;s set of detections is depicted here.</span>
-<span class="sd">    Input data dictionaries:</span>
-<span class="sd">    Both left and right radars of the same structure</span>
-<span class="sd">        radar_data = { 	&quot;range&quot;: ,</span>
-<span class="sd">                        &quot;azimuth&quot;: ,</span>
-<span class="sd">                        &quot;velocity&quot;: ,</span>
-<span class="sd">                        &quot;x&quot;: ,</span>
-<span class="sd">                        &quot;y&quot;: ,</span>
-<span class="sd">                        &quot;beam&quot;: ,</span>
-<span class="sd">                        &quot;mcc&quot;:  	}</span>
-<span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Plot starts here:</span>
     <span class="n">cms</span> <span class="o">=</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">cm</span>
     <span class="n">color_map_left</span> <span class="o">=</span> <span class="n">cms</span><span class="o">.</span><span class="n">Blues</span>
@@ -276,19 +264,6 @@
 
 
 <div class="viewcode-block" id="static_plot_selections"><a class="viewcode-back" href="../radarplots.html#radar_plots.static_plot_selections">[docs]</a><span class="k">def</span> <span class="nf">static_plot_selections</span><span class="p">(</span><span class="n">lst_det_left</span><span class="p">,</span> <span class="n">lst_det_right</span><span class="p">,</span> <span class="n">selection</span><span class="p">,</span> <span class="n">fname_det</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Plots data in an analytic way. Complete set of detections for all MCCs is depicted here.</span>
-<span class="sd">    Input data dictionaries:</span>
-<span class="sd">        Both left and right radars of the same structure</span>
-<span class="sd">        radar_data = { 	&quot;range&quot;: ,</span>
-<span class="sd">                        &quot;azimuth&quot;: ,</span>
-<span class="sd">                        &quot;velocity&quot;: ,</span>
-<span class="sd">                        &quot;x&quot;: ,</span>
-<span class="sd">                        &quot;y&quot;: ,</span>
-<span class="sd">                        &quot;beam&quot;: ,</span>
-<span class="sd">                        &quot;mcc&quot;:  	}</span>
-
-<span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Plot starts here:</span>
     <span class="n">cms</span> <span class="o">=</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">cm</span>
     <span class="n">color_map_left</span> <span class="o">=</span> <span class="n">cms</span><span class="o">.</span><span class="n">Blues</span>
@@ -397,19 +372,6 @@
 <div class="viewcode-block" id="static_plotREF_selections"><a class="viewcode-back" href="../radarplots.html#radar_plots.static_plotREF_selections">[docs]</a><span class="k">def</span> <span class="nf">static_plotREF_selections</span><span class="p">(</span><span class="n">lst_det_left</span><span class="p">,</span> <span class="n">lst_det_right</span><span class="p">,</span>
                               <span class="n">lst_ref_left</span><span class="p">,</span> <span class="n">lst_ref_right</span><span class="p">,</span> <span class="n">lst_ref_both</span><span class="p">,</span>
                               <span class="n">selection</span><span class="p">,</span> <span class="n">fname_det</span><span class="p">,</span> <span class="n">DGPS_xcompensation</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Plots data in an analytic way. Complete set of detections for all MCCs is depicted here.</span>
-<span class="sd">    Input data dictionaries:</span>
-<span class="sd">        Both left and right radars of the same structure</span>
-<span class="sd">        radar_data = { 	&quot;range&quot;: ,</span>
-<span class="sd">                        &quot;azimuth&quot;: ,</span>
-<span class="sd">                        &quot;velocity&quot;: ,</span>
-<span class="sd">                        &quot;x&quot;: ,</span>
-<span class="sd">                        &quot;y&quot;: ,</span>
-<span class="sd">                        &quot;beam&quot;: ,</span>
-<span class="sd">                        &quot;mcc&quot;:  	}</span>
-
-<span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Plot starts here:</span>
     <span class="n">cms</span> <span class="o">=</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">cm</span>
     <span class="n">color_map_left</span> <span class="o">=</span> <span class="n">cms</span><span class="o">.</span><span class="n">Blues</span>

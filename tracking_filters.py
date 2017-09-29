@@ -7,24 +7,12 @@ from utils import setter, setter_scalar, dot3, setter_1d
 class ExtendedKalmanFilter(object):
 
     def __init__(self, dim_x, dim_z, dim_u=0):
-        """ Extended Kalman filter. You are responsible for setting the
-        various state variables to reasonable values; the defaults below will
-        not give you a functional filter.
-
-
-
-        dim_x : int
-            Number of state variables for the Kalman filter. For example, if
-            you are tracking the position and velocity of an object in two
-            dimensions, dim_x would be 4.
-
-            This is used to set the default size of P, Q, and u
-
-        dim_z : int
-            Number of of measurement inputs. For example, if the sensor
-            provides you with position in (x,y), dim_z would be 2.
         """
 
+        :param dim_x:
+        :param dim_z:
+        :param dim_u:
+        """
         self.dim_x = dim_x
         self.dim_z = dim_z
         self.dim_u = dim_u
@@ -42,36 +30,7 @@ class ExtendedKalmanFilter(object):
 
 
     def predict_update(self, z, HJacobian, Hx, args=(), hx_args=(), u=0):
-        """ Performs the predict/update innovation of the extended Kalman
-        filter.
 
-
-
-        z : np.array
-            measurement for this step.
-            If `None`, only predict step is perfomed.
-
-        HJacobian : function
-           function which computes the Jacobian of the H matrix (measurement
-           function). Takes state variable (self.x) as input, along with the
-           optional arguments in args, and returns H.
-
-        Hx : function
-            function which takes as input the state variable (self.x) along
-            with the optional arguments in hx_args, and returns the measurement
-            that would correspond to that state.
-
-        args : tuple, optional, default (,)
-            arguments to be passed into HJacobian after the required state
-            variable.
-
-        hx_args : tuple, optional, default (,)
-            arguments to be passed into Hx after the required state
-            variable.
-
-        u : np.array or scalar
-            optional control vector input to the filter.
-        """
 
         if not isinstance(args, tuple):
             args = (args,)
@@ -107,45 +66,7 @@ class ExtendedKalmanFilter(object):
 
     def update(self, z, HJacobian, Hx, R=None, args=(), hx_args=(),
                residual=np.subtract):
-        """ Performs the update innovation of the extended Kalman filter.
 
-
-
-        z : np.array
-            measurement for this step.
-            If `None`, only predict step is perfomed.
-
-        HJacobian : function
-           function which computes the Jacobian of the H matrix (measurement
-           function). Takes state variable (self.x) as input, returns H.
-
-        Hx : function
-            function which takes as input the state variable (self.x) along
-            with the optional arguments in hx_args, and returns the measurement
-            that would correspond to that state.
-
-        R : np.array, scalar, or None
-            Optionally provide R to override the measurement noise for this
-            one call, otherwise  self.R will be used.
-
-        args : tuple, optional, default (,)
-            arguments to be passed into HJacobian after the required state
-            variable. for robot localization you might need to pass in
-            information about the map and time of day, so you might have
-            `args=(map_data, time)`, where the signature of HCacobian will
-            be `def HJacobian(x, map, t)`
-
-        hx_args : tuple, optional, default (,)
-            arguments to be passed into Hx function after the required state
-            variable.
-
-        residual : function (z, z2), optional
-            Optional function that computes the residual (difference) between
-            the two measurement vectors. If you do not provide this, then the
-            built in minus operator will be used. You will normally want to use
-            the built in unless your residual computation is nonlinear (for
-            example, if they are angles)
-        """
 
         if not isinstance(args, tuple):
             args = (args,)
@@ -178,23 +99,13 @@ class ExtendedKalmanFilter(object):
 
 
     def predict_x(self, u=0):
-        """ predicts the next state of X. If you need to
-        compute the next state yourself, override this function. You would
-        need to do this, for example, if the usual Taylor expansion to
-        generate F is not providing accurate results for you. """
+
 
         self._x = dot(self._F, self._x) + dot(self._B, u)
 
 
     def predict(self, u=0):
-        """ Predict next position.
 
-
-
-        u : np.array
-            Optional control vector. If non-zero, it is multiplied by B
-            to create the control input into the system.
-        """
 
         self.predict_x(u)
         self._P = dot3(self._F, self._P, self._F.T) + self._Q
@@ -289,58 +200,7 @@ class ExtendedKalmanFilter(object):
 class FadingKalmanFilter(object):
 
     def __init__(self, alpha, dim_x, dim_z, dim_u=0):
-        """ Create a Kalman filter. You are responsible for setting the
-        various state variables to reasonable values; the defaults below will not give you a functional filter.
 
-
-
-        alpha : float, >= 1
-            alpha controls how much you want the filter to forget past
-            measurements. alpha==1 yields identical performance to the
-            Kalman filter. A typical application might use 1.01
-
-        dim_x : int
-            Number of state variables for the Kalman filter. For example, if
-            you are tracking the position and velocity of an object in two
-            dimensions, dim_x would be 4.
-
-            This is used to set the default size of P, Q, and u
-
-        dim_z : int
-            Number of of measurement inputs. For example, if the sensor
-            provides you with position in (x,y), dim_z would be 2.
-
-        dim_u : int (optional)
-            size of the control input, if it is being used.
-            Default value of 0 indicates it is not used.
-
-
-        **Attributes**
-
-        You will have to assign reasonable values to all of these before
-        running the filter. All must have dtype of float
-
-        x : ndarray (dim_x, 1), default = [0,0,0...0]
-            state of the filter
-
-        P : ndarray (dim_x, dim_x), default identity matrix
-            covariance matrix
-
-        Q : ndarray (dim_x, dim_x), default identity matrix
-            Process uncertainty matrix
-
-        R : ndarray (dim_z, dim_z), default identity matrix
-            measurement uncertainty
-
-        H : ndarray (dim_z, dim_x)
-            measurement function
-
-        F : ndarray (dim_x, dim_x)
-            state transistion matrix
-
-        B : ndarray (dim_x, dim_u), default 0
-            control transition matrix
-        """
 
         assert alpha >= 1
         assert dim_x > 0
@@ -373,19 +233,7 @@ class FadingKalmanFilter(object):
 
 
     def update(self, z, R=None):
-        """
-        Add a new measurement (z) to the kalman filter. If z is None, nothing
-        is changed.
 
-
-
-        z : np.array
-            measurement for this update.
-
-        R : np.array, scalar, or None
-            Optionally provide R to override the measurement noise for this
-            one call, otherwise  self.R will be used.
-        """
 
         if z is None:
             return
@@ -425,16 +273,7 @@ class FadingKalmanFilter(object):
 
 
     def predict(self, u=0):
-        """ Predict next position.
-
-
-
-        u : np.array
-            Optional control vector. If non-zero, it is multiplied by B
-            to create the control input into the system.
-        """
-
-        # x = Fx + Bu
+       # x = Fx + Bu
         self.x = dot(self.F, self.x) + dot(self.B, u)
 
         # P = FPF' + Q
@@ -442,43 +281,6 @@ class FadingKalmanFilter(object):
 
 
     def batch_filter(self, zs, Rs=None, update_first=False):
-        """ Batch processes a sequences of measurements.
-
-
-        zs : list-like
-            list of measurements at each time step `self.dt` Missing
-            measurements must be represented by 'None'.
-
-        Rs : list-like, optional
-            optional list of values to use for the measurement error
-            covariance; a value of None in any position will cause the filter
-            to use `self.R` for that time step.
-
-        update_first : bool, optional,
-            controls whether the order of operations is update followed by
-            predict, or predict followed by update. Default is predict->update.
-
-
-
-        means: np.array((n,dim_x,1))
-            array of the state for each time step after the update. Each entry
-            is an np.array. In other words `means[k,:]` is the state at step
-            `k`.
-
-        covariance: np.array((n,dim_x,dim_x))
-            array of the covariances for each time step after the update.
-            In other words `covariance[k,:,:]` is the covariance at step `k`.
-
-        means_predictions: np.array((n,dim_x,1))
-            array of the state for each time step after the predictions. Each
-            entry is an np.array. In other words `means[k,:]` is the state at
-            step `k`.
-
-        covariance_predictions: np.array((n,dim_x,dim_x))
-            array of the covariances for each time step after the prediction.
-            In other words `covariance[k,:,:]` is the covariance at step `k`.
-        """
-
         n = np.size(zs,0)
         if Rs is None:
             Rs = [None]*n
@@ -514,18 +316,7 @@ class FadingKalmanFilter(object):
 
 
     def get_prediction(self, u=0):
-        """ Predicts the next state of the filter and returns it. Does not
-        alter the state of the filter.
 
-
-        u : np.array
-            optional control input
-
-
-
-        (x, P)
-            State vector and covariance array of the prediction.
-        """
 
         x = dot(self.F, self.x) + dot(self.B, u)
         P = self.alpha_sq * dot3(self.F, self.P, self.F.T) + self.Q
@@ -533,23 +324,9 @@ class FadingKalmanFilter(object):
 
 
     def residual_of(self, z):
-        """ returns the residual for the given measurement (z). Does not alter
-        the state of the filter.
-        """
         return z - dot(self.H, self.x)
 
 
     def measurement_of_state(self, x):
-        """ Helper function that converts a state into a measurement.
 
-
-
-        x : np.array
-            kalman state vector
-
-
-
-        z : np.array
-            measurement corresponding to the given state
-        """
         return dot(self.H, x)

@@ -1,50 +1,44 @@
-Data Containers Package
-=======================
+Data Containers Module
+======================
 any classes
 
-
+.. module:: data_containers
 
 DetectionPoint
 --------------
 
-.. autoclass:: data_containers.DetectionPoint
+.. autoclass:: DetectionPoint
     :members:
-    :undoc-members:
-    :show-inheritance:
 
 ReferencePoint
 --------------
 
-.. autoclass:: data_containers.ReferencePoint
+.. autoclass:: ReferencePoint
     :members:
-    :undoc-members:
-    :show-inheritance:
 
 
 TrackPoint
 ----------
 
-.. autoclass:: data_containers.TrackPoint
+.. autoclass:: TrackPoint
     :members:
-    :undoc-members:
-    :show-inheritance:
 
 
 DetectionList
 -------------
 
-.. autoclass:: data_containers.DetectionList
+.. autoclass:: DetectionList
     :members:
-    :undoc-members:
-    :show-inheritance:
 
+UnAssignedDetectionList
+-----------------------
+
+.. autoclass:: UnAssignedDetectionList
+    :members:
 
 Track
 -----
 
-.. autoclass:: data_containers.Track
+.. autoclass:: Track
     :members:
-    :undoc-members:
-    :show-inheritance:
-
 

@@ -8,18 +8,6 @@ import matplotlib
 import copy
 
 def static_plot_grid_hist_selections(lst_det_left, lst_det_right, selection, fname_det):
-    """
-    Plots data in an analytic way. Only one MCC's set of detections is depicted here.
-    Input data dictionaries:
-    Both left and right radars of the same structure
-        radar_data = { 	"range": ,
-                        "azimuth": ,
-                        "velocity": ,
-                        "x": ,
-                        "y": ,
-                        "beam": ,
-                        "mcc":  	}
-    """
     # Plot starts here:
     cms = matplotlib.cm
     color_map_left = cms.Blues
@@ -232,19 +220,6 @@ def static_plot_grid_hist_selections(lst_det_left, lst_det_right, selection, fna
 
 
 def static_plot_selections(lst_det_left, lst_det_right, selection, fname_det):
-    """
-    Plots data in an analytic way. Complete set of detections for all MCCs is depicted here.
-    Input data dictionaries:
-        Both left and right radars of the same structure
-        radar_data = { 	"range": ,
-                        "azimuth": ,
-                        "velocity": ,
-                        "x": ,
-                        "y": ,
-                        "beam": ,
-                        "mcc":  	}
-
-    """
     # Plot starts here:
     cms = matplotlib.cm
     color_map_left = cms.Blues
@@ -353,19 +328,6 @@ def static_plot_selections(lst_det_left, lst_det_right, selection, fname_det):
 def static_plotREF_selections(lst_det_left, lst_det_right,
                               lst_ref_left, lst_ref_right, lst_ref_both,
                               selection, fname_det, DGPS_xcompensation):
-    """
-    Plots data in an analytic way. Complete set of detections for all MCCs is depicted here.
-    Input data dictionaries:
-        Both left and right radars of the same structure
-        radar_data = { 	"range": ,
-                        "azimuth": ,
-                        "velocity": ,
-                        "x": ,
-                        "y": ,
-                        "beam": ,
-                        "mcc":  	}
-
-    """
     # Plot starts here:
     cms = matplotlib.cm
     color_map_left = cms.Blues

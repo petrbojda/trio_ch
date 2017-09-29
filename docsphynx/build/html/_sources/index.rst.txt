@@ -7,7 +7,7 @@ Welcome to Automotive Rear-Looking RADAR Tracker's Documentation!
 =================================================================
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 4
    :caption: Contents:
 
    intro

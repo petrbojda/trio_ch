@@ -23,7 +23,7 @@ class TrackManager(list):
     def append_detection_to_track(self, trackID, detection):
         for elem in self:
             if (elem.trackID == trackID):
-                elem.append_point_from_detection(detection)
+                elem.append_detection(detection)
 
 
 
@@ -33,13 +33,7 @@ class TrackManager(list):
 
         return is_in_x and is_in_y
 
-    def calc_two_point_projection(self,start_detection,end_detection):
 
-        projected_point.x = 2*end_detection._x - start_detection._x
-        projected_point.y = 2*end_detection._y - start_detection._y
-        projected_point.dx = (end_detection._x - start_detection._x) / self._Tsampling
-        projected_point.dy = (end_detection._y - start_detection._y) / self._Tsampling
-        return projected_point
 
     def test_detections(self,mcc,noDet,lst_detections):
         print ("Detections to assign, mcc:",mcc,"with NoDet",noDet)

@@ -1,10 +1,6 @@
-Radar Plots Package
-===================
-The package contains two modules.
-
-1. **static_plot_grid_hist_selections** - to plot complex anlysis with statistics,
-2. **static_plot_selections** - to simple X-Y graph with selected detections,
-3. **static_plotREF_selections** - to simple X-Y graph with selected detections including DGPS reference
+Radar Plots Module
+==================
+The module contains set of functions which plot results from radar data pre-processing and tracking.
 
 .. module:: radar_plots
 
@@ -12,17 +8,17 @@ The package contains two modules.
 static_plot_grid_hist_selections
 --------------------------------
 
-.. autofunction:: static_plot_grid_hist_selections
+.. function:: static_plot_grid_hist_selections
 
 
 static_plot_selections
 ----------------------
 
-.. autofunction:: static_plot_selections
+.. function:: static_plot_selections
 
 
 static_plotREF_selections module
 --------------------------------
 
-.. autofunction:: static_plotREF_selections
+.. function:: static_plotREF_selections
 

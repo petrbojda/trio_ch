@@ -1,11 +1,11 @@
-Track Management Package
-===============
+Track Management Module
+=======================
 One single class
 
 .. automodule:: track_management
 
-track_management.TrackManager
------------------------------
+TrackManager
+------------
 
 .. autoclass:: TrackManager
     :members:

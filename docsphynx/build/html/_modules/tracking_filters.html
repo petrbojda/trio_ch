@@ -51,24 +51,12 @@
 <div class="viewcode-block" id="ExtendedKalmanFilter"><a class="viewcode-back" href="../trackingfilters.html#tracking_filters.ExtendedKalmanFilter">[docs]</a><span class="k">class</span> <span class="nc">ExtendedKalmanFilter</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dim_x</span><span class="p">,</span> <span class="n">dim_z</span><span class="p">,</span> <span class="n">dim_u</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Extended Kalman filter. You are responsible for setting the</span>
-<span class="sd">        various state variables to reasonable values; the defaults below will</span>
-<span class="sd">        not give you a functional filter.</span>
+        <span class="sd">&quot;&quot;&quot;</span>
 
-
-
-<span class="sd">        dim_x : int</span>
-<span class="sd">            Number of state variables for the Kalman filter. For example, if</span>
-<span class="sd">            you are tracking the position and velocity of an object in two</span>
-<span class="sd">            dimensions, dim_x would be 4.</span>
-
-<span class="sd">            This is used to set the default size of P, Q, and u</span>
-
-<span class="sd">        dim_z : int</span>
-<span class="sd">            Number of of measurement inputs. For example, if the sensor</span>
-<span class="sd">            provides you with position in (x,y), dim_z would be 2.</span>
+<span class="sd">        :param dim_x:</span>
+<span class="sd">        :param dim_z:</span>
+<span class="sd">        :param dim_u:</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-
         <span class="bp">self</span><span class="o">.</span><span class="n">dim_x</span> <span class="o">=</span> <span class="n">dim_x</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dim_z</span> <span class="o">=</span> <span class="n">dim_z</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dim_u</span> <span class="o">=</span> <span class="n">dim_u</span>
@@ -85,37 +73,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_I</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">dim_x</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="ExtendedKalmanFilter.predict_update"><a class="viewcode-back" href="../trackingfilters.html#tracking_filters.ExtendedKalmanFilter.predict_update">[docs]</a>    <span class="k">def</span> <span class="nf">predict_update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">HJacobian</span><span class="p">,</span> <span class="n">Hx</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(),</span> <span class="n">hx_args</span><span class="o">=</span><span class="p">(),</span> <span class="n">u</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Performs the predict/update innovation of the extended Kalman</span>
-<span class="sd">        filter.</span>
+    <span class="k">def</span> <span class="nf">predict_update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">HJacobian</span><span class="p">,</span> <span class="n">Hx</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(),</span> <span class="n">hx_args</span><span class="o">=</span><span class="p">(),</span> <span class="n">u</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
 
-
-
-<span class="sd">        z : np.array</span>
-<span class="sd">            measurement for this step.</span>
-<span class="sd">            If `None`, only predict step is perfomed.</span>
-
-<span class="sd">        HJacobian : function</span>
-<span class="sd">           function which computes the Jacobian of the H matrix (measurement</span>
-<span class="sd">           function). Takes state variable (self.x) as input, along with the</span>
-<span class="sd">           optional arguments in args, and returns H.</span>
-
-<span class="sd">        Hx : function</span>
-<span class="sd">            function which takes as input the state variable (self.x) along</span>
-<span class="sd">            with the optional arguments in hx_args, and returns the measurement</span>
-<span class="sd">            that would correspond to that state.</span>
-
-<span class="sd">        args : tuple, optional, default (,)</span>
-<span class="sd">            arguments to be passed into HJacobian after the required state</span>
-<span class="sd">            variable.</span>
-
-<span class="sd">        hx_args : tuple, optional, default (,)</span>
-<span class="sd">            arguments to be passed into Hx after the required state</span>
-<span class="sd">            variable.</span>
-
-<span class="sd">        u : np.array or scalar</span>
-<span class="sd">            optional control vector input to the filter.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span>
             <span class="n">args</span> <span class="o">=</span> <span class="p">(</span><span class="n">args</span><span class="p">,)</span>
@@ -146,50 +105,12 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_x</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="n">dot</span><span class="p">(</span><span class="n">K</span><span class="p">,</span> <span class="p">(</span><span class="n">z</span> <span class="o">-</span> <span class="n">Hx</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="o">*</span><span class="n">hx_args</span><span class="p">)))</span>
 
         <span class="n">I_KH</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_I</span> <span class="o">-</span> <span class="n">dot</span><span class="p">(</span><span class="n">K</span><span class="p">,</span> <span class="n">H</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_P</span> <span class="o">=</span> <span class="n">dot3</span><span class="p">(</span><span class="n">I_KH</span><span class="p">,</span> <span class="n">P</span><span class="p">,</span> <span class="n">I_KH</span><span class="o">.</span><span class="n">T</span><span class="p">)</span> <span class="o">+</span> <span class="n">dot3</span><span class="p">(</span><span class="n">K</span><span class="p">,</span> <span class="n">R</span><span class="p">,</span> <span class="n">K</span><span class="o">.</span><span class="n">T</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_P</span> <span class="o">=</span> <span class="n">dot3</span><span class="p">(</span><span class="n">I_KH</span><span class="p">,</span> <span class="n">P</span><span class="p">,</span> <span class="n">I_KH</span><span class="o">.</span><span class="n">T</span><span class="p">)</span> <span class="o">+</span> <span class="n">dot3</span><span class="p">(</span><span class="n">K</span><span class="p">,</span> <span class="n">R</span><span class="p">,</span> <span class="n">K</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="ExtendedKalmanFilter.update"><a class="viewcode-back" href="../trackingfilters.html#tracking_filters.ExtendedKalmanFilter.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">HJacobian</span><span class="p">,</span> <span class="n">Hx</span><span class="p">,</span> <span class="n">R</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(),</span> <span class="n">hx_args</span><span class="o">=</span><span class="p">(),</span>
+    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">HJacobian</span><span class="p">,</span> <span class="n">Hx</span><span class="p">,</span> <span class="n">R</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(),</span> <span class="n">hx_args</span><span class="o">=</span><span class="p">(),</span>
                <span class="n">residual</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">subtract</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Performs the update innovation of the extended Kalman filter.</span>
 
-
-
-<span class="sd">        z : np.array</span>
-<span class="sd">            measurement for this step.</span>
-<span class="sd">            If `None`, only predict step is perfomed.</span>
-
-<span class="sd">        HJacobian : function</span>
-<span class="sd">           function which computes the Jacobian of the H matrix (measurement</span>
-<span class="sd">           function). Takes state variable (self.x) as input, returns H.</span>
-
-<span class="sd">        Hx : function</span>
-<span class="sd">            function which takes as input the state variable (self.x) along</span>
-<span class="sd">            with the optional arguments in hx_args, and returns the measurement</span>
-<span class="sd">            that would correspond to that state.</span>
-
-<span class="sd">        R : np.array, scalar, or None</span>
-<span class="sd">            Optionally provide R to override the measurement noise for this</span>
-<span class="sd">            one call, otherwise  self.R will be used.</span>
-
-<span class="sd">        args : tuple, optional, default (,)</span>
-<span class="sd">            arguments to be passed into HJacobian after the required state</span>
-<span class="sd">            variable. for robot localization you might need to pass in</span>
-<span class="sd">            information about the map and time of day, so you might have</span>
-<span class="sd">            `args=(map_data, time)`, where the signature of HCacobian will</span>
-<span class="sd">            be `def HJacobian(x, map, t)`</span>
-
-<span class="sd">        hx_args : tuple, optional, default (,)</span>
-<span class="sd">            arguments to be passed into Hx function after the required state</span>
-<span class="sd">            variable.</span>
-
-<span class="sd">        residual : function (z, z2), optional</span>
-<span class="sd">            Optional function that computes the residual (difference) between</span>
-<span class="sd">            the two measurement vectors. If you do not provide this, then the</span>
-<span class="sd">            built in minus operator will be used. You will normally want to use</span>
-<span class="sd">            the built in unless your residual computation is nonlinear (for</span>
-<span class="sd">            example, if they are angles)</span>
-<span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span>
             <span class="n">args</span> <span class="o">=</span> <span class="p">(</span><span class="n">args</span><span class="p">,)</span>
@@ -218,30 +139,20 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_x</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="n">dot</span><span class="p">(</span><span class="n">K</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
 
         <span class="n">I_KH</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_I</span> <span class="o">-</span> <span class="n">dot</span><span class="p">(</span><span class="n">K</span><span class="p">,</span> <span class="n">H</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_P</span> <span class="o">=</span> <span class="n">dot3</span><span class="p">(</span><span class="n">I_KH</span><span class="p">,</span> <span class="n">P</span><span class="p">,</span> <span class="n">I_KH</span><span class="o">.</span><span class="n">T</span><span class="p">)</span> <span class="o">+</span> <span class="n">dot3</span><span class="p">(</span><span class="n">K</span><span class="p">,</span> <span class="n">R</span><span class="p">,</span> <span class="n">K</span><span class="o">.</span><span class="n">T</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_P</span> <span class="o">=</span> <span class="n">dot3</span><span class="p">(</span><span class="n">I_KH</span><span class="p">,</span> <span class="n">P</span><span class="p">,</span> <span class="n">I_KH</span><span class="o">.</span><span class="n">T</span><span class="p">)</span> <span class="o">+</span> <span class="n">dot3</span><span class="p">(</span><span class="n">K</span><span class="p">,</span> <span class="n">R</span><span class="p">,</span> <span class="n">K</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="ExtendedKalmanFilter.predict_x"><a class="viewcode-back" href="../trackingfilters.html#tracking_filters.ExtendedKalmanFilter.predict_x">[docs]</a>    <span class="k">def</span> <span class="nf">predict_x</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">u</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; predicts the next state of X. If you need to</span>
-<span class="sd">        compute the next state yourself, override this function. You would</span>
-<span class="sd">        need to do this, for example, if the usual Taylor expansion to</span>
-<span class="sd">        generate F is not providing accurate results for you. &quot;&quot;&quot;</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">_x</span> <span class="o">=</span> <span class="n">dot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_F</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_x</span><span class="p">)</span> <span class="o">+</span> <span class="n">dot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_B</span><span class="p">,</span> <span class="n">u</span><span class="p">)</span></div>
+    <span class="k">def</span> <span class="nf">predict_x</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">u</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
 
 
-<div class="viewcode-block" id="ExtendedKalmanFilter.predict"><a class="viewcode-back" href="../trackingfilters.html#tracking_filters.ExtendedKalmanFilter.predict">[docs]</a>    <span class="k">def</span> <span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">u</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Predict next position.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_x</span> <span class="o">=</span> <span class="n">dot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_F</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_x</span><span class="p">)</span> <span class="o">+</span> <span class="n">dot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_B</span><span class="p">,</span> <span class="n">u</span><span class="p">)</span>
 
 
+    <span class="k">def</span> <span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">u</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
 
-<span class="sd">        u : np.array</span>
-<span class="sd">            Optional control vector. If non-zero, it is multiplied by B</span>
-<span class="sd">            to create the control input into the system.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">predict_x</span><span class="p">(</span><span class="n">u</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_P</span> <span class="o">=</span> <span class="n">dot3</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_F</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_P</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_F</span><span class="o">.</span><span class="n">T</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_Q</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_P</span> <span class="o">=</span> <span class="n">dot3</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_F</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_P</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_F</span><span class="o">.</span><span class="n">T</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_Q</span>
 
 
     <span class="nd">@property</span>
@@ -333,58 +244,7 @@
 <div class="viewcode-block" id="FadingKalmanFilter"><a class="viewcode-back" href="../trackingfilters.html#tracking_filters.FadingKalmanFilter">[docs]</a><span class="k">class</span> <span class="nc">FadingKalmanFilter</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">alpha</span><span class="p">,</span> <span class="n">dim_x</span><span class="p">,</span> <span class="n">dim_z</span><span class="p">,</span> <span class="n">dim_u</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Create a Kalman filter. You are responsible for setting the</span>
-<span class="sd">        various state variables to reasonable values; the defaults below will not give you a functional filter.</span>
 
-
-
-<span class="sd">        alpha : float, &gt;= 1</span>
-<span class="sd">            alpha controls how much you want the filter to forget past</span>
-<span class="sd">            measurements. alpha==1 yields identical performance to the</span>
-<span class="sd">            Kalman filter. A typical application might use 1.01</span>
-
-<span class="sd">        dim_x : int</span>
-<span class="sd">            Number of state variables for the Kalman filter. For example, if</span>
-<span class="sd">            you are tracking the position and velocity of an object in two</span>
-<span class="sd">            dimensions, dim_x would be 4.</span>
-
-<span class="sd">            This is used to set the default size of P, Q, and u</span>
-
-<span class="sd">        dim_z : int</span>
-<span class="sd">            Number of of measurement inputs. For example, if the sensor</span>
-<span class="sd">            provides you with position in (x,y), dim_z would be 2.</span>
-
-<span class="sd">        dim_u : int (optional)</span>
-<span class="sd">            size of the control input, if it is being used.</span>
-<span class="sd">            Default value of 0 indicates it is not used.</span>
-
-
-<span class="sd">        **Attributes**</span>
-
-<span class="sd">        You will have to assign reasonable values to all of these before</span>
-<span class="sd">        running the filter. All must have dtype of float</span>
-
-<span class="sd">        x : ndarray (dim_x, 1), default = [0,0,0...0]</span>
-<span class="sd">            state of the filter</span>
-
-<span class="sd">        P : ndarray (dim_x, dim_x), default identity matrix</span>
-<span class="sd">            covariance matrix</span>
-
-<span class="sd">        Q : ndarray (dim_x, dim_x), default identity matrix</span>
-<span class="sd">            Process uncertainty matrix</span>
-
-<span class="sd">        R : ndarray (dim_z, dim_z), default identity matrix</span>
-<span class="sd">            measurement uncertainty</span>
-
-<span class="sd">        H : ndarray (dim_z, dim_x)</span>
-<span class="sd">            measurement function</span>
-
-<span class="sd">        F : ndarray (dim_x, dim_x)</span>
-<span class="sd">            state transistion matrix</span>
-
-<span class="sd">        B : ndarray (dim_x, dim_u), default 0</span>
-<span class="sd">            control transition matrix</span>
-<span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="k">assert</span> <span class="n">alpha</span> <span class="o">&gt;=</span> <span class="mi">1</span>
         <span class="k">assert</span> <span class="n">dim_x</span> <span class="o">&gt;</span> <span class="mi">0</span>
@@ -416,20 +276,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">I</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">dim_x</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="FadingKalmanFilter.update"><a class="viewcode-back" href="../trackingfilters.html#tracking_filters.FadingKalmanFilter.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">R</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Add a new measurement (z) to the kalman filter. If z is None, nothing</span>
-<span class="sd">        is changed.</span>
+    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">R</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 
-
-
-<span class="sd">        z : np.array</span>
-<span class="sd">            measurement for this update.</span>
-
-<span class="sd">        R : np.array, scalar, or None</span>
-<span class="sd">            Optionally provide R to override the measurement noise for this</span>
-<span class="sd">            one call, otherwise  self.R will be used.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="k">if</span> <span class="n">z</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span>
@@ -465,64 +313,18 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">P</span> <span class="o">=</span> <span class="n">dot3</span><span class="p">(</span><span class="n">I_KH</span><span class="p">,</span> <span class="n">P</span><span class="p">,</span> <span class="n">I_KH</span><span class="o">.</span><span class="n">T</span><span class="p">)</span> <span class="o">+</span> <span class="n">dot3</span><span class="p">(</span><span class="n">K</span><span class="p">,</span> <span class="n">R</span><span class="p">,</span> <span class="n">K</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">S</span> <span class="o">=</span> <span class="n">S</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">K</span> <span class="o">=</span> <span class="n">K</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">K</span> <span class="o">=</span> <span class="n">K</span>
 
 
-<div class="viewcode-block" id="FadingKalmanFilter.predict"><a class="viewcode-back" href="../trackingfilters.html#tracking_filters.FadingKalmanFilter.predict">[docs]</a>    <span class="k">def</span> <span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">u</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Predict next position.</span>
-
-
-
-<span class="sd">        u : np.array</span>
-<span class="sd">            Optional control vector. If non-zero, it is multiplied by B</span>
-<span class="sd">            to create the control input into the system.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-
-        <span class="c1"># x = Fx + Bu</span>
+    <span class="k">def</span> <span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">u</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+       <span class="c1"># x = Fx + Bu</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">dot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">F</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">)</span> <span class="o">+</span> <span class="n">dot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">B</span><span class="p">,</span> <span class="n">u</span><span class="p">)</span>
 
         <span class="c1"># P = FPF&#39; + Q</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">P</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">alpha_sq</span> <span class="o">*</span> <span class="n">dot3</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">F</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">P</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">F</span><span class="o">.</span><span class="n">T</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">Q</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">P</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">alpha_sq</span> <span class="o">*</span> <span class="n">dot3</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">F</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">P</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">F</span><span class="o">.</span><span class="n">T</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">Q</span>
 
 
-<div class="viewcode-block" id="FadingKalmanFilter.batch_filter"><a class="viewcode-back" href="../trackingfilters.html#tracking_filters.FadingKalmanFilter.batch_filter">[docs]</a>    <span class="k">def</span> <span class="nf">batch_filter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">zs</span><span class="p">,</span> <span class="n">Rs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">update_first</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Batch processes a sequences of measurements.</span>
-
-
-<span class="sd">        zs : list-like</span>
-<span class="sd">            list of measurements at each time step `self.dt` Missing</span>
-<span class="sd">            measurements must be represented by &#39;None&#39;.</span>
-
-<span class="sd">        Rs : list-like, optional</span>
-<span class="sd">            optional list of values to use for the measurement error</span>
-<span class="sd">            covariance; a value of None in any position will cause the filter</span>
-<span class="sd">            to use `self.R` for that time step.</span>
-
-<span class="sd">        update_first : bool, optional,</span>
-<span class="sd">            controls whether the order of operations is update followed by</span>
-<span class="sd">            predict, or predict followed by update. Default is predict-&gt;update.</span>
-
-
-
-<span class="sd">        means: np.array((n,dim_x,1))</span>
-<span class="sd">            array of the state for each time step after the update. Each entry</span>
-<span class="sd">            is an np.array. In other words `means[k,:]` is the state at step</span>
-<span class="sd">            `k`.</span>
-
-<span class="sd">        covariance: np.array((n,dim_x,dim_x))</span>
-<span class="sd">            array of the covariances for each time step after the update.</span>
-<span class="sd">            In other words `covariance[k,:,:]` is the covariance at step `k`.</span>
-
-<span class="sd">        means_predictions: np.array((n,dim_x,1))</span>
-<span class="sd">            array of the state for each time step after the predictions. Each</span>
-<span class="sd">            entry is an np.array. In other words `means[k,:]` is the state at</span>
-<span class="sd">            step `k`.</span>
-
-<span class="sd">        covariance_predictions: np.array((n,dim_x,dim_x))</span>
-<span class="sd">            array of the covariances for each time step after the prediction.</span>
-<span class="sd">            In other words `covariance[k,:,:]` is the covariance at step `k`.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-
+    <span class="k">def</span> <span class="nf">batch_filter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">zs</span><span class="p">,</span> <span class="n">Rs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">update_first</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="n">n</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="n">zs</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">Rs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">Rs</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span><span class="p">]</span><span class="o">*</span><span class="n">n</span>
@@ -554,49 +356,24 @@
                 <span class="n">means</span><span class="p">[</span><span class="n">i</span><span class="p">,:]</span>         <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span>
                 <span class="n">covariances</span><span class="p">[</span><span class="n">i</span><span class="p">,:,:]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">P</span>
 
-        <span class="k">return</span> <span class="p">(</span><span class="n">means</span><span class="p">,</span> <span class="n">covariances</span><span class="p">,</span> <span class="n">means_p</span><span class="p">,</span> <span class="n">covariances_p</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="p">(</span><span class="n">means</span><span class="p">,</span> <span class="n">covariances</span><span class="p">,</span> <span class="n">means_p</span><span class="p">,</span> <span class="n">covariances_p</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="FadingKalmanFilter.get_prediction"><a class="viewcode-back" href="../trackingfilters.html#tracking_filters.FadingKalmanFilter.get_prediction">[docs]</a>    <span class="k">def</span> <span class="nf">get_prediction</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">u</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Predicts the next state of the filter and returns it. Does not</span>
-<span class="sd">        alter the state of the filter.</span>
+    <span class="k">def</span> <span class="nf">get_prediction</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">u</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
 
-
-<span class="sd">        u : np.array</span>
-<span class="sd">            optional control input</span>
-
-
-
-<span class="sd">        (x, P)</span>
-<span class="sd">            State vector and covariance array of the prediction.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">x</span> <span class="o">=</span> <span class="n">dot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">F</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">)</span> <span class="o">+</span> <span class="n">dot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">B</span><span class="p">,</span> <span class="n">u</span><span class="p">)</span>
         <span class="n">P</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">alpha_sq</span> <span class="o">*</span> <span class="n">dot3</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">F</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">P</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">F</span><span class="o">.</span><span class="n">T</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">Q</span>
-        <span class="k">return</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">P</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">P</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="FadingKalmanFilter.residual_of"><a class="viewcode-back" href="../trackingfilters.html#tracking_filters.FadingKalmanFilter.residual_of">[docs]</a>    <span class="k">def</span> <span class="nf">residual_of</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">z</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; returns the residual for the given measurement (z). Does not alter</span>
-<span class="sd">        the state of the filter.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="n">z</span> <span class="o">-</span> <span class="n">dot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">H</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">)</span></div>
+    <span class="k">def</span> <span class="nf">residual_of</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">z</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">z</span> <span class="o">-</span> <span class="n">dot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">H</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="FadingKalmanFilter.measurement_of_state"><a class="viewcode-back" href="../trackingfilters.html#tracking_filters.FadingKalmanFilter.measurement_of_state">[docs]</a>    <span class="k">def</span> <span class="nf">measurement_of_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Helper function that converts a state into a measurement.</span>
+    <span class="k">def</span> <span class="nf">measurement_of_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
 
-
-
-<span class="sd">        x : np.array</span>
-<span class="sd">            kalman state vector</span>
-
-
-
-<span class="sd">        z : np.array</span>
-<span class="sd">            measurement corresponding to the given state</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="n">dot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">H</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span></div></div>
+        <span class="k">return</span> <span class="n">dot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">H</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span></div>
 </pre></div>
 
           </div>

@@ -14,7 +14,7 @@ def static_plot_grid_hist_selections(lst_det_left, lst_det_right, selection, fna
     color_map_right = cms.RdPu
 
     if fname_det:
-        f1 = plt.figure(1, (23, 13), dpi=300)
+        f1 = plt.figure(1, (23, 13), dpi=1200)
     else:
         f1 = plt.figure(1, (15, 8))
 
@@ -212,7 +212,7 @@ def static_plot_grid_hist_selections(lst_det_left, lst_det_right, selection, fna
         f1.suptitle(tit, fontsize=14, fontweight='bold')
 
         if fname_det:
-            f1.savefig(fname_det)
+            f1.savefig(fname_det, format='eps', dpi=1200)
         else:
             plt.show()
     else:
@@ -226,7 +226,7 @@ def static_plot_selections(lst_det_left, lst_det_right, selection, fname_det):
     color_map_right = cms.RdPu
 
     if fname_det:
-        f1 = plt.figure(1, (23, 13), dpi=300)
+        f1 = plt.figure(1, (23, 13), dpi=1200)
     else:
         f1 = plt.figure(1, (15, 8))
 
@@ -320,7 +320,7 @@ def static_plot_selections(lst_det_left, lst_det_right, selection, fname_det):
     f1.suptitle(tit, fontsize=14, fontweight='bold')
 
     if fname_det:
-        f1.savefig(fname_det)
+        f1.savefig(fname_det, format='eps', dpi=1200)
     else:
         plt.show()
 
@@ -335,7 +335,7 @@ def static_plotREF_selections(lst_det_left, lst_det_right,
     color_map_ref = cms.Greens
 
     if fname_det:
-        f1 = plt.figure(1, (23, 13), dpi=300)
+        f1 = plt.figure(1, (23, 13), dpi=1200)
     else:
         f1 = plt.figure(1, (15, 8))
 
@@ -458,6 +458,6 @@ def static_plotREF_selections(lst_det_left, lst_det_right,
     f1.suptitle(tit, fontsize=14, fontweight='bold')
 
     if fname_det:
-        f1.savefig(fname_det)
+        f1.savefig(fname_det, format='eps', dpi=1200)
     else:
         plt.show()

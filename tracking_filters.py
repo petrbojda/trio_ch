@@ -4,6 +4,31 @@ import scipy.linalg as linalg
 from numpy import dot, zeros, eye, asarray
 from utils import setter, setter_scalar, dot3, setter_1d
 
+
+class TrackingFilter(object):
+
+    def __init__(self, dim_x, dim_z, dim_u=0):
+        """
+
+        :param dim_x:
+        :param dim_z:
+        :param dim_u:
+        """
+        self.dim_x = dim_x
+        self.dim_z = dim_z
+        self.dim_u = dim_u
+
+        self._x = zeros((dim_x,1)) # state
+        self._P = eye(dim_x)       # uncertainty covariance
+        self._B = 0                # control transition matrix
+        self._F = 0                # state transition matrix
+        self._R = eye(dim_z)       # state uncertainty
+        self._Q = eye(dim_x)       # process uncertainty
+        self._y = zeros((dim_z, 1))
+
+        # identity matrix. Do not alter this.
+        self._I = np.eye(dim_x)
+
 class ExtendedKalmanFilter(object):
 
     def __init__(self, dim_x, dim_z, dim_u=0):

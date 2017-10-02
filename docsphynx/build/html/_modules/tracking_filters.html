@@ -48,6 +48,31 @@
 <span class="kn">from</span> <span class="nn">numpy</span> <span class="k">import</span> <span class="n">dot</span><span class="p">,</span> <span class="n">zeros</span><span class="p">,</span> <span class="n">eye</span><span class="p">,</span> <span class="n">asarray</span>
 <span class="kn">from</span> <span class="nn">utils</span> <span class="k">import</span> <span class="n">setter</span><span class="p">,</span> <span class="n">setter_scalar</span><span class="p">,</span> <span class="n">dot3</span><span class="p">,</span> <span class="n">setter_1d</span>
 
+
+<div class="viewcode-block" id="TrackingFilter"><a class="viewcode-back" href="../trackingfilters.html#tracking_filters.TrackingFilter">[docs]</a><span class="k">class</span> <span class="nc">TrackingFilter</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dim_x</span><span class="p">,</span> <span class="n">dim_z</span><span class="p">,</span> <span class="n">dim_u</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        :param dim_x:</span>
+<span class="sd">        :param dim_z:</span>
+<span class="sd">        :param dim_u:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dim_x</span> <span class="o">=</span> <span class="n">dim_x</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dim_z</span> <span class="o">=</span> <span class="n">dim_z</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dim_u</span> <span class="o">=</span> <span class="n">dim_u</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_x</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">((</span><span class="n">dim_x</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span> <span class="c1"># state</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_P</span> <span class="o">=</span> <span class="n">eye</span><span class="p">(</span><span class="n">dim_x</span><span class="p">)</span>       <span class="c1"># uncertainty covariance</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_B</span> <span class="o">=</span> <span class="mi">0</span>                <span class="c1"># control transition matrix</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_F</span> <span class="o">=</span> <span class="mi">0</span>                <span class="c1"># state transition matrix</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_R</span> <span class="o">=</span> <span class="n">eye</span><span class="p">(</span><span class="n">dim_z</span><span class="p">)</span>       <span class="c1"># state uncertainty</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_Q</span> <span class="o">=</span> <span class="n">eye</span><span class="p">(</span><span class="n">dim_x</span><span class="p">)</span>       <span class="c1"># process uncertainty</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_y</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">((</span><span class="n">dim_z</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+
+        <span class="c1"># identity matrix. Do not alter this.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_I</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">dim_x</span><span class="p">)</span></div>
+
 <div class="viewcode-block" id="ExtendedKalmanFilter"><a class="viewcode-back" href="../trackingfilters.html#tracking_filters.ExtendedKalmanFilter">[docs]</a><span class="k">class</span> <span class="nc">ExtendedKalmanFilter</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dim_x</span><span class="p">,</span> <span class="n">dim_z</span><span class="p">,</span> <span class="n">dim_u</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>

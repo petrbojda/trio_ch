@@ -27,7 +27,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Radar Plots Module" href="radarplots.html" />
-    <link rel="prev" title="Track Management Module" href="trackmanagement.html" />
+    <link rel="prev" title="Filter Management Module" href="filtersmanagement.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
@@ -52,7 +52,28 @@
 </ol>
 <p>These filters were developed based on the tutorial in
 .. _a link: <a class="reference external" href="https://pykalman.github.io/">https://pykalman.github.io/</a></p>
-<span class="target" id="module-tracking_filters"></span><div class="section" id="extended-kalman-filter">
+<span class="target" id="module-tracking_filters"></span><div class="section" id="tracking-filter">
+<h2>Tracking Filter<a class="headerlink" href="#tracking-filter" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="tracking_filters.TrackingFilter">
+<em class="property">class </em><code class="descclassname">tracking_filters.</code><code class="descname">TrackingFilter</code><span class="sig-paren">(</span><em>dim_x</em>, <em>dim_z</em>, <em>dim_u=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tracking_filters.html#TrackingFilter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tracking_filters.TrackingFilter" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>dim_x</strong> – </li>
+<li><strong>dim_z</strong> – </li>
+<li><strong>dim_u</strong> – </li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="extended-kalman-filter">
 <h2>Extended Kalman Filter<a class="headerlink" href="#extended-kalman-filter" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="tracking_filters.ExtendedKalmanFilter">
@@ -146,6 +167,7 @@
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Tracking Filters Module</a><ul>
+<li><a class="reference internal" href="#tracking-filter">Tracking Filter</a></li>
 <li><a class="reference internal" href="#extended-kalman-filter">Extended Kalman Filter</a></li>
 <li><a class="reference internal" href="#fading-kalman-filter">Fading Kalman Filter</a></li>
 </ul>
@@ -156,7 +178,7 @@
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
   <li><a href="modules.html">&lt;no title&gt;</a><ul>
-      <li>Previous: <a href="trackmanagement.html" title="previous chapter">Track Management Module</a></li>
+      <li>Previous: <a href="filtersmanagement.html" title="previous chapter">Filter Management Module</a></li>
       <li>Next: <a href="radarplots.html" title="next chapter">Radar Plots Module</a></li>
   </ul></li>
   </ul></li>

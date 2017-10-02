@@ -4,6 +4,7 @@
 
    datacontainers
    trackmanagement
+   filtersmanagement
    trackingfilters
    radarplots
    utils

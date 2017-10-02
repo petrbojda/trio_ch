@@ -10,6 +10,13 @@ These filters were developed based on the tutorial in
 
 .. module:: tracking_filters
 
+Tracking Filter
+----------------------
+
+.. autoclass:: TrackingFilter
+    :members:
+
+
 Extended Kalman Filter
 ----------------------
 

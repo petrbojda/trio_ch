@@ -16,8 +16,12 @@ class FilterManager(list):
         else:
             self._gate = gate
 
-    def create_new_filter(self):
+    def create_new_tracker(self):
         self._n_of_Trackers = np.append(self._n_of_Trackers, self._n_of_Trackers[-1] + 1)
         self.append(tflt.Tracker(self._n_of_Trackers[-1]))
 
+    def update_tracker(self, trackID):
+        self[trackID].update()
 
+    def remove_tracker(self, trackID):
+        self[trackID].remove()

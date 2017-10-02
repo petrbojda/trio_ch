@@ -5,9 +5,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
     <title>radar_plots &#8212; Automotive Rearlooking RADAR Tracker 1.2.1 documentation</title>
+    
     <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
@@ -55,7 +58,7 @@
     <span class="n">color_map_right</span> <span class="o">=</span> <span class="n">cms</span><span class="o">.</span><span class="n">RdPu</span>
 
     <span class="k">if</span> <span class="n">fname_det</span><span class="p">:</span>
-        <span class="n">f1</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="p">(</span><span class="mi">23</span><span class="p">,</span> <span class="mi">13</span><span class="p">),</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">)</span>
+        <span class="n">f1</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="p">(</span><span class="mi">23</span><span class="p">,</span> <span class="mi">13</span><span class="p">),</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">1200</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">f1</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
 
@@ -253,7 +256,7 @@
         <span class="n">f1</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="n">tit</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">fname_det</span><span class="p">:</span>
-            <span class="n">f1</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">fname_det</span><span class="p">)</span>
+            <span class="n">f1</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">fname_det</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;eps&#39;</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">1200</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
     <span class="k">else</span><span class="p">:</span>
@@ -267,7 +270,7 @@
     <span class="n">color_map_right</span> <span class="o">=</span> <span class="n">cms</span><span class="o">.</span><span class="n">RdPu</span>
 
     <span class="k">if</span> <span class="n">fname_det</span><span class="p">:</span>
-        <span class="n">f1</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="p">(</span><span class="mi">23</span><span class="p">,</span> <span class="mi">13</span><span class="p">),</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">)</span>
+        <span class="n">f1</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="p">(</span><span class="mi">23</span><span class="p">,</span> <span class="mi">13</span><span class="p">),</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">1200</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">f1</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
 
@@ -361,7 +364,7 @@
     <span class="n">f1</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="n">tit</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">fname_det</span><span class="p">:</span>
-        <span class="n">f1</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">fname_det</span><span class="p">)</span>
+        <span class="n">f1</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">fname_det</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;eps&#39;</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">1200</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
 
@@ -376,7 +379,7 @@
     <span class="n">color_map_ref</span> <span class="o">=</span> <span class="n">cms</span><span class="o">.</span><span class="n">Greens</span>
 
     <span class="k">if</span> <span class="n">fname_det</span><span class="p">:</span>
-        <span class="n">f1</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="p">(</span><span class="mi">23</span><span class="p">,</span> <span class="mi">13</span><span class="p">),</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">)</span>
+        <span class="n">f1</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="p">(</span><span class="mi">23</span><span class="p">,</span> <span class="mi">13</span><span class="p">),</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">1200</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">f1</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
 
@@ -499,7 +502,7 @@
     <span class="n">f1</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="n">tit</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">fname_det</span><span class="p">:</span>
-        <span class="n">f1</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">fname_det</span><span class="p">)</span>
+        <span class="n">f1</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">fname_det</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;eps&#39;</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">1200</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
 </pre></div>
@@ -535,7 +538,7 @@
       &copy;2017, Petr Bojda.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.3</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.2</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
       
     </div>

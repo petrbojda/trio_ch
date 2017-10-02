@@ -5,9 +5,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
     <title>data_containers &#8212; Automotive Rearlooking RADAR Tracker 1.2.1 documentation</title>
+    
     <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
@@ -43,6 +46,7 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">configparser</span>
 <span class="kn">import</span> <span class="nn">argparse</span>
+<span class="kn">import</span> <span class="nn">itertools</span>
 
 
 <div class="viewcode-block" id="DetectionPoint"><a class="viewcode-back" href="../datacontainers.html#data_containers.DetectionPoint">[docs]</a><span class="k">class</span> <span class="nc">DetectionPoint</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
@@ -68,7 +72,7 @@
 <span class="sd">        :param azimuth: Azimuth of the detection measured by RADAR</span>
 <span class="sd">        :type azimuth: float</span>
 <span class="sd">        :param left: TRUE if the detection was measured by the left RADAR, FALSE if by right one</span>
-<span class="sd">        :type left: float</span>
+<span class="sd">        :type left: bool</span>
 <span class="sd">        :param car_width: The width of an EGO car. (is being used to align left and right RADAR measurement)</span>
 <span class="sd">        :type car_width: float</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -81,8 +85,22 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_vel</span> <span class="o">=</span> <span class="n">vel</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_azimuth</span> <span class="o">=</span> <span class="n">azimuth</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_rng</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_azimuth</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_y_correction_dir</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_rng</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_azimuth</span><span class="p">)</span> <span class="o">+</span> <span class="n">car_width</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_y_correction_dir</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_rng</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_azimuth</span><span class="p">)</span> <span class="o">+</span> <span class="n">car_width</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
 
+<div class="viewcode-block" id="DetectionPoint.set_XY"><a class="viewcode-back" href="../datacontainers.html#data_containers.DetectionPoint.set_XY">[docs]</a>    <span class="k">def</span> <span class="nf">set_XY</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; For an existing detection sets its _x and _y attributes independently</span>
+
+<span class="sd">        :param x: value to assign to _x</span>
+<span class="sd">        :param y: value to assign to _y</span>
+<span class="sd">        :type x: float</span>
+<span class="sd">        :type y: float</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_x</span> <span class="o">=</span> <span class="n">x</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_y</span> <span class="o">=</span> <span class="n">y</span></div>
+
+    <span class="k">def</span> <span class="nf">equalsXY</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">detection_point</span><span class="p">):</span>
+        <span class="n">test</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_x</span> <span class="o">==</span> <span class="n">detection_point</span><span class="o">.</span><span class="n">_x</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_y</span> <span class="o">==</span> <span class="n">detection_point</span><span class="o">.</span><span class="n">_y</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">test</span></div>
 
 <div class="viewcode-block" id="ReferencePoint"><a class="viewcode-back" href="../datacontainers.html#data_containers.ReferencePoint">[docs]</a><span class="k">class</span> <span class="nc">ReferencePoint</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mccL</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">mccR</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">TAR_dist</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">TAR_distX</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">TAR_distY</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
@@ -187,14 +205,6 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_rng_interval</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_mcc_interval</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_trackID_interval</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">append_point</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mcc</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span><span class="p">,</span> <span class="n">beam</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">DetectionPoint</span><span class="p">(</span><span class="n">mcc</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span><span class="p">,</span> <span class="n">beam</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_y_interval</span> <span class="o">=</span> <span class="p">(</span><span class="nb">min</span><span class="p">([</span><span class="n">elem</span><span class="o">.</span><span class="n">_y</span> <span class="k">for</span> <span class="n">elem</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">]),</span> <span class="nb">max</span><span class="p">([</span><span class="n">elem</span><span class="o">.</span><span class="n">_y</span> <span class="k">for</span> <span class="n">elem</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">]))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_x_interval</span> <span class="o">=</span> <span class="p">(</span><span class="nb">min</span><span class="p">([</span><span class="n">elem</span><span class="o">.</span><span class="n">_x</span> <span class="k">for</span> <span class="n">elem</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">]),</span> <span class="nb">max</span><span class="p">([</span><span class="n">elem</span><span class="o">.</span><span class="n">_x</span> <span class="k">for</span> <span class="n">elem</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">]))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_vely_interval</span> <span class="o">=</span> <span class="p">(</span><span class="nb">min</span><span class="p">([</span><span class="n">elem</span><span class="o">.</span><span class="n">_vely</span> <span class="k">for</span> <span class="n">elem</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">]),</span> <span class="nb">max</span><span class="p">([</span><span class="n">elem</span><span class="o">.</span><span class="n">_vely</span> <span class="k">for</span> <span class="n">elem</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">]))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_velx_interval</span> <span class="o">=</span> <span class="p">(</span><span class="nb">min</span><span class="p">([</span><span class="n">elem</span><span class="o">.</span><span class="n">_velx</span> <span class="k">for</span> <span class="n">elem</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">]),</span> <span class="nb">max</span><span class="p">([</span><span class="n">elem</span><span class="o">.</span><span class="n">_velx</span> <span class="k">for</span> <span class="n">elem</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">]))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_mcc_interval</span> <span class="o">=</span> <span class="p">(</span><span class="nb">min</span><span class="p">([</span><span class="n">elem</span><span class="o">.</span><span class="n">_mcc</span> <span class="k">for</span> <span class="n">elem</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">]),</span> <span class="nb">max</span><span class="p">([</span><span class="n">elem</span><span class="o">.</span><span class="n">_mcc</span> <span class="k">for</span> <span class="n">elem</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">]))</span>
 
     <span class="k">def</span> <span class="nf">append_detection</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">detection_point</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">detection_point</span><span class="p">)</span>
@@ -493,20 +503,60 @@
 
 
 <div class="viewcode-block" id="UnAssignedDetectionList"><a class="viewcode-back" href="../datacontainers.html#data_containers.UnAssignedDetectionList">[docs]</a><span class="k">class</span> <span class="nc">UnAssignedDetectionList</span><span class="p">(</span><span class="n">DetectionList</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Tsampling</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Tsampling</span><span class="p">,</span> <span class="n">gate</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        :param Tsampling:</span>
+<span class="sd">        :param gate:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_Tsampling</span> <span class="o">=</span> <span class="n">Tsampling</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gate</span> <span class="o">=</span> <span class="n">gate</span>
 
-    <span class="c1"># TODO: write method to compute 3-point projections from stored detections</span>
+<div class="viewcode-block" id="UnAssignedDetectionList.two_point_projection"><a class="viewcode-back" href="../datacontainers.html#data_containers.UnAssignedDetectionList.two_point_projection">[docs]</a>    <span class="k">def</span> <span class="nf">two_point_projection</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start_detection</span><span class="p">,</span> <span class="n">end_detection</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Extrapolates two detections in terms of the first order polynomial.</span>
+<span class="sd">        The extrapolation is computed from x,y coordinates.</span>
 
-    <span class="c1"># TODO: Add an array of 3-point projections as a class parameter</span>
-    <span class="k">def</span> <span class="nf">two_point_projection</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start_detection</span><span class="p">,</span> <span class="n">end_detection</span><span class="p">):</span>
+<span class="sd">        :param start_detection: The first point of the extrapolation. X and Y coordinates are being used only.</span>
+<span class="sd">        :param end_detection: The second point of the extrapolation. X and Y coordinates are being used only.</span>
+<span class="sd">        :return: Projected point, X and Y coordinates are set only.</span>
+
+<span class="sd">        :type start_detection: DetectionPoint</span>
+<span class="sd">        :type end_detection: DetectionPoint</span>
+<span class="sd">        :rtype: DetectionPoint</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">projected_point</span> <span class="o">=</span> <span class="n">DetectionPoint</span><span class="p">()</span>
-        <span class="n">projected_point</span><span class="o">.</span><span class="n">_x</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">end_detection</span><span class="o">.</span><span class="n">_x</span> <span class="o">-</span> <span class="n">start_detection</span><span class="o">.</span><span class="n">_x</span>
-        <span class="n">projected_point</span><span class="o">.</span><span class="n">_y</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">end_detection</span><span class="o">.</span><span class="n">_y</span> <span class="o">-</span> <span class="n">start_detection</span><span class="o">.</span><span class="n">_y</span>
-        <span class="n">projected_point</span><span class="o">.</span><span class="n">_dx</span> <span class="o">=</span> <span class="p">(</span><span class="n">end_detection</span><span class="o">.</span><span class="n">_x</span> <span class="o">-</span> <span class="n">start_detection</span><span class="o">.</span><span class="n">_x</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">_Tsampling</span>
-        <span class="n">projected_point</span><span class="o">.</span><span class="n">_dy</span> <span class="o">=</span> <span class="p">(</span><span class="n">end_detection</span><span class="o">.</span><span class="n">_y</span> <span class="o">-</span> <span class="n">start_detection</span><span class="o">.</span><span class="n">_y</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">_Tsampling</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">end_detection</span><span class="o">.</span><span class="n">_x</span> <span class="o">-</span> <span class="n">start_detection</span><span class="o">.</span><span class="n">_x</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">end_detection</span><span class="o">.</span><span class="n">_y</span> <span class="o">-</span> <span class="n">start_detection</span><span class="o">.</span><span class="n">_y</span>
+        <span class="n">projected_point</span><span class="o">.</span><span class="n">set_XY</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">projected_point</span></div>
+
+    <span class="k">def</span> <span class="nf">test_det_in_gate_3points</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">tested_detection</span><span class="p">,</span> <span class="n">detection_1</span><span class="p">,</span> <span class="n">detection_2</span><span class="p">):</span>
+        <span class="n">expected_point</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">two_point_projection</span><span class="p">(</span><span class="n">detection_1</span><span class="p">,</span> <span class="n">detection_2</span><span class="p">)</span>
+        <span class="n">is_in_x</span> <span class="o">=</span> <span class="p">(</span><span class="n">expected_point</span><span class="o">.</span><span class="n">_x</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">gate</span><span class="o">.</span><span class="n">x</span> <span class="o">&lt;</span> <span class="n">tested_detection</span><span class="o">.</span><span class="n">_x</span><span class="p">)</span> <span class="ow">and</span>\
+                  <span class="p">(</span><span class="n">expected_point</span><span class="o">.</span><span class="n">_x</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">gate</span><span class="o">.</span><span class="n">x</span> <span class="o">&gt;</span> <span class="n">tested_detection</span><span class="o">.</span><span class="n">_x</span><span class="p">)</span>
+        <span class="n">is_in_y</span> <span class="o">=</span> <span class="p">(</span><span class="n">expected_point</span><span class="o">.</span><span class="n">_y</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">gate</span><span class="o">.</span><span class="n">y</span> <span class="o">&lt;</span> <span class="n">tested_detection</span><span class="o">.</span><span class="n">_y</span><span class="p">)</span> <span class="ow">and</span>\
+                  <span class="p">(</span><span class="n">expected_point</span><span class="o">.</span><span class="n">_y</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">gate</span><span class="o">.</span><span class="n">y</span> <span class="o">&gt;</span> <span class="n">tested_detection</span><span class="o">.</span><span class="n">_y</span><span class="p">)</span>
+
+
+
+        <span class="k">return</span> <span class="n">is_in_x</span> <span class="ow">and</span> <span class="n">is_in_y</span>
+
+    <span class="k">def</span> <span class="nf">append_detection</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">detection_point</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">append_detection</span><span class="p">(</span><span class="n">detection_point</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">ready_for_a_new_track</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">detection_point</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">itertools</span><span class="o">.</span><span class="n">combinations</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">test_det_in_gate</span><span class="p">()</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="k">def</span> <span class="nf">remove_detections</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mcc_interval</span><span class="p">):</span>
+        <span class="n">mcc_i</span> <span class="o">=</span> <span class="n">mcc_interval</span> <span class="k">if</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">mcc_interval</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">)</span> <span class="k">else</span> <span class="p">(</span><span class="n">mcc_interval</span><span class="p">,</span> <span class="n">mcc_interval</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">elem</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">mcc_i</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">elem</span><span class="o">.</span><span class="n">_mcc</span> <span class="o">&lt;=</span> <span class="n">mcc_i</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">elem</span><span class="p">)</span></div>
+
 
 
 <span class="k">class</span> <span class="nc">ReferenceList</span><span class="p">(</span><span class="nb">list</span><span class="p">):</span>
@@ -899,7 +949,7 @@
       &copy;2017, Petr Bojda.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.3</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.2</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
       
     </div>

@@ -5,9 +5,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
     <title>Data Containers Module &#8212; Automotive Rearlooking RADAR Tracker 1.2.1 documentation</title>
+    
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
@@ -41,10 +44,15 @@
           <div class="body" role="main">
             
   <div class="section" id="data-containers-module">
-<h1>Data Containers Module<a class="headerlink" href="#data-containers-module" title="Permalink to this headline">¶</a></h1>
-<p>any classes</p>
+<span id="trackpoint-label"></span><h1>Data Containers Module<a class="headerlink" href="#data-containers-module" title="Permalink to this headline">¶</a></h1>
+<p>The module defines all the necessary containers to store, sort, filter, import and export data
+either raw radar detections or already processed tracks. Also available here are classes to keep
+and manipulate data from a referential DGPS system.</p>
+<p>All the containers are based on lists of appropriate points. Lists are inherited from a python’s built-in
+class ‘list’ with additional methods. Points are inherited from a basic ‘object’ class.</p>
 <span class="target" id="module-data_containers"></span><div class="section" id="detectionpoint">
 <h2>DetectionPoint<a class="headerlink" href="#detectionpoint" title="Permalink to this headline">¶</a></h2>
+<p>Defines a class which represents a raw radar detection.</p>
 <dl class="class">
 <dt id="data_containers.DetectionPoint">
 <em class="property">class </em><code class="descclassname">data_containers.</code><code class="descname">DetectionPoint</code><span class="sig-paren">(</span><em>mcc=0</em>, <em>beam=0</em>, <em>nodet_permcc=0</em>, <em>trackID=0</em>, <em>rng=0.0</em>, <em>vel=0.0</em>, <em>azimuth=0.0</em>, <em>left=True</em>, <em>car_width=1.88</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/data_containers.html#DetectionPoint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#data_containers.DetectionPoint" title="Permalink to this definition">¶</a></dt>
@@ -64,13 +72,31 @@
 <li><strong>rng</strong> (<em>float</em>) – Range of the detection measured by RADAR</li>
 <li><strong>vel</strong> (<em>float</em>) – Velocity of the detection measured by RADAR</li>
 <li><strong>azimuth</strong> (<em>float</em>) – Azimuth of the detection measured by RADAR</li>
-<li><strong>left</strong> (<em>float</em>) – TRUE if the detection was measured by the left RADAR, FALSE if by right one</li>
+<li><strong>left</strong> (<em>bool</em>) – TRUE if the detection was measured by the left RADAR, FALSE if by right one</li>
 <li><strong>car_width</strong> (<em>float</em>) – The width of an EGO car. (is being used to align left and right RADAR measurement)</li>
 </ul>
 </td>
 </tr>
 </tbody>
 </table>
+<dl class="method">
+<dt id="data_containers.DetectionPoint.set_XY">
+<code class="descname">set_XY</code><span class="sig-paren">(</span><em>x</em>, <em>y</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/data_containers.html#DetectionPoint.set_XY"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#data_containers.DetectionPoint.set_XY" title="Permalink to this definition">¶</a></dt>
+<dd><p>For an existing detection sets its _x and _y attributes independently</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>x</strong> (<em>float</em>) – value to assign to _x</li>
+<li><strong>y</strong> (<em>float</em>) – value to assign to _y</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 </dd></dl>
 
 </div>
@@ -165,8 +191,45 @@
 <h2>UnAssignedDetectionList<a class="headerlink" href="#unassigneddetectionlist" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="data_containers.UnAssignedDetectionList">
-<em class="property">class </em><code class="descclassname">data_containers.</code><code class="descname">UnAssignedDetectionList</code><span class="sig-paren">(</span><em>Tsampling</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/data_containers.html#UnAssignedDetectionList"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#data_containers.UnAssignedDetectionList" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<em class="property">class </em><code class="descclassname">data_containers.</code><code class="descname">UnAssignedDetectionList</code><span class="sig-paren">(</span><em>Tsampling</em>, <em>gate</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/data_containers.html#UnAssignedDetectionList"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#data_containers.UnAssignedDetectionList" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>Tsampling</strong> – </li>
+<li><strong>gate</strong> – </li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="data_containers.UnAssignedDetectionList.two_point_projection">
+<code class="descname">two_point_projection</code><span class="sig-paren">(</span><em>start_detection</em>, <em>end_detection</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/data_containers.html#UnAssignedDetectionList.two_point_projection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#data_containers.UnAssignedDetectionList.two_point_projection" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extrapolates two detections in terms of the first order polynomial.
+The extrapolation is computed from x,y coordinates.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>start_detection</strong> (<a class="reference internal" href="#data_containers.DetectionPoint" title="data_containers.DetectionPoint"><em>DetectionPoint</em></a>) – The first point of the extrapolation. X and Y coordinates are being used only.</li>
+<li><strong>end_detection</strong> (<a class="reference internal" href="#data_containers.DetectionPoint" title="data_containers.DetectionPoint"><em>DetectionPoint</em></a>) – The second point of the extrapolation. X and Y coordinates are being used only.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Projected point, X and Y coordinates are set only.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#data_containers.DetectionPoint" title="data_containers.DetectionPoint">DetectionPoint</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
 
 </div>
 <div class="section" id="track">
@@ -233,7 +296,7 @@
       &copy;2017, Petr Bojda.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.3</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.2</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
       
       |

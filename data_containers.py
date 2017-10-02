@@ -2,6 +2,7 @@ import scipy.io as sio
 import numpy as np
 import configparser
 import argparse
+import itertools
 
 
 class DetectionPoint(object):
@@ -27,7 +28,7 @@ class DetectionPoint(object):
         :param azimuth: Azimuth of the detection measured by RADAR
         :type azimuth: float
         :param left: TRUE if the detection was measured by the left RADAR, FALSE if by right one
-        :type left: float
+        :type left: bool
         :param car_width: The width of an EGO car. (is being used to align left and right RADAR measurement)
         :type car_width: float
         """
@@ -42,6 +43,20 @@ class DetectionPoint(object):
         self._x = self._rng * np.cos(self._azimuth)
         self._y = self._y_correction_dir * (self._rng * np.sin(self._azimuth) + car_width / 2)
 
+    def set_XY (self,x,y):
+        """ For an existing detection sets its _x and _y attributes independently
+
+        :param x: value to assign to _x
+        :param y: value to assign to _y
+        :type x: float
+        :type y: float
+        """
+        self._x = x
+        self._y = y
+
+    def equalsXY (self,detection_point):
+        test = (self._x == detection_point._x) and (self._y == detection_point._y)
+        return test
 
 class ReferencePoint(object):
     def __init__(self, mccL=0, mccR=0, TAR_dist=0.0, TAR_distX=0.0, TAR_distY=0.0,
@@ -146,14 +161,6 @@ class DetectionList(list):
         self._rng_interval = (0, 0)
         self._mcc_interval = (0, 0)
         self._trackID_interval = (0, 0)
-
-    def append_point(self, mcc, x, y, dx, dy, beam):
-        self.append(DetectionPoint(mcc, x, y, dx, dy, beam))
-        self._y_interval = (min([elem._y for elem in self]), max([elem._y for elem in self]))
-        self._x_interval = (min([elem._x for elem in self]), max([elem._x for elem in self]))
-        self._vely_interval = (min([elem._vely for elem in self]), max([elem._vely for elem in self]))
-        self._velx_interval = (min([elem._velx for elem in self]), max([elem._velx for elem in self]))
-        self._mcc_interval = (min([elem._mcc for elem in self]), max([elem._mcc for elem in self]))
 
     def append_detection(self, detection_point):
         self.append(detection_point)
@@ -452,20 +459,60 @@ class DetectionList(list):
 
 
 class UnAssignedDetectionList(DetectionList):
-    def __init__(self, Tsampling):
+    def __init__(self, Tsampling, gate):
+        """
+
+        :param Tsampling:
+        :param gate:
+        """
         super().__init__()
         self._Tsampling = Tsampling
+        self.gate = gate
 
-    # TODO: write method to compute 3-point projections from stored detections
-
-    # TODO: Add an array of 3-point projections as a class parameter
     def two_point_projection(self, start_detection, end_detection):
+        """ Extrapolates two detections in terms of the first order polynomial.
+        The extrapolation is computed from x,y coordinates.
+
+        :param start_detection: The first point of the extrapolation. X and Y coordinates are being used only.
+        :param end_detection: The second point of the extrapolation. X and Y coordinates are being used only.
+        :return: Projected point, X and Y coordinates are set only.
+
+        :type start_detection: DetectionPoint
+        :type end_detection: DetectionPoint
+        :rtype: DetectionPoint
+        """
         projected_point = DetectionPoint()
-        projected_point._x = 2 * end_detection._x - start_detection._x
-        projected_point._y = 2 * end_detection._y - start_detection._y
-        projected_point._dx = (end_detection._x - start_detection._x) / self._Tsampling
-        projected_point._dy = (end_detection._y - start_detection._y) / self._Tsampling
+        x = 2 * end_detection._x - start_detection._x
+        y = 2 * end_detection._y - start_detection._y
+        projected_point.set_XY(x,y)
         return projected_point
+
+    def test_det_in_gate_3points(self,tested_detection, detection_1, detection_2):
+        expected_point = self.two_point_projection(detection_1, detection_2)
+        is_in_x = (expected_point._x - self.gate.x < tested_detection._x) and\
+                  (expected_point._x + self.gate.x > tested_detection._x)
+        is_in_y = (expected_point._y - self.gate.y < tested_detection._y) and\
+                  (expected_point._y + self.gate.y > tested_detection._y)
+
+
+
+        return is_in_x and is_in_y
+
+    def append_detection(self, detection_point):
+        super().append_detection(detection_point)
+    def ready_for_a_new_track(self, detection_point):
+        for item in itertools.combinations(self, 2):
+
+            self.test_det_in_gate()
+        return False
+
+    def remove_detections(self, mcc_interval):
+        mcc_i = mcc_interval if (len(mcc_interval) == 2) else (mcc_interval, mcc_interval)
+
+        for elem in self:
+            if mcc_i[0] <= elem._mcc <= mcc_i[1]:
+                self.remove(elem)
+
 
 
 class ReferenceList(list):

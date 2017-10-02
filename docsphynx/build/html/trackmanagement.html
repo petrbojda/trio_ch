@@ -5,9 +5,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
     <title>Track Management Module &#8212; Automotive Rearlooking RADAR Tracker 1.2.1 documentation</title>
+    
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
@@ -42,12 +45,24 @@
             
   <div class="section" id="track-management-module">
 <h1>Track Management Module<a class="headerlink" href="#track-management-module" title="Permalink to this headline">¶</a></h1>
-<p>One single class</p>
+<p>The module contains one single class which manages all the necessary processes to organize all tracks, starts them from
+the scratch and stops them accordingly. Here is being kept a list of current tracks, they are updated when a new detection is
+assigned to them, incoming detections are sorted out and either assigned to already existing track or they are stored into
+a list of unassigned detections.</p>
 <span class="target" id="module-track_management"></span><div class="section" id="trackmanager">
 <h2>TrackManager<a class="headerlink" href="#trackmanager" title="Permalink to this headline">¶</a></h2>
+<p>TrackManager is a class of which primary task is to organize life of all tracks starting by their initiation to
+the moment when they are terminated. Advanced management as a parallel tracks merging is not implemented yet.</p>
+<p>The main part of the TrackManager is a list of all active tracks where every track is a list itself, see
+<a class="reference internal" href="datacontainers.html#data_containers.Track" title="data_containers.Track"><code class="xref py py-meth docutils literal"><span class="pre">data_containers.Track()</span></code></a> in a file <a class="reference internal" href="datacontainers.html"><span class="doc">data_containers.py</span></a> file.</p>
+<p>Another list is a list of unassigned detections, <a class="reference internal" href="datacontainers.html#data_containers.UnAssignedDetectionList" title="data_containers.UnAssignedDetectionList"><code class="xref py py-meth docutils literal"><span class="pre">data_containers.UnAssignedDetectionList()</span></code></a> defined in a
+<a class="reference internal" href="datacontainers.html"><span class="doc">data_containers.py</span></a> file. A newly incoming detection if not assigned to any existing track is
+stored here. Every newcomer is then tested if it can form a new track in combination with other detections already
+in a list. If not they are removed from a list and ‘trashed’ after couple of cycles in order to free the memory and avoid
+any possible false track initiation.</p>
 <dl class="class">
 <dt id="track_management.TrackManager">
-<em class="property">class </em><code class="descclassname">track_management.</code><code class="descname">TrackManager</code><span class="sig-paren">(</span><em>flt_type='G-H'</em>, <em>Tsampling=0.05</em>, <em>gate_dx=5</em>, <em>gate_dy=5</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/track_management.html#TrackManager"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#track_management.TrackManager" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">track_management.</code><code class="descname">TrackManager</code><span class="sig-paren">(</span><em>gate=None</em>, <em>flt_type=’G-H’</em>, <em>Tsampling=0.05</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/track_management.html#TrackManager"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#track_management.TrackManager" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </div>
@@ -102,7 +117,7 @@
       &copy;2017, Petr Bojda.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.3</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.2</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
       
       |

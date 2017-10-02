@@ -5,9 +5,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
     <title>track_management &#8212; Automotive Rearlooking RADAR Tracker 1.2.1 documentation</title>
+    
     <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
@@ -45,17 +48,17 @@
 
 <div class="viewcode-block" id="TrackManager"><a class="viewcode-back" href="../trackmanagement.html#track_management.TrackManager">[docs]</a><span class="k">class</span> <span class="nc">TrackManager</span><span class="p">(</span><span class="nb">list</span><span class="p">):</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">flt_type</span><span class="o">=</span><span class="s2">&quot;G-H&quot;</span><span class="p">,</span> <span class="n">Tsampling</span><span class="o">=</span><span class="mf">50.0e-3</span><span class="p">,</span> <span class="n">gate_dx</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">gate_dy</span><span class="o">=</span><span class="mi">5</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gate</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">flt_type</span><span class="o">=</span><span class="s1">&#39;G-H&#39;</span><span class="p">,</span> <span class="n">Tsampling</span><span class="o">=</span><span class="mf">50.0e-3</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
-
         <span class="bp">self</span><span class="o">.</span><span class="n">_Tsampling</span> <span class="o">=</span> <span class="n">Tsampling</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_gate_dx</span> <span class="o">=</span> <span class="n">gate_dx</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_gate_dy</span> <span class="o">=</span> <span class="n">gate_dy</span>
-
+        <span class="bp">self</span><span class="o">.</span><span class="n">_gate_</span> <span class="o">=</span> <span class="n">gate</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_flt_type</span> <span class="o">=</span> <span class="n">flt_type</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_n_of_Tracks</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">])</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_lst_not_assigned_detections</span> <span class="o">=</span> <span class="p">[]</span>
-
+        <span class="bp">self</span><span class="o">.</span><span class="n">_lst_not_assigned_detections</span> <span class="o">=</span> <span class="n">dc</span><span class="o">.</span><span class="n">UnAssignedDetectionList</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">gate</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_gate</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;dx&#39;</span><span class="p">:</span> <span class="mf">0.65</span><span class="p">,</span> <span class="s1">&#39;dy&#39;</span><span class="p">:</span> <span class="mf">0.3</span><span class="p">}</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_gate</span> <span class="o">=</span> <span class="n">gate</span>
 
     <span class="k">def</span> <span class="nf">create_new_track</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_n_of_Tracks</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_n_of_Tracks</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">_n_of_Tracks</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
@@ -63,26 +66,13 @@
 
     <span class="k">def</span> <span class="nf">append_detection_to_track</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">trackID</span><span class="p">,</span> <span class="n">detection</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">elem</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">:</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">elem</span><span class="o">.</span><span class="n">trackID</span> <span class="o">==</span> <span class="n">trackID</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">elem</span><span class="o">.</span><span class="n">trackID</span> <span class="o">==</span> <span class="n">trackID</span><span class="p">:</span>
                 <span class="n">elem</span><span class="o">.</span><span class="n">append_detection</span><span class="p">(</span><span class="n">detection</span><span class="p">)</span>
 
-
-
-    <span class="k">def</span> <span class="nf">test_det_in_gate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">gate</span><span class="p">,</span><span class="n">detection</span><span class="p">):</span>
-        <span class="n">is_in_x</span> <span class="o">=</span> <span class="p">(</span><span class="n">gate</span><span class="o">.</span><span class="n">x</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">_gate_dx</span> <span class="o">&lt;</span> <span class="n">detection</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">])</span> <span class="ow">and</span> <span class="p">(</span><span class="n">gate</span><span class="o">.</span><span class="n">x</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">_gate_dx</span> <span class="o">&gt;</span> <span class="n">detection</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">])</span>
-        <span class="n">is_in_y</span> <span class="o">=</span> <span class="p">(</span><span class="n">gate</span><span class="o">.</span><span class="n">y</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">_gate_dx</span> <span class="o">&lt;</span> <span class="n">detection</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">])</span> <span class="ow">and</span> <span class="p">(</span><span class="n">gate</span><span class="o">.</span><span class="n">y</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">_gate_dx</span> <span class="o">&gt;</span> <span class="n">detection</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">])</span>
-
-        <span class="k">return</span> <span class="n">is_in_x</span> <span class="ow">and</span> <span class="n">is_in_y</span>
-
-
-
-    <span class="k">def</span> <span class="nf">test_detections</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">mcc</span><span class="p">,</span><span class="n">noDet</span><span class="p">,</span><span class="n">lst_detections</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">test_detection</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">mcc</span><span class="p">,</span><span class="n">noDet</span><span class="p">,</span><span class="n">lst_detections</span><span class="p">):</span>
         <span class="nb">print</span> <span class="p">(</span><span class="s2">&quot;Detections to assign, mcc:&quot;</span><span class="p">,</span><span class="n">mcc</span><span class="p">,</span><span class="s2">&quot;with NoDet&quot;</span><span class="p">,</span><span class="n">noDet</span><span class="p">)</span>
         <span class="nb">print</span> <span class="p">(</span><span class="s2">&quot;Detections to assign&quot;</span><span class="p">,</span> <span class="n">lst_detections</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">i1</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">noDet</span><span class="p">):</span>
-            <span class="c1"># detection = {&#39;x&#39;:lst_detections[&#39;x&#39;][i1],&#39;y&#39;:lst_detections[&#39;y&#39;][i1],&#39;beam&#39;:lst_detections[&#39;beam&#39;][i1],</span>
-            <span class="c1">#              &#39;mcc&#39;:lst_detections[&#39;mcc&#39;][i1],&#39;trackID&#39;:lst_detections[&#39;trackID&#39;][i1],</span>
-            <span class="c1">#              &#39;Razimuth&#39;: lst_detections[&#39;Razimuth&#39;][i1], &#39;Rvelocity&#39;: lst_detections[&#39;Rvelocity&#39;][i1]}</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_n_of_Tracks</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
                 <span class="k">for</span> <span class="n">elem</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">:</span>
                     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_det_in_gate</span><span class="p">(</span><span class="n">elem</span><span class="o">.</span><span class="n">get_prediction</span><span class="p">(),</span><span class="n">lst_detections</span><span class="p">[</span><span class="n">i1</span><span class="p">]):</span>
@@ -95,22 +85,12 @@
 
             <span class="k">if</span> <span class="n">lst_detections</span><span class="p">[</span><span class="n">i1</span><span class="p">]</span><span class="o">.</span><span class="n">_trackID</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
                 <span class="nb">print</span> <span class="p">(</span><span class="s2">&quot;not assigned detections are in a list:&quot;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">_lst_not_assigned_detections</span><span class="p">)</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_lst_not_assigned_detections</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">detection</span><span class="p">)</span>
-                <span class="c1"># TODO: rewrite &#39;_lst_not_assigned_detections&#39; to a structure (class) with a combination of linear predictions</span>
-                <span class="nb">print</span> <span class="p">(</span><span class="s2">&quot;Detection at mcc&quot;</span><span class="p">,</span><span class="n">mcc</span> <span class="p">,</span><span class="s2">&quot;is not assigned to an existing track&quot;</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_lst_not_assigned_detections</span><span class="o">.</span><span class="n">append_detection</span><span class="p">(</span><span class="n">lst_detections</span><span class="p">[</span><span class="n">i1</span><span class="p">])</span>
 
-            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_lst_not_assigned_detections</span><span class="p">[</span><span class="s1">&#39;mcc&#39;</span><span class="p">])</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">:</span>
-                <span class="k">for</span> <span class="n">elem1</span><span class="p">,</span> <span class="n">elem2</span> <span class="ow">in</span> <span class="n">it</span><span class="o">.</span><span class="n">combinations</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_lst_not_assigned_detections</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">],</span> <span class="mi">2</span><span class="p">):</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">calc_two_point_projection</span><span class="p">(</span><span class="n">elem1</span><span class="p">,</span><span class="n">elem2</span><span class="p">)</span>
-                    <span class="c1"># TODO: finish comparison of elements, rewrite method &#39;calc_two_point_projection&#39;</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">create_new_track</span><span class="p">()</span>
-                    <span class="nb">print</span> <span class="p">(</span><span class="s2">&quot;A new track is created. ID:&quot;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">_n_of_Tracks</span><span class="p">)</span></div>
+                <span class="bp">self</span><span class="o">.</span><span class="n">create_new_track</span><span class="p">()</span>
+                <span class="nb">print</span> <span class="p">(</span><span class="s2">&quot;A new track is created. ID:&quot;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">_n_of_Tracks</span><span class="p">)</span></div>
 
 
-        <span class="c1"># TODO: write a function to test third detection in a row to fit a prediction based on detection at mcc-2 and mcc-1</span>
-
-
-        <span class="c1"># TODO: &#39;_lst_not_assigned_detections&#39; is of a special class inherited from the DetectionList. An array of 3-point predictions will be its parameter updated with every new appended detection</span>
 </pre></div>
 
           </div>
@@ -144,7 +124,7 @@
       &copy;2017, Petr Bojda.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.3</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.2</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
       
     </div>

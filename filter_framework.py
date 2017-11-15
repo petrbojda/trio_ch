@@ -62,12 +62,13 @@ def main(conf_data):
         #################### Left radar filter
         if lst_det_left:
             lst_LR_data = lst_det_left.get_lst_detections_selected(selection=selection)
+            #   TODO: Is it correct to assign this for every iteration?
             if lst_LR_data["mcc"].any():
                 LR_data_exists = True
                 number_of_dets_left = np.size(lst_LR_data["mcc"])
-                tracks_left.test_detection(i,number_of_dets_left,lst_LR_data)
+                tracks_left.new_detection(i,number_of_dets_left,lst_LR_data)
 
-        i_prev = i
+        i_prev = i + 1
 #     TODO: graphical representation of the results
 
 if __name__ == "__main__":

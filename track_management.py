@@ -24,7 +24,7 @@ class TrackManager(list):
             if elem.trackID == trackID:
                 elem.append_detection(detection)
 
-    def test_detection(self,mcc,noDet,lst_detections):
+    def new_detection(self,mcc,noDet,lst_detections):
         print ("Detections to assign, mcc:",mcc,"with NoDet",noDet)
         print ("Detections to assign", lst_detections)
         for i1 in range(0, noDet):

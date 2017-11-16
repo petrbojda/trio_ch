@@ -6,72 +6,78 @@ import radar_plots as rplt
 import numpy as np
 
 
-def main(conf_data):
+def main(config_data):
+    selection = {"beam_tp": config_data["beams_tp"],
+                 "mcc_tp": None, "x_tp": None, "y_tp": None,
+                 "rng_tp": None, "vel_tp": (-5, 5), "az_tp": None,
+                 "trackID_tp": None, }
+    # Structure 'selection' constrains  data to use as input to the tracker.
+    # Specific 'mcc', 'azimuth', 'range' ... etc can be specified here to block
+    # unwanted data to enter.
 
-    selection = {"beam_tp":conf_data["beams_tp"],
-                 "mcc_tp":None, "x_tp":None, "y_tp":None,
-                 "rng_tp":None, "vel_tp":(-5,5), "az_tp":None,
-                 "trackID_tp":None,}
-
-    tracks_left = tm.TrackManager()
-    tracks_right = tm.TrackManager()
+    track_LR = tm.TrackManager()
+    track_RR = tm.TrackManager()
 
     # Load Data from .mat files
-    if conf_data["filename_LeftRadar"]:
+    if config_data["filename_LeftRadar"]:
         l = []
-        l.append(conf_data["path_data_folder"])
-        l.append(conf_data["filename_LeftRadar"])
-        leftradar_path = ''.join(l)
+        l.append(config_data["path_data_folder"])
+        l.append(config_data["filename_LeftRadar"])
+        leftradar_path = ''.join(l)     
 
-        lst_det_left = dc.DetectionList()
-        lst_det_left.append_data_from_m_file(leftradar_path, True, conf_data["EGO_car_width"])
-        mcc_interval_left = lst_det_left.get_mcc_interval()
-        print("MCC Left starts at: ", mcc_interval_left[0],
-              "and ends at: ", mcc_interval_left[1])
+        lst_det_LR = dc.DetectionList()
+        lst_det_LR.append_data_from_m_file(leftradar_path, True, config_data["EGO_car_width"])
+        mcc_interval_LR = lst_det_LR.get_mcc_interval()
+        print("filter_framework: MCC Left starts at: ", mcc_interval_LR[0],
+              "and ends at: ", mcc_interval_LR[1])
 
-    if conf_data["filename_RightRadar"]:
+    if config_data["filename_RightRadar"]:
         l = []
-        l.append(conf_data["path_data_folder"])
-        l.append(conf_data["filename_RightRadar"])
+        l.append(config_data["path_data_folder"])
+        l.append(config_data["filename_RightRadar"])
         rightradar_path = ''.join(l)
 
-        lst_det_right = dc.DetectionList()
-        lst_det_right.append_data_from_m_file(rightradar_path, False, conf_data["EGO_car_width"])
-        mcc_interval_right = lst_det_right.get_mcc_interval()
-        print("MCC Right starts at: ", mcc_interval_right[0], "and ends at: ", mcc_interval_right[1])
+        lst_det_RR = dc.DetectionList()
+        lst_det_RR.append_data_from_m_file(rightradar_path, False, config_data["EGO_car_width"])
+        mcc_interval_RR = lst_det_RR.get_mcc_interval()
+        print("filter_framework: MCC Right starts at: ", mcc_interval_RR[0], "and ends at: ", mcc_interval_RR[1])
 
     # Calculate valid mcc interval for detections to be presented
-    if conf_data["filename_LeftRadar"] and conf_data["filename_RightRadar"]:
-        mcc_start = min(mcc_interval_left[0], mcc_interval_right[0])
-        mcc_end = max(mcc_interval_left[1], mcc_interval_right[1])
-    elif conf_data["filename_LeftRadar"]:
-        mcc_start = mcc_interval_left[0]
-        mcc_end = mcc_interval_left[1]
+    if config_data["filename_LeftRadar"] and config_data["filename_RightRadar"]:
+        mcc_start = min(mcc_interval_LR[0], mcc_interval_RR[0])
+        mcc_end = max(mcc_interval_LR[1], mcc_interval_RR[1])
+    elif config_data["filename_LeftRadar"]:
+        mcc_start = mcc_interval_LR[0]
+        mcc_end = mcc_interval_LR[1]
     else:
-        mcc_start = mcc_interval_right[0]
-        # mcc_end = mcc_interval_right[1]
+        mcc_start = mcc_interval_RR[0]
+        # mcc_end = mcc_interval_RR[1]
         mcc_end = mcc_start + 100
-    print("MCC starts at: ", mcc_start, "MCC ends at: ", mcc_end)
+    print("filter_framework: MCC starts at: ", mcc_start, "MCC ends at: ", mcc_end)
     mcc_step = 1
 
-    ############ Filtering loop
+    #----------------- Filtering loop
     i_prev = mcc_start
     for i in range(mcc_start, mcc_end, mcc_step):  # number of frames
 
-        selection["mcc_tp"] = (i_prev,i)
-        #################### Left radar filter
-        if lst_det_left:
-            lst_LR_data = lst_det_left.get_lst_detections_selected(selection=selection)
-            #   TODO: Is it correct to assign this for every iteration?
-            if lst_LR_data["mcc"].any():
-                LR_data_exists = True
-                number_of_dets_left = np.size(lst_LR_data["mcc"])
-                tracks_left.new_detection(i,number_of_dets_left,lst_LR_data)
+        selection["mcc_tp"] = (i_prev, i)
+        #-------------- Left radar filter
+        if lst_det_LR:
+            lst_det_per_loop_cycle_LR = lst_det_LR.get_lst_detections_selected(selection=selection)
+            #   TODO: Is it correct to assign this for every iteration? Potential to write more effective code.
+            if lst_det_per_loop_cycle_LR:
+                print('filter_framework: Number of detections for a LR mcc ', i, 'is: ', len(lst_det_per_loop_cycle_LR))
+                track_LR.new_detection(i, len(lst_det_per_loop_cycle_LR), lst_det_per_loop_cycle_LR)
+            else:
+                print('filter_framework: There is no detection for a LR mcc ',i)
 
         i_prev = i + 1
+        # TODO: This line is redundant if only one mcc is being processed per loop cycle. However if mcc_step is different than 1, it might be good to keep it here.
+
+
 #     TODO: graphical representation of the results
 
 if __name__ == "__main__":
-    conf_data = dc.parse_CMDLine("./analysis.cnf")
-    if conf_data:
-        main(conf_data)
+    config_data = dc.parse_CMDLine("./analysis.cnf")
+    if config_data:
+        main(config_data)

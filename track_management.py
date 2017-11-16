@@ -6,10 +6,12 @@ class TrackManager(list):
     def __init__(self, gate = None, flt_type='G-H', Tsampling=50.0e-3):
         super().__init__()
         self._Tsampling = Tsampling
-        self._gate_ = gate
+        self._gate = gate
         self._flt_type = flt_type
         self._n_of_Tracks = np.array([0])
-        self._lst_not_assigned_detections = dc.UnAssignedDetectionList()
+        self._lst_not_assigned_detections = dc.UnAssignedDetectionList(
+                                                            self._Tsampling,
+                                                            self._gate)
         if gate is None:
             self._gate = {'x': 3, 'y': 1, 'dx': 0.65, 'dy': 0.3}
         else:
@@ -25,8 +27,8 @@ class TrackManager(list):
                 elem.append_detection(detection)
 
     def new_detection(self,mcc,noDet,lst_detections):
-        print ("Detections to assign, mcc:",mcc,"with NoDet",noDet)
-        print ("Detections to assign", lst_detections)
+        print ("track_mgmt: Detections to assign, mcc:",mcc,"with NoDet",noDet,"Agreed on:", len(lst_detections))
+        print ("track_mgmt: Detections to assign", lst_detections)
         for i1 in range(0, noDet):
             if self._n_of_Tracks[-1]:
                 for elem in self:
@@ -36,13 +38,13 @@ class TrackManager(list):
                         self.append_detection_to_track(selTrackID,lst_detections[i1])
 
                 lst_detections[i1]._trackID = 999   # more reasonable value will be assigned in the future
-            #     TODO: assign list of trackIDs to mark the case when a detection is assigned to more than just one tracks
+            #     TODO: assign list of trackIDs to mark the case when a detection is assigned to more than just one track
 
             if lst_detections[i1]._trackID == 0:
-                print ("not assigned detections are in a list:",self._lst_not_assigned_detections)
+                print ("track_mgmt: not assigned detections are in a list:",self._lst_not_assigned_detections)
                 self._lst_not_assigned_detections.append_detection(lst_detections[i1])
 
                 self.create_new_track()
-                print ("A new track is created. ID:",self._n_of_Tracks)
+                print ("track_mgmt: A new track is created. ID:",self._n_of_Tracks)
 
 

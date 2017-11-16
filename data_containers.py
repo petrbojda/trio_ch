@@ -166,8 +166,7 @@ class DetectionList(list):
         self.append(detection_point)
         self._y_interval = (min([elem._y for elem in self]), max([elem._y for elem in self]))
         self._x_interval = (min([elem._x for elem in self]), max([elem._x for elem in self]))
-        self._vely_interval = (min([elem._vely for elem in self]), max([elem._vely for elem in self]))
-        self._velx_interval = (min([elem._velx for elem in self]), max([elem._velx for elem in self]))
+        self._vel_interval = (min([elem._vel for elem in self]), max([elem._vel for elem in self]))
         self._mcc_interval = (min([elem._mcc for elem in self]), max([elem._mcc for elem in self]))
 
     def append_data_from_m_file(self, data_path, left, car_width):
@@ -500,6 +499,7 @@ class UnAssignedDetectionList(DetectionList):
 
     def append_detection(self, detection_point):
         super().append_detection(detection_point)
+
     def ready_for_a_new_track(self, detection_point):
         for item in itertools.combinations(self, 2):
 

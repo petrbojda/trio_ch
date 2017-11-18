@@ -67,9 +67,9 @@ def main(config_data):
             #   TODO: Is it correct to assign this for every iteration? Potential to write more effective code.
             if lst_det_per_loop_cycle_LR:
                 print('filter_framework: Number of detections for a LR mcc ', i, 'is: ', len(lst_det_per_loop_cycle_LR))
-                track_LR.new_detection(i, len(lst_det_per_loop_cycle_LR), lst_det_per_loop_cycle_LR)
+                track_LR.new_detection(lst_det_per_loop_cycle_LR)
             else:
-                print('filter_framework: There is no detection for a LR mcc ',i)
+                print('filter_framework: There is no detection for current LR mcc ',i)
 
         i_prev = i + 1
         # TODO: This line is redundant if only one mcc is being processed per loop cycle. However if mcc_step is different than 1, it might be good to keep it here.

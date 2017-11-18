@@ -492,23 +492,20 @@ class UnAssignedDetectionList(DetectionList):
                   (expected_point._x + self.gate.x > tested_detection._x)
         is_in_y = (expected_point._y - self.gate.y < tested_detection._y) and\
                   (expected_point._y + self.gate.y > tested_detection._y)
-
-
-
         return is_in_x and is_in_y
 
-    def append_detection(self, detection_point):
-        super().append_detection(detection_point)
+    def new_detection(self, detection):
+        """Tests whether or not the list of unassigned detections can form a new track.
 
-    def ready_for_a_new_track(self, detection_point):
-        for item in itertools.combinations(self, 2):
+        :param detection: The detection which is going to be tested.
 
-            self.test_det_in_gate()
-        return False
+        :type detection: DetectionPoint
+        """
+        track_formed = False
+        return track_formed
 
     def remove_detections(self, mcc_interval):
         mcc_i = mcc_interval if (len(mcc_interval) == 2) else (mcc_interval, mcc_interval)
-
         for elem in self:
             if mcc_i[0] <= elem._mcc <= mcc_i[1]:
                 self.remove(elem)
@@ -631,8 +628,8 @@ class ReferenceList(list):
 class Track(list):
     def __init__(self, trackID):
         super().__init__()
-        self._prediction = TrackPoint(mcc=0, x=0, y=0, dx=0, dy=0, beam=0, Razimuth=0, Rvelocity=0)
-        self.trackID = trackID
+        self._gate = TrackPoint(mcc=0, x=0, y=0, dx=0, dy=0, beam=0, Razimuth=0, Rvelocity=0)
+        self._trackID = trackID
         self._velx_interval = (0, 0)
         self._x_interval = (0, 0)
         self._vely_interval = (0, 0)
@@ -650,8 +647,9 @@ class Track(list):
         self._Rvelocity_interval = (min([elem._Rvelocity for elem in self]), max([elem._Rvelocity for elem in self]))
         self._Razimuth_interval = (min([elem._Razimuth for elem in self]), max([elem._Razimuth for elem in self]))
         self._mcc_interval = (min([elem._mcc for elem in self]), max([elem._mcc for elem in self]))
+        return self._trackID
 
-    def append_point_from_detection(self, detection):
+    def append_detection(self, detection):
         self.append(TrackPoint(mcc=detection._mcc,
                                x=detection._x,
                                y=detection._y,
@@ -665,6 +663,7 @@ class Track(list):
         self._Rvelocity_interval = (min([elem._Rvelocity for elem in self]), max([elem._Rvelocity for elem in self]))
         self._Razimuth_interval = (min([elem._Razimuth for elem in self]), max([elem._Razimuth for elem in self]))
         self._mcc_interval = (min([elem._mcc for elem in self]), max([elem._mcc for elem in self]))
+        return self._trackID
 
     def append_point_from_radardata_str(self, detection):
         self.append(TrackPoint(mcc=detection['mcc'],
@@ -680,6 +679,7 @@ class Track(list):
         self._Rvelocity_interval = (min([elem.Rvelocity for elem in self]), max([elem.Rvelocity for elem in self]))
         self._Razimuth_interval = (min([elem.Razimuth for elem in self]), max([elem.Razimuth for elem in self]))
         self._mcc_interval = (min([elem.mcc for elem in self]), max([elem.mcc for elem in self]))
+        return self._trackID
 
         # Note: radar data structure here
         # radar_data = {"range": np.array(r_sel),
@@ -691,14 +691,21 @@ class Track(list):
         #               "beam": np.array(beam_sel),
         #               "mcc": np.array(mcc_sel)}
 
+    def test_det_in_gate(self,detection):
+
+        return(dist)
+
     def get_mcc_interval(self):
         return self._mcc_interval
 
-    def get_prediction(self):
-        return self._prediction
+    def get_ID(self):
+        return self._trackID
+
+    def get_gate(self):
+        return self._gate
 
     def update_prediction(self, prediction):
-        self._prediction = prediction
+        self._gate = prediction
 
 
 def cnf_file_read(cnf_file):

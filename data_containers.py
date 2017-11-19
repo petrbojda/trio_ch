@@ -628,7 +628,7 @@ class ReferenceList(list):
 class Track(list):
     def __init__(self, trackID):
         super().__init__()
-        self._gate = TrackPoint(mcc=0, x=0, y=0, dx=0, dy=0, beam=0, Razimuth=0, Rvelocity=0)
+        self._predicted_Point = TrackPoint(mcc=0, x=0, y=0, dx=0, dy=0, beam=0, Razimuth=0, Rvelocity=0)
         self._trackID = trackID
         self._velx_interval = (0, 0)
         self._x_interval = (0, 0)
@@ -701,11 +701,17 @@ class Track(list):
     def get_ID(self):
         return self._trackID
 
+    def get_predictedPoint(self):
+        return self._predicted_Point
+
     def get_gate(self):
-        return self._gate
+        return self._predicted_Point
+
+    def set_gate_constrains(self,):
+        return self._gate_constrains
 
     def update_prediction(self, prediction):
-        self._gate = prediction
+        self._predicted_Point = prediction
 
 
 def cnf_file_read(cnf_file):

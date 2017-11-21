@@ -1,5 +1,6 @@
 import scipy.io as sio
 import numpy as np
+import numpy.linalg as npla
 import configparser
 import argparse
 import itertools
@@ -54,9 +55,12 @@ class DetectionPoint(object):
         self._x = x
         self._y = y
 
-    def equalsXY (self,detection_point):
+    def equalsXY(self,detection_point):
         test = (self._x == detection_point._x) and (self._y == detection_point._y)
         return test
+
+    def get_mcc(self):
+        return self._mcc
 
 class ReferencePoint(object):
     def __init__(self, mccL=0, mccR=0, TAR_dist=0.0, TAR_distX=0.0, TAR_distY=0.0,
@@ -111,7 +115,7 @@ class ReferencePoint(object):
 
 class TrackPoint(object):
     def __init__(self, mcc=0, beam=[], x=0, y=0, dx=0, dy=0,
-                 Rvelocity=0, Razimuth=0):
+                 rvelocity=0, razimuth=0):
         """ Creates a point which is a part of the track.
 
         :rtype: object
@@ -128,10 +132,10 @@ class TrackPoint(object):
         :type dx: float
         :param dy: the time derivative of y
         :type dy: float
-        :param Rvelocity: an absolute velocity as measured by RADAR
-        :type Rvelocity: float
-        :param Razimuth: an azimuth as measured by RADAR
-        :type Razimuth: float
+        :param rvelocity: an absolute velocity as measured by RADAR
+        :type rvelocity: float
+        :param razimuth: an azimuth as measured by RADAR
+        :type razimuth: float
         """
         self.mcc = mcc
         self.x = x
@@ -139,8 +143,8 @@ class TrackPoint(object):
         self.y = y
         self.dy = dy
         self.beam = beam
-        self.Razimuth = Razimuth
-        self.Rvelocity = Rvelocity
+        self.razimuth = razimuth
+        self.rvelocity = rvelocity
 
     def get_array(self):
         """ Returns x and y coordinates and their time derivatives in a 4-element numpy array
@@ -149,6 +153,53 @@ class TrackPoint(object):
         """
         x = np.array([self.x, self.dx, self.y, self.dy])
         return x.reshape(4, 1)
+
+class Gate(object):
+    def __init__(self, beam=[], cx=0, cy=0, dx=0, dy=0,
+                 rvelocity=0, razimuth=0):
+        self._centerx = cx
+        self._diff_x = dx
+        self._centery = cy
+        self._diff_y = dy
+        self._beam = beam
+        self._razimuth = razimuth
+        self._rvelocity = rvelocity
+
+    def set_center_x(self, cx):
+        self._centerx = cx
+
+    def set_center_y(self, cy):
+        self._centery = cy
+
+    def set_diff_x(self, dx):
+        self._diff_x = dx
+
+    def set_diff_y(self, dy):
+        self._diff_y = dy
+
+    def set_beam(self, beam):
+        self._beam = beam
+
+    def set_razimuth(self, razimuth):
+        self._razimuth = razimuth
+
+    def set_rvelocity(self, rvelocity):
+        self._rvelocity = rvelocity
+
+    def test_in_gate(self, detection):
+        gate_x_min = self._centerx - self._diff_x/2
+        gate_x_max = self._centerx + self._diff_x/2
+        gate_y_min = self._centery - self._diff_y/2
+        gate_y_max = self._centery + self._diff_y/2
+        return (gate_x_min < detection._x < gate_x_max) & (gate_y_min < detection._y < gate_y_max)
+
+    def get_dist_from_center(self, detection):
+        c = np.array([self._centerx,self._centery])
+        d = np.array([detection._x, detection._y])
+        diff = np.array([self._diff_x, self._diff_y])
+        aim = (npla.norm(diff) - npla.norm(c-d)) / npla.norm(diff)
+        return aim
+
 
 
 class DetectionList(list):
@@ -317,8 +368,8 @@ class DetectionList(list):
                                                           az_i[0] <= elem._azimuth <= az_i[1])]
 
         radar_data = {"range": np.array(r_sel),
-                      "Razimuth": np.array(az_sel),
-                      "Rvelocity": np.array(v_sel),
+                      "razimuth": np.array(az_sel),
+                      "rvelocity": np.array(v_sel),
                       "x": np.array(x_sel),
                       "y": np.array(y_sel),
                       "trackID": np.array(trackID_sel),
@@ -514,19 +565,15 @@ class UnAssignedDetectionList(DetectionList):
 
 class ReferenceList(list):
     def __init__(self):
-
         super().__init__()
         self._mccL_interval = (0, 0)
         self._mccR_interval = (0, 0)
 
     def append_from_m_file(self, data_path):
-
         DGPS_data = sio.loadmat(data_path)
-
         no_dL = len(DGPS_data["MCC_LeftRadar"])
         no_dR = len(DGPS_data["MCC_RightRadar"])
         no_d = max(no_dL, no_dR)
-
         print("DGPSdata Left:", len(DGPS_data["MCC_LeftRadar"]))
         print("DGPSdata Left list:", int(DGPS_data["MCC_LeftRadar"][20]))
         for itr in range(0, no_d - 1):
@@ -544,27 +591,22 @@ class ReferenceList(list):
                                        EGO_accY=float(DGPS_data["EGO_Acc_y"][itr]),
                                        EGO_hdg=float(DGPS_data["EGO_Heading"][itr])
                                        ))
-
         self._mccL_interval = (min([elem._mccL for elem in self]), max([elem._mccL for elem in self]))
         self._mccR_interval = (min([elem._mccR for elem in self]), max([elem._mccR for elem in self]))
 
     def get_mccL_interval(self):
-
         return self._mccL_interval
 
     def get_mccR_interval(self):
-
         return self._mccR_interval
 
     def get_mccB_interval(self):
-
         mcc_min = min(self._mccL_interval[0], self._mccR_interval[0])
         mcc_max = max(self._mccL_interval[1], self._mccR_interval[1])
         mccB = (mcc_min, mcc_max)
         return mccB
 
     def get_array_references_selected(self, **kwarg):
-
         if 'mccL' in kwarg:
             if kwarg['mccL']:
                 mccL_i = kwarg['mccL'] if (len(kwarg['mccL']) == 2) else (kwarg['mccL'], kwarg['mccL'])
@@ -607,7 +649,6 @@ class ReferenceList(list):
                         (mccL_i[0] <= elem._mccL <= mccL_i[1] and mccR_i[0] <= elem._mccR <= mccR_i[1])]
         EGO_hdg_sel = [elem._EGO_hdg for elem in self if
                        (mccL_i[0] <= elem._mccL <= mccL_i[1] and mccR_i[0] <= elem._mccR <= mccR_i[1])]
-
         DGPS_data = {"mccL": np.array(mccL_sel),
                      "mccR": np.array(mccR_sel),
                      "TAR_dist": np.array(TAR_dist_sel),
@@ -621,21 +662,20 @@ class ReferenceList(list):
                      "EGO_accX": np.array(EGO_accX_sel),
                      "EGO_accY": np.array(EGO_accY_sel),
                      "EGO_hdg": np.array(EGO_hdg_sel)}
-
         return DGPS_data
 
 
 class Track(list):
     def __init__(self, trackID):
         super().__init__()
-        self._predicted_Point = TrackPoint(mcc=0, x=0, y=0, dx=0, dy=0, beam=0, Razimuth=0, Rvelocity=0)
+        self._predicted_gate = Gate(beam=[], cx=0, cy=0, dx=0, dy=0, rvelocity=0, razimuth=0)
         self._trackID = trackID
         self._velx_interval = (0, 0)
         self._x_interval = (0, 0)
         self._vely_interval = (0, 0)
         self._y_interval = (0, 0)
-        self._Rvelocity_interval = (0, 0)
-        self._Razimuth_interval = (0, 0)
+        self._rvelocity_interval = (0, 0)
+        self._razimuth_interval = (0, 0)
         self._mcc_interval = (0, 0)
 
     def append_point(self, mcc, x, y, dx, dy, beam):
@@ -644,8 +684,8 @@ class Track(list):
         self._x_interval = (min([elem._x for elem in self]), max([elem._x for elem in self]))
         self._vely_interval = (min([elem._vely for elem in self]), max([elem._vely for elem in self]))
         self._velx_interval = (min([elem._velx for elem in self]), max([elem._velx for elem in self]))
-        self._Rvelocity_interval = (min([elem._Rvelocity for elem in self]), max([elem._Rvelocity for elem in self]))
-        self._Razimuth_interval = (min([elem._Razimuth for elem in self]), max([elem._Razimuth for elem in self]))
+        self._rvelocity_interval = (min([elem._rvelocity for elem in self]), max([elem._rvelocity for elem in self]))
+        self._razimuth_interval = (min([elem._razimuth for elem in self]), max([elem._razimuth for elem in self]))
         self._mcc_interval = (min([elem._mcc for elem in self]), max([elem._mcc for elem in self]))
         return self._trackID
 
@@ -653,15 +693,15 @@ class Track(list):
         self.append(TrackPoint(mcc=detection._mcc,
                                x=detection._x,
                                y=detection._y,
-                               Razimuth=detection._Razimuth,
-                               Rvelocity=detection._Rvelocity,
+                               razimuth=detection._razimuth,
+                               rvelocity=detection._rvelocity,
                                beam=detection._beam))
         self._y_interval = (min([elem._y for elem in self]), max([elem._y for elem in self]))
         self._x_interval = (min([elem._x for elem in self]), max([elem._x for elem in self]))
         self._vely_interval = (min([elem._vely for elem in self]), max([elem._vely for elem in self]))
         self._velx_interval = (min([elem._velx for elem in self]), max([elem._velx for elem in self]))
-        self._Rvelocity_interval = (min([elem._Rvelocity for elem in self]), max([elem._Rvelocity for elem in self]))
-        self._Razimuth_interval = (min([elem._Razimuth for elem in self]), max([elem._Razimuth for elem in self]))
+        self._rvelocity_interval = (min([elem._rvelocity for elem in self]), max([elem._rvelocity for elem in self]))
+        self._razimuth_interval = (min([elem._razimuth for elem in self]), max([elem._razimuth for elem in self]))
         self._mcc_interval = (min([elem._mcc for elem in self]), max([elem._mcc for elem in self]))
         return self._trackID
 
@@ -669,31 +709,24 @@ class Track(list):
         self.append(TrackPoint(mcc=detection['mcc'],
                                x=detection['x'],
                                y=detection['y'],
-                               Razimuth=detection['Razimuth'],
-                               Rvelocity=detection['Rvelocity'],
+                               razimuth=detection['razimuth'],
+                               rvelocity=detection['rvelocity'],
                                beam=detection['beam']))
         self._y_interval = (min([elem.y for elem in self]), max([elem.y for elem in self]))
         self._x_interval = (min([elem.x for elem in self]), max([elem.x for elem in self]))
         # self._vely_interval = (min([elem._vely for elem in self]),max([elem._vely for elem in self]))
         # self._velx_interval = (min([elem._velx for elem in self]),max([elem._velx for elem in self]))
-        self._Rvelocity_interval = (min([elem.Rvelocity for elem in self]), max([elem.Rvelocity for elem in self]))
-        self._Razimuth_interval = (min([elem.Razimuth for elem in self]), max([elem.Razimuth for elem in self]))
+        self._rvelocity_interval = (min([elem.rvelocity for elem in self]), max([elem.rvelocity for elem in self]))
+        self._razimuth_interval = (min([elem.razimuth for elem in self]), max([elem.razimuth for elem in self]))
         self._mcc_interval = (min([elem.mcc for elem in self]), max([elem.mcc for elem in self]))
         return self._trackID
 
-        # Note: radar data structure here
-        # radar_data = {"range": np.array(r_sel),
-        #               "azimuth": np.array(az_sel),
-        #               "velocity": np.array(v_sel),
-        #               "x": np.array(x_sel),
-        #               "y": np.array(y_sel),
-        #               "trackID": np.array(trackID_sel),
-        #               "beam": np.array(beam_sel),
-        #               "mcc": np.array(mcc_sel)}
-
     def test_det_in_gate(self,detection):
-
-        return(dist)
+        if self._predicted_gate.test_in_gate(detection):
+            aim = self._predicted_gate.get_dist_from_center(detection)
+        else:
+            aim = 0
+        return aim
 
     def get_mcc_interval(self):
         return self._mcc_interval
@@ -701,14 +734,8 @@ class Track(list):
     def get_ID(self):
         return self._trackID
 
-    def get_predictedPoint(self):
-        return self._predicted_Point
-
-    def get_gate(self):
-        return self._predicted_Point
-
-    def set_gate_constrains(self,):
-        return self._gate_constrains
+    def get_predicted_gate(self):
+        return self._predicted_gate
 
     def update_prediction(self, prediction):
         self._predicted_Point = prediction
@@ -716,7 +743,6 @@ class Track(list):
 
 def cnf_file_read(cnf_file):
     # Reads the configuration file
-
     config = configparser.ConfigParser()
     config.read(cnf_file)  # "./analysis.cnf"
 
@@ -830,7 +856,6 @@ def parse_CMDLine(cnf_file):
         conf_data_out = False
 
     elif argv.scenario in conf_data["list_of_scenarios"]:
-
         if dataset == "new":
             path_data_folder = conf_data["path_new_data"]
         elif dataset == "old":
@@ -842,19 +867,17 @@ def parse_CMDLine(cnf_file):
 
         print("Dataset to process:", dataset)
         print("Data files are stored in:", path_data_folder)
-
         print("Data for the scenario are in:")
         print('\t \t left_radar:', data_filenames["filename_LeftRadar"])
         print('\t \t right_radar:', data_filenames["filename_RightRadar"])
         print('\t \t left_dgps:', data_filenames["filename_LeftDGPS"])
         print('\t \t right_dgps:', data_filenames["filename_RightDGPS"])
         print('\t \t both_dgps:', data_filenames["filename_BothDGPS"])
-
         print("Radar to process:", radar_tp)
+
         for n_beams in range(0, 4):
             if beams_tp.count(n_beams):
                 print("Beam", n_beams, "will be processed:", beams_tp.count(n_beams), "times.")
-
         conf_data_out = {"scenario": argv.scenario,
                          "path_data_folder": path_data_folder,
                          "filename_LeftRadar": data_filenames["filename_LeftRadar"],
@@ -867,6 +890,7 @@ def parse_CMDLine(cnf_file):
                          "beams_tp": beams_tp,
                          "radar_tp": radar_tp,
                          "output_folder": output}
+
         if radar_tp == "L":
             conf_data_out["filename_RightRadar"] = None
         elif radar_tp == "R":
@@ -879,7 +903,6 @@ def parse_CMDLine(cnf_file):
             conf_data_out["filename_RightRadar"] = None
             print("The input argument -r (--radar) is not correct")
             quit()
-
     else:
         print("No scenario selected.")
         conf_data_out = False

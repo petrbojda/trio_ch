@@ -22,15 +22,23 @@ class TrackManager(list):
         self.append(dc.Track(self._n_of_Tracks[-1]))
 
     def new_detection(self,lst_detections):
-        print ("track_mgmt: Detections to assign, mcc:",mcc,"Agreed on:", len(lst_detections))
+        print ("track_mgmt: Detections to assign, mcc:",lst_detections[0].get_mcc(),"Agreed on:", len(lst_detections))
         print ("track_mgmt: Detections to assign", lst_detections)
-        dist=[]
+        aim=[]
         for det in lst_detections:
-            for elem in self:
-                dist.append(elem.test_det_in_gate(det))
-            if max(dist):
-                self[dist.index(max(dist))].append(det)
+            if self:
+                for elem in self:
+                    aim.append(elem.test_det_in_gate(det))
+                if max(aim):
+                    self[aim.index(max(aim))].append(det)
+                    unassigned = False
+                else:
+                    print("track_mgmt: Some track exists but detection doesn't fit in.")
+                    unassigned = True
             else:
+                unassigned = True
+            if unassigned:
+                print("track_mgmt: No track started yet!")
                 # test unassigned detections
                 if self._lst_not_assigned_detections.new_detection(det):
                     # a new track is started with a detection "det"
@@ -39,7 +47,7 @@ class TrackManager(list):
                     # a new detestion "det" is stored in a list of unassigned detections
                     self._lst_not_assigned_detections.append(det)
 
-            dist.clean()
+        aim.clear()
 
 
 

@@ -52,7 +52,7 @@ def main(config_data):
     else:
         mcc_start = mcc_interval_RR[0]
         # mcc_end = mcc_interval_RR[1]
-        mcc_end = mcc_start + 100
+        mcc_end = mcc_start + 1000
     print("filter_framework: MCC starts at: ", mcc_start, "MCC ends at: ", mcc_end)
     mcc_step = 1
 

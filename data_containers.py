@@ -558,14 +558,15 @@ class UnAssignedDetectionList(DetectionList):
         aimed = []
         if len(self)>1:
             for det1, det2 in itertools.combinations(self,2):
-                print("data_cont: length of Unassigned list is:",len(self),"currently combined:",det1._mcc, det2._mcc)
+                print("data_cont: length of Unassigned list is:",len(self),"currently combining:",det1._mcc, det2._mcc)
+                print("data_cont: mcc:", det1._mcc, "at x", det1._x, "y", det1._y, "and mcc:", det2._mcc, "at x", det2._x, "y", det2._y)
                 if self.test_det_in_gate_3points(detection, det1, det2):
                     self._lst_tracks_possible.append(Track(0))
                     self._lst_tracks_possible[-1].append(det1)
                     self._lst_tracks_possible[-1].append(det2)
                     self._lst_tracks_possible[-1].append(detection)
                     self._lst_tracks_possible[-1].set_predicted_gate(self._gate_pattern)
-                    print("data_cont: last track:", len(self._lst_tracks_possible), "currently aimed:",
+                    print("data_cont: perspective track:", len(self._lst_tracks_possible), "currently processing one aiming:",
                           self._lst_tracks_possible[-1].test_det_in_gate(self._lst_tracks_possible[-1][-1]))
                     aimed.append(self._lst_tracks_possible[-1].test_det_in_gate(self._lst_tracks_possible[-1][-1]))
             if aimed:
@@ -573,8 +574,13 @@ class UnAssignedDetectionList(DetectionList):
                 aimed.clear()
             else:
                 track_to_return = False
+                self.append(detection)
+                print("data_cont: Detection stored in an unassigned list. Now it contains:", len(self), "unassigned detections")
             self._lst_tracks_possible.clear()
         else:
+            self.append(detection)
+            print("data_cont: Detection stored in an unassigned list. Now it contains:", len(self),
+                  "unassigned detections")
             track_to_return = False
 
         return track_to_return

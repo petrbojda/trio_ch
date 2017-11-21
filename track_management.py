@@ -30,28 +30,27 @@ class TrackManager(list):
             if self:
                 for elem in self:
                     aim.append(elem.test_det_in_gate(det))
+                print("track_mgmt: aim is",aim)
                 if max(aim):
-                    print("track_mgmt: max(aim) is",max(aim), "number of tracks", len(self), "pointing at",self[aim.index(max(aim))] )
+                    print("track_mgmt: max(aim) is",max(aim), "number of tracks", len(self), "pointing at",aim.index(max(aim)),"Object:",self[aim.index(max(aim))] )
                     self[aim.index(max(aim))].append(det)
+                    print("track_mgmt: The detection was assigned to a track at", aim.index(max(aim)))
                     unassigned = False
                 else:
-                    print("track_mgmt: Some track exists but detection doesn't fit in.")
+                    print("track_mgmt: Some track exists but detection doesn't fit in. Number of tracks in list:",len(self))
                     unassigned = True
             else:
                 unassigned = True
+            aim.clear()
             if unassigned:
-                print("track_mgmt: No track started yet!")
+                print("track_mgmt: Processing detection at mcc:",det._mcc,"No track started now!")
                 # test unassigned detections
                 newly_formed_track = self._lst_not_assigned_detections.new_detection(det)
                 if newly_formed_track:
                     # a new track is started with a detection "det"
                     self.create_new_track(newly_formed_track)
                     print("track_mgmt: A new track was created. Currently ",len(self), "tracks is in the list.")
-                else:
-                    # a new detection "det" is stored in a list of unassigned detections
-                    self._lst_not_assigned_detections.append(det)
-                    print("track_mgmt: Number of unassigned detections in a list:",len(self._lst_not_assigned_detections))
-        aim.clear()
+
 
 
 

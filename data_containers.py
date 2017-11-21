@@ -4,6 +4,7 @@ import numpy.linalg as npla
 import configparser
 import argparse
 import itertools
+import copy
 
 
 class DetectionPoint(object):
@@ -170,6 +171,10 @@ class Gate(object):
 
     def set_center_y(self, cy):
         self._centery = cy
+
+    def set_center_point(self, detection):
+        self._centerx = detection._x
+        self._centery = detection._y
 
     def set_diff_x(self, dx):
         self._diff_x = dx
@@ -517,7 +522,9 @@ class UnAssignedDetectionList(DetectionList):
         """
         super().__init__()
         self._Tsampling = Tsampling
-        self.gate = gate
+        self._lst_tracks_possible = []
+        self._gate_pattern = Gate(beam=[], cx=0, cy=0, dx=2, dy=2, rvelocity=0, razimuth=0)
+
 
     def two_point_projection(self, start_detection, end_detection):
         """ Extrapolates two detections in terms of the first order polynomial.
@@ -537,23 +544,40 @@ class UnAssignedDetectionList(DetectionList):
         projected_point.set_XY(x,y)
         return projected_point
 
-    def test_det_in_gate_3points(self,tested_detection, detection_1, detection_2):
+    def test_det_in_gate_3points(self,detection, detection_1, detection_2):
         expected_point = self.two_point_projection(detection_1, detection_2)
-        is_in_x = (expected_point._x - self.gate.x < tested_detection._x) and\
-                  (expected_point._x + self.gate.x > tested_detection._x)
-        is_in_y = (expected_point._y - self.gate.y < tested_detection._y) and\
-                  (expected_point._y + self.gate.y > tested_detection._y)
-        return is_in_x and is_in_y
+        self._gate_pattern.set_center_point(expected_point)
+        return self._gate_pattern.test_in_gate(detection)
 
     def new_detection(self, detection):
         """Tests whether or not the list of unassigned detections can form a new track.
 
         :param detection: The detection which is going to be tested.
-
         :type detection: DetectionPoint
         """
-        track_formed = False
-        return track_formed
+        aimed = []
+        if len(self)>1:
+            for det1, det2 in itertools.combinations(self,2):
+                print("data_cont: length of Unassigned list is:",len(self),"currently combined:",det1._mcc, det2._mcc)
+                if self.test_det_in_gate_3points(detection, det1, det2):
+                    self._lst_tracks_possible.append(Track(0))
+                    self._lst_tracks_possible[-1].append(det1)
+                    self._lst_tracks_possible[-1].append(det2)
+                    self._lst_tracks_possible[-1].append(detection)
+                    self._lst_tracks_possible[-1].set_predicted_gate(self._gate_pattern)
+                    print("data_cont: last track:", len(self._lst_tracks_possible), "currently aimed:",
+                          self._lst_tracks_possible[-1].test_det_in_gate(self._lst_tracks_possible[-1][-1]))
+                    aimed.append(self._lst_tracks_possible[-1].test_det_in_gate(self._lst_tracks_possible[-1][-1]))
+            if aimed:
+                track_to_return = copy.copy(self._lst_tracks_possible[aimed.index(max(aimed))])
+                aimed.clear()
+            else:
+                track_to_return = False
+            self._lst_tracks_possible.clear()
+        else:
+            track_to_return = False
+
+        return track_to_return
 
     def remove_detections(self, mcc_interval):
         mcc_i = mcc_interval if (len(mcc_interval) == 2) else (mcc_interval, mcc_interval)
@@ -668,7 +692,7 @@ class ReferenceList(list):
 class Track(list):
     def __init__(self, trackID):
         super().__init__()
-        self._predicted_gate = Gate(beam=[], cx=0, cy=0, dx=0, dy=0, rvelocity=0, razimuth=0)
+        self._predicted_gate = Gate(beam=[], cx=0, cy=0, dx=2, dy=2, rvelocity=0, razimuth=0)
         self._trackID = trackID
         self._velx_interval = (0, 0)
         self._x_interval = (0, 0)
@@ -736,6 +760,9 @@ class Track(list):
 
     def get_predicted_gate(self):
         return self._predicted_gate
+
+    def set_predicted_gate(self, predicted_gate):
+        self._predicted_gate = copy.copy(predicted_gate)
 
     def update_prediction(self, prediction):
         self._predicted_Point = prediction

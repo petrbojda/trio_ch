@@ -52,7 +52,7 @@ def main(config_data):
     else:
         mcc_start = mcc_interval_RR[0]
         # mcc_end = mcc_interval_RR[1]
-        mcc_end = mcc_start + 1000
+    mcc_end = mcc_start + 1000
     print("filter_framework: MCC starts at: ", mcc_start, "MCC ends at: ", mcc_end)
     mcc_step = 1
 
@@ -64,10 +64,12 @@ def main(config_data):
         #-------------- Left radar filter
         if lst_det_LR:
             lst_det_per_loop_cycle_LR = lst_det_LR.get_lst_detections_selected(selection=selection)
+
             #   TODO: Is it correct to assign this for every iteration? Potential to write more effective code.
             if lst_det_per_loop_cycle_LR:
                 print('filter_framework: Number of detections for a LR mcc ', i, 'is: ', len(lst_det_per_loop_cycle_LR))
-                track_LR.new_detection(lst_det_per_loop_cycle_LR)
+                #track_LR.new_detection(lst_det_per_loop_cycle_LR)
+                track_LR.new_detection_plot(lst_det_per_loop_cycle_LR)
             else:
                 print('filter_framework: There is no detection for current LR mcc ',i)
 

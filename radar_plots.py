@@ -461,3 +461,80 @@ def static_plotREF_selections(lst_det_left, lst_det_right,
         f1.savefig(fname_det, format='eps', dpi=1200)
     else:
         plt.show()
+
+
+
+
+
+
+
+
+def static_plotTrackMan_initialization(lst_detections, lst_not_assigned, new_track):
+    # Plot starts here:
+    cms = matplotlib.cm
+    color_map_new_det = cms.Blues
+    color_map_not_assig = cms.Greys
+    color_map_newly_formed = cms.Oranges
+
+    f1 = plt.figure(1, (15, 8))
+
+    f1ax1 = f1.add_subplot(111)
+    f1ax1.grid(True)
+    f1ax1.axis([-40, 100, -80, 80])
+    plt.title('Detections', loc='left')
+
+    number_of_new_dets_processed = 0
+    number_of_unassig_dets_processed = 0
+    number_of_track_points = 0
+    # Newly Incoming Detection Plot
+    if lst_detections:
+        print("radar_plt: Plotting newly incoming detection list of the length:",len(lst_detections))
+        new_data = lst_detections.get_array_detections()
+
+        f1ax1.plot(new_data["x"], new_data["y"],
+                   color=color_map_new_det(0.8), marker='^', ls='None', label='New Detection')
+        number_of_new_dets_processed += np.size(new_data["mcc"])
+        print("radar_plt: New detections: ", number_of_new_dets_processed, "detections. new_data has ", len(new_data),
+              "detections", new_data)
+        print("radar_plt: new_data[x]:", new_data["x"], "new_data[y]:", new_data["y"])
+
+        plt.draw()
+
+    # Unassigned Detections Plot
+    if lst_not_assigned:
+        print("radar_plt: Plotting unassigned detection list of the length:",len(lst_detections))
+        unassig_data = lst_not_assigned.get_array_detections()
+
+        f1ax1.plot(unassig_data["x"], unassig_data["y"],
+                   color=color_map_not_assig(0.8), marker='+', ls='None', label='Unassigned Detection')
+        number_of_unassig_dets_processed += np.size(unassig_data["mcc"])
+        print("radar_plt: Unassigned detections: ", number_of_unassig_dets_processed, "detections. unassig_data has ", len(unassig_data),
+              "detections", unassig_data)
+        print("radar_plt: unassig_data[x]:", unassig_data["x"], "unassig_data[y]:", unassig_data["y"])
+
+        plt.draw()
+
+    # # Newly Formed Track Plot
+    if new_track:
+        print("radar_plt: Plotting newly formed track of the length:",len(new_track))
+        new_track_data = new_track.get_array_detections()
+
+        f1ax1.plot(new_track_data["x"], new_track_data["y"],
+                   color=color_map_newly_formed(0.8), ls='-', label='New Track')
+        number_of_track_points += np.size(new_track_data["mcc"])
+        print("radar_plt: Processed ", number_of_unassig_dets_processed, "track points. new_track_data has ", len(new_track_data),
+              "points", new_track_data)
+        print("radar_plt: new_track_data[x]:", new_track_data["x"], "new_track_data[y]:", new_track_data["y"])
+
+        plt.draw()
+
+    # Legend and Title of the plot
+    lgd2 = f1ax1.legend(loc='upper right', bbox_to_anchor=(1.0, 1.0))
+
+    f1ax1.set_xlabel('x [meters]')
+    f1ax1.set_ylabel('y [meters]')
+
+    tit = "New Track Started: incoming dets =%d unassigned dets=%d" % (number_of_new_dets_processed, number_of_unassig_dets_processed)
+    f1.suptitle(tit, fontsize=14, fontweight='bold')
+
+    plt.show()

@@ -191,16 +191,30 @@ class Gate(object):
     def set_rvelocity(self, rvelocity):
         self._rvelocity = rvelocity
 
-    def test_in_gate(self, detection):
+    def test_detection_in_gate(self, detection):
         gate_x_min = self._centerx - self._diff_x/2
         gate_x_max = self._centerx + self._diff_x/2
         gate_y_min = self._centery - self._diff_y/2
         gate_y_max = self._centery + self._diff_y/2
         return (gate_x_min < detection._x < gate_x_max) & (gate_y_min < detection._y < gate_y_max)
 
-    def get_dist_from_center(self, detection):
+    def test_trackpoint_in_gate(self, tp):
+        gate_x_min = self._centerx - self._diff_x/2
+        gate_x_max = self._centerx + self._diff_x/2
+        gate_y_min = self._centery - self._diff_y/2
+        gate_y_max = self._centery + self._diff_y/2
+        return (gate_x_min < tp.x < gate_x_max) & (gate_y_min < tp.y < gate_y_max)
+
+    def get_detection_dist_from_center(self, detection):
         c = np.array([self._centerx,self._centery])
         d = np.array([detection._x, detection._y])
+        diff = np.array([self._diff_x, self._diff_y])
+        aim = (npla.norm(diff) - npla.norm(c-d)) / npla.norm(diff)
+        return aim
+
+    def get_trackpoint_dist_from_center(self, tp):
+        c = np.array([self._centerx,self._centery])
+        d = np.array([tp.x, tp.y])
         diff = np.array([self._diff_x, self._diff_y])
         aim = (npla.norm(diff) - npla.norm(c-d)) / npla.norm(diff)
         return aim
@@ -383,6 +397,26 @@ class DetectionList(list):
 
         return radar_data
 
+    def get_array_detections(self):
+        r_sel = [elem._rng for elem in self]
+        v_sel = [elem._vel for elem in self]
+        az_sel = [elem._azimuth for elem in self]
+        mcc_sel = [elem._mcc for elem in self]
+        x_sel = [elem._x for elem in self]
+        y_sel = [elem._y for elem in self]
+        beam_sel = [elem._beam for elem in self]
+        trackID_sel = [elem._trackID for elem in self]
+
+        radar_data = {"range": np.array(r_sel),
+                      "razimuth": np.array(az_sel),
+                      "rvelocity": np.array(v_sel),
+                      "x": np.array(x_sel),
+                      "y": np.array(y_sel),
+                      "trackID": np.array(trackID_sel),
+                      "beam": np.array(beam_sel),
+                      "mcc": np.array(mcc_sel)}
+        return radar_data
+
     def get_lst_detections_selected(self, **kwarg):
         if 'beam' in kwarg:
             beam = kwarg['beam']
@@ -434,7 +468,7 @@ class DetectionList(list):
             az_i = kwarg['selection']['az_tp'] if kwarg['selection']['az_tp'] else self._azimuth_interval
             trackID_i = kwarg['selection']['trackID_tp'] if kwarg['selection']['trackID_tp'] else self._trackID_interval
 
-        lst_selected_detection = []
+        lst_selected_detection = DetectionList()
 
         for elem in self:
             if (elem._beam in beam and
@@ -547,7 +581,7 @@ class UnAssignedDetectionList(DetectionList):
     def test_det_in_gate_3points(self,detection, detection_1, detection_2):
         expected_point = self.two_point_projection(detection_1, detection_2)
         self._gate_pattern.set_center_point(expected_point)
-        return self._gate_pattern.test_in_gate(detection)
+        return self._gate_pattern.test_detection_in_gate(detection)
 
     def new_detection(self, detection):
         """Tests whether or not the list of unassigned detections can form a new track.
@@ -562,13 +596,13 @@ class UnAssignedDetectionList(DetectionList):
                 print("data_cont: mcc:", det1._mcc, "at x", det1._x, "y", det1._y, "and mcc:", det2._mcc, "at x", det2._x, "y", det2._y)
                 if self.test_det_in_gate_3points(detection, det1, det2):
                     self._lst_tracks_possible.append(Track(0))
-                    self._lst_tracks_possible[-1].append(det1)
-                    self._lst_tracks_possible[-1].append(det2)
-                    self._lst_tracks_possible[-1].append(detection)
+                    self._lst_tracks_possible[-1].append_detection(det1)
+                    self._lst_tracks_possible[-1].append_detection(det2)
+                    self._lst_tracks_possible[-1].append_detection(detection)
                     self._lst_tracks_possible[-1].set_predicted_gate(self._gate_pattern)
                     print("data_cont: perspective track:", len(self._lst_tracks_possible), "currently processing one aiming:",
-                          self._lst_tracks_possible[-1].test_det_in_gate(self._lst_tracks_possible[-1][-1]))
-                    aimed.append(self._lst_tracks_possible[-1].test_det_in_gate(self._lst_tracks_possible[-1][-1]))
+                          self._lst_tracks_possible[-1].test_trackpoint_in_gate(self._lst_tracks_possible[-1][-1]))
+                    aimed.append(self._lst_tracks_possible[-1].test_trackpoint_in_gate(self._lst_tracks_possible[-1][-1]))
             if aimed:
                 track_to_return = copy.copy(self._lst_tracks_possible[aimed.index(max(aimed))])
                 aimed.clear()
@@ -723,16 +757,14 @@ class Track(list):
         self.append(TrackPoint(mcc=detection._mcc,
                                x=detection._x,
                                y=detection._y,
-                               razimuth=detection._razimuth,
-                               rvelocity=detection._rvelocity,
+                               razimuth=detection._azimuth,
+                               rvelocity=detection._vel,
                                beam=detection._beam))
-        self._y_interval = (min([elem._y for elem in self]), max([elem._y for elem in self]))
-        self._x_interval = (min([elem._x for elem in self]), max([elem._x for elem in self]))
-        self._vely_interval = (min([elem._vely for elem in self]), max([elem._vely for elem in self]))
-        self._velx_interval = (min([elem._velx for elem in self]), max([elem._velx for elem in self]))
-        self._rvelocity_interval = (min([elem._rvelocity for elem in self]), max([elem._rvelocity for elem in self]))
-        self._razimuth_interval = (min([elem._razimuth for elem in self]), max([elem._razimuth for elem in self]))
-        self._mcc_interval = (min([elem._mcc for elem in self]), max([elem._mcc for elem in self]))
+        self._y_interval = (min([elem.y for elem in self]), max([elem.y for elem in self]))
+        self._x_interval = (min([elem.x for elem in self]), max([elem.x for elem in self]))
+        self._rvelocity_interval = (min([elem.rvelocity for elem in self]), max([elem.rvelocity for elem in self]))
+        self._razimuth_interval = (min([elem.razimuth for elem in self]), max([elem.razimuth for elem in self]))
+        self._mcc_interval = (min([elem.mcc for elem in self]), max([elem.mcc for elem in self]))
         return self._trackID
 
     def append_point_from_radardata_str(self, detection):
@@ -751,9 +783,32 @@ class Track(list):
         self._mcc_interval = (min([elem.mcc for elem in self]), max([elem.mcc for elem in self]))
         return self._trackID
 
-    def test_det_in_gate(self,detection):
-        if self._predicted_gate.test_in_gate(detection):
-            aim = self._predicted_gate.get_dist_from_center(detection)
+    def get_array_detections(self):
+        mcc_sel = [elem.mcc for elem in self]
+        x_sel = [elem.x for elem in self]
+        y_sel = [elem.y for elem in self]
+        razimuth_sel = [elem.razimuth for elem in self]
+        rvelocity_sel = [elem.rvelocity for elem in self]
+        beam_sel = [elem.beam for elem in self]
+
+        track_data = {"mcc": np.array(mcc_sel),
+                      "razimuth": np.array(razimuth_sel),
+                      "rvelocity": np.array(rvelocity_sel),
+                      "x": np.array(x_sel),
+                      "y": np.array(y_sel),
+                      "beam": np.array(beam_sel)}
+        return track_data
+
+    def test_trackpoint_in_gate(self,tp):
+        if self._predicted_gate.test_trackpoint_in_gate(tp):
+            aim = self._predicted_gate.get_trackpoint_dist_from_center(tp)
+        else:
+            aim = 0
+        return aim
+
+    def test_detection_in_gate(self,detection):
+        if self._predicted_gate.test_detection_in_gate(detection):
+            aim = self._predicted_gate.get_detection_dist_from_center(detection)
         else:
             aim = 0
         return aim

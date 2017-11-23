@@ -33,7 +33,9 @@ class TrackManager(list):
                     aim.append(elem.test_det_in_gate(det))
                 print("track_mgmt: aim is",aim)
                 if max(aim):
-                    print("track_mgmt: max(aim) is",max(aim), "number of tracks", len(self), "pointing at",aim.index(max(aim)),"Object:",self[aim.index(max(aim))] )
+                    print("track_mgmt: max(aim) is",max(aim), "number of tracks",
+                          len(self), "pointing at",aim.index(max(aim)),"Object:",
+                          self[aim.index(max(aim))])
                     self[aim.index(max(aim))].append(det)
                     print("track_mgmt: The detection was assigned to a track at", aim.index(max(aim)))
                     unassigned = False

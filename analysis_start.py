@@ -43,7 +43,8 @@ def main(conf_data):
         lst_ref_left = dc.ReferenceList()
         lst_ref_left.append_from_m_file(leftDGPS_path)
         mcc_intervalDGPS_left = lst_ref_left.get_mccL_interval()
-        print("MCC Left DGPS starts at: ", mcc_intervalDGPS_left[0], "and ends at: ", mcc_intervalDGPS_left[1])
+        print("MCC Left DGPS starts at: ", mcc_intervalDGPS_left[0], "and ends at: ",
+              mcc_intervalDGPS_left[1])
     else:
         lst_ref_left = None
 
@@ -56,7 +57,8 @@ def main(conf_data):
         lst_ref_right = dc.ReferenceList()
         lst_ref_right.append_from_m_file(rightDGPS_path)
         mcc_intervalDGPS_right = lst_ref_right.get_mccR_interval()
-        print("MCC Left DGPS starts at: ", mcc_intervalDGPS_right[0], "and ends at: ", mcc_intervalDGPS_right[1])
+        print("MCC Left DGPS starts at: ", mcc_intervalDGPS_right[0], "and ends at: ",
+              mcc_intervalDGPS_right[1])
     else:
         lst_ref_right = None
 
@@ -69,7 +71,8 @@ def main(conf_data):
         lst_ref_both = dc.ReferenceList()
         lst_ref_both.append_from_m_file(bothDGPS_path)
         mcc_intervalDGPS_both = lst_ref_both.get_mccB_interval()
-        print("MCC Both DGPS starts at: ", mcc_intervalDGPS_both[0], "and ends at: ", mcc_intervalDGPS_both[1])
+        print("MCC Both DGPS starts at: ", mcc_intervalDGPS_both[0], "and ends at: ",
+              mcc_intervalDGPS_both[1])
     else:
         lst_ref_both = None
 

@@ -116,7 +116,7 @@ class ReferencePoint(object):
 
 class TrackPoint(object):
     def __init__(self, mcc=0, beam=[], x=0, y=0, dx=0, dy=0,
-                 rvelocity=0, razimuth=0):
+                 rvelocity=0, razimuth=0, rrange=0):
         """ Creates a point which is a part of the track.
 
         :rtype: object
@@ -145,6 +145,7 @@ class TrackPoint(object):
         self.dy = dy
         self.beam = beam
         self.razimuth = razimuth
+        self.rrange = rrange
         self.rvelocity = rvelocity
 
     def get_array(self):
@@ -157,7 +158,7 @@ class TrackPoint(object):
 
 class Gate(object):
     def __init__(self, beam=[], cx=0, cy=0, dx=0, dy=0,
-                 rvelocity=0, razimuth=0):
+                 rvelocity=0, razimuth=0, rrange=0):
         self._centerx = cx
         self._diff_x = dx
         self._centery = cy
@@ -165,6 +166,7 @@ class Gate(object):
         self._beam = beam
         self._razimuth = razimuth
         self._rvelocity = rvelocity
+        self._rrange = rrange
 
     def set_center_x(self, cx):
         self._centerx = cx
@@ -190,6 +192,9 @@ class Gate(object):
 
     def set_rvelocity(self, rvelocity):
         self._rvelocity = rvelocity
+
+    def set_rrange(self, rrange):
+        self._rrange = rrange
 
     def test_detection_in_gate(self, detection):
         gate_x_min = self._centerx - self._diff_x/2
@@ -732,7 +737,7 @@ class ReferenceList(list):
 class Track(list):
     def __init__(self, trackID):
         super().__init__()
-        self._predicted_gate = Gate(beam=[], cx=0, cy=0, dx=2, dy=2, rvelocity=0, razimuth=0)
+        self._predicted_gate = Gate(beam=[], cx=0, cy=0, dx=2, dy=2, rvelocity=0, razimuth=0, rrange=0)
         self._trackID = trackID
         self._velx_interval = (0, 0)
         self._x_interval = (0, 0)
@@ -740,17 +745,19 @@ class Track(list):
         self._y_interval = (0, 0)
         self._rvelocity_interval = (0, 0)
         self._razimuth_interval = (0, 0)
+        self._rrange_interval = (0, 0)
         self._mcc_interval = (0, 0)
 
     def append_point(self, mcc, x, y, dx, dy, beam):
         self.append(TrackPoint(mcc, x, y, dx, dy, beam))
-        self._y_interval = (min([elem._y for elem in self]), max([elem._y for elem in self]))
-        self._x_interval = (min([elem._x for elem in self]), max([elem._x for elem in self]))
-        self._vely_interval = (min([elem._vely for elem in self]), max([elem._vely for elem in self]))
-        self._velx_interval = (min([elem._velx for elem in self]), max([elem._velx for elem in self]))
-        self._rvelocity_interval = (min([elem._rvelocity for elem in self]), max([elem._rvelocity for elem in self]))
-        self._razimuth_interval = (min([elem._razimuth for elem in self]), max([elem._razimuth for elem in self]))
-        self._mcc_interval = (min([elem._mcc for elem in self]), max([elem._mcc for elem in self]))
+        self._y_interval = (min([elem.y for elem in self]), max([elem.y for elem in self]))
+        self._x_interval = (min([elem.x for elem in self]), max([elem.x for elem in self]))
+        self._vely_interval = (min([elem.vely for elem in self]), max([elem.vely for elem in self]))
+        self._velx_interval = (min([elem.velx for elem in self]), max([elem.velx for elem in self]))
+        self._rvelocity_interval = (min([elem.rvelocity for elem in self]), max([elem.rvelocity for elem in self]))
+        self._razimuth_interval = (min([elem.razimuth for elem in self]), max([elem.razimuth for elem in self]))
+        self._rrange_interval = (min([elem.rrange for elem in self]), max([elem.rrange for elem in self]))
+        self._mcc_interval = (min([elem.mcc for elem in self]), max([elem.mcc for elem in self]))
         return self._trackID
 
     def append_detection(self, detection):
@@ -764,26 +771,28 @@ class Track(list):
         self._x_interval = (min([elem.x for elem in self]), max([elem.x for elem in self]))
         self._rvelocity_interval = (min([elem.rvelocity for elem in self]), max([elem.rvelocity for elem in self]))
         self._razimuth_interval = (min([elem.razimuth for elem in self]), max([elem.razimuth for elem in self]))
+        self._rrange_interval = (min([elem.rrange for elem in self]), max([elem.rrange for elem in self]))
         self._mcc_interval = (min([elem.mcc for elem in self]), max([elem.mcc for elem in self]))
         return self._trackID
 
-    def append_point_from_radardata_str(self, detection):
-        self.append(TrackPoint(mcc=detection['mcc'],
-                               x=detection['x'],
-                               y=detection['y'],
-                               razimuth=detection['razimuth'],
-                               rvelocity=detection['rvelocity'],
-                               beam=detection['beam']))
+    def append_point_from_radardata_str(self, radardata):
+        self.append(TrackPoint(mcc=radardata['mcc'],
+                               x=radardata['x'],
+                               y=radardata['y'],
+                               razimuth=radardata['razimuth'],
+                               rvelocity=radardata['rvelocity'],
+                               beam=radardata['beam']))
         self._y_interval = (min([elem.y for elem in self]), max([elem.y for elem in self]))
         self._x_interval = (min([elem.x for elem in self]), max([elem.x for elem in self]))
         # self._vely_interval = (min([elem._vely for elem in self]),max([elem._vely for elem in self]))
         # self._velx_interval = (min([elem._velx for elem in self]),max([elem._velx for elem in self]))
         self._rvelocity_interval = (min([elem.rvelocity for elem in self]), max([elem.rvelocity for elem in self]))
         self._razimuth_interval = (min([elem.razimuth for elem in self]), max([elem.razimuth for elem in self]))
+        self._rrange_interval = (min([elem.rrange for elem in self]), max([elem.rrange for elem in self]))
         self._mcc_interval = (min([elem.mcc for elem in self]), max([elem.mcc for elem in self]))
         return self._trackID
 
-    def get_array_detections(self):
+    def get_array_trackpoints(self):
         mcc_sel = [elem.mcc for elem in self]
         x_sel = [elem.x for elem in self]
         y_sel = [elem.y for elem in self]

@@ -517,7 +517,7 @@ def static_plotTrackMan_initialization(lst_detections, lst_not_assigned, new_tra
     # # Newly Formed Track Plot
     if new_track:
         print("radar_plt: Plotting newly formed track of the length:",len(new_track))
-        new_track_data = new_track.get_array_detections()
+        new_track_data = new_track.get_array_trackpoints()
 
         f1ax1.plot(new_track_data["x"], new_track_data["y"],
                    color=color_map_newly_formed(0.8), ls='-', label='New Track')

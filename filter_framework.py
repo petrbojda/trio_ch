@@ -2,7 +2,7 @@
 
 import data_containers as dc
 import track_management as tm
-import radar_plots as rplt
+import radar_plots as rp
 import numpy as np
 
 
@@ -12,8 +12,8 @@ def main(config_data):
                  "rng_tp": None, "vel_tp": (-5, 5), "az_tp": None,
                  "trackID_tp": None, }
     # Structure 'selection' constrains  data to use as input to the tracker.
-    # Specific 'mcc', 'azimuth', 'range' ... etc can be specified here to block
-    # unwanted data to enter.
+    # An exact value or interval of 'mcc', 'azimuth', 'range' ... etc can be
+    # specified here to block unwanted data to enter.
 
     track_LR = tm.TrackManager()
     track_RR = tm.TrackManager()
@@ -40,7 +40,8 @@ def main(config_data):
         lst_det_RR = dc.DetectionList()
         lst_det_RR.append_data_from_m_file(rightradar_path, False, config_data["EGO_car_width"])
         mcc_interval_RR = lst_det_RR.get_mcc_interval()
-        print("filter_framework: MCC Right starts at: ", mcc_interval_RR[0], "and ends at: ", mcc_interval_RR[1])
+        print("filter_framework: MCC Right starts at: ", mcc_interval_RR[0],
+              "and ends at: ", mcc_interval_RR[1])
 
     # Calculate valid mcc interval for detections to be presented
     if config_data["filename_LeftRadar"] and config_data["filename_RightRadar"]:
@@ -65,16 +66,28 @@ def main(config_data):
         if lst_det_LR:
             lst_det_per_loop_cycle_LR = lst_det_LR.get_lst_detections_selected(selection=selection)
 
-            #   TODO: Is it correct to assign this for every iteration? Potential to write more effective code.
+            # TODO: Is it correct to assign this for every iteration? Potential to write
+            # more effective code.
             if lst_det_per_loop_cycle_LR:
-                print('filter_framework: Number of detections for a LR mcc ', i, 'is: ', len(lst_det_per_loop_cycle_LR))
-                #track_LR.new_detection(lst_det_per_loop_cycle_LR)
-                track_LR.new_detection_plot(lst_det_per_loop_cycle_LR)
+                print('filter_framework: Number of detections for a LR mcc ', i, 'is: ',
+                      len(lst_det_per_loop_cycle_LR))
+                # track_LR.new_detection(lst_det_per_loop_cycle_LR)
+                track_LR.new_detection(lst_det_per_loop_cycle_LR)
+                lst_not_assigned,new_track = track_LR.port_data("track_init")
+                if new_track:
+                    print("filter_framework: Type of ported new_track list",type(new_track))
+                    print("filter_framework: Type of ported new_track element", type(new_track[-1]))
+                else:
+                    print("filter_framework: new_track not ported/created")
+                rp.static_plotTrackMan_initialization(lst_det_per_loop_cycle_LR,
+                                                      lst_not_assigned,
+                                                      new_track)
             else:
                 print('filter_framework: There is no detection for current LR mcc ',i)
 
         i_prev = i + 1
-        # TODO: This line is redundant if only one mcc is being processed per loop cycle. However if mcc_step is different than 1, it might be good to keep it here.
+        # This line is redundant if only one mcc is being processed per loop cycle.
+        # However if mcc_step is different than 1, it might be good to keep it here.
 
 
 #     TODO: graphical representation of the results

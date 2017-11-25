@@ -27,7 +27,7 @@ class TrackManager(list):
         self._n_of_Tracks = np.append(self._n_of_Tracks,self._n_of_Tracks[-1]+1)
         self.append(track)
 
-    def new_detection(self,lst_detections):
+    def new_detections(self,lst_detections):
         print ("track_mgmt: Detections to assign, mcc:",lst_detections[0].get_mcc(),"Agreed on:", len(lst_detections))
         print ("track_mgmt: Detections to assign", lst_detections)
         aim=[]
@@ -62,7 +62,8 @@ class TrackManager(list):
                     self.append_track(newly_formed_track)
                     print("track_mgmt: A new track was created. Currently ",len(self), "tracks is in the list.")
             else:
-                # The detection 'det' was assigned to an existing track
+                # The detection 'det' was assigned to an existing track and its appropriate filter or set of filters
+                # needs to be updated.
 
 
     def port_data(self,requested_data_type):

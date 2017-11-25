@@ -738,6 +738,7 @@ class Track(list):
     def __init__(self, trackID):
         super().__init__()
         self._predicted_gate = Gate(beam=[], cx=0, cy=0, dx=2, dy=2, rvelocity=0, razimuth=0, rrange=0)
+        self._predicted_point = TrackPoint()
         self._trackID = trackID
         self._velx_interval = (0, 0)
         self._x_interval = (0, 0)
@@ -822,6 +823,10 @@ class Track(list):
             aim = 0
         return aim
 
+    def update_filter(self):
+
+        return self._predicted_point
+
     def get_mcc_interval(self):
         return self._mcc_interval
 
@@ -834,8 +839,8 @@ class Track(list):
     def set_predicted_gate(self, predicted_gate):
         self._predicted_gate = copy.copy(predicted_gate)
 
-    def update_prediction(self, prediction):
-        self._predicted_Point = prediction
+    def set_prediction(self, prediction):
+        self._predicted_point = prediction
 
 
 def cnf_file_read(cnf_file):

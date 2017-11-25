@@ -2,6 +2,7 @@
 
 import data_containers as dc
 import track_management as tm
+import filter_management as fm
 import radar_plots as rp
 import numpy as np
 
@@ -15,8 +16,11 @@ def main(config_data):
     # An exact value or interval of 'mcc', 'azimuth', 'range' ... etc can be
     # specified here to block unwanted data to enter.
 
-    track_LR = tm.TrackManager()
-    track_RR = tm.TrackManager()
+    track_mgmt_LR = tm.TrackManager()
+    track_mgmt_RR = tm.TrackManager()
+
+    filter_mgmt_LR = fm.FilterManager()
+    filter_mgmt_RR = fm.FilterManager()
 
     # Load Data from .mat files
     if config_data["filename_LeftRadar"]:
@@ -71,17 +75,16 @@ def main(config_data):
             if lst_det_per_loop_cycle_LR:
                 print('filter_framework: Number of detections for a LR mcc ', i, 'is: ',
                       len(lst_det_per_loop_cycle_LR))
-                # track_LR.new_detection(lst_det_per_loop_cycle_LR)
-                track_LR.new_detection(lst_det_per_loop_cycle_LR)
-                lst_not_assigned,new_track = track_LR.port_data("track_init")
-                if new_track:
-                    print("filter_framework: Type of ported new_track list",type(new_track))
-                    print("filter_framework: Type of ported new_track element", type(new_track[-1]))
+                track_mgmt_LR.new_detection(lst_det_per_loop_cycle_LR)
+                lst_not_assigned_LR,new_track_LR = track_mgmt_LR.port_data("track_init")
+                if new_track_LR:
+                    print("filter_framework: Type of ported new_track list",type(new_track_LR))
+                    print("filter_framework: Type of ported new_track element", type(new_track_LR[-1]))
                 else:
                     print("filter_framework: new_track not ported/created")
                 rp.static_plotTrackMan_initialization(lst_det_per_loop_cycle_LR,
-                                                      lst_not_assigned,
-                                                      new_track)
+                                                      lst_not_assigned_LR,
+                                                      new_track_LR)
             else:
                 print('filter_framework: There is no detection for current LR mcc ',i)
 

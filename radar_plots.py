@@ -60,20 +60,20 @@ def static_plot_grid_hist_selections(lst_det_left, lst_det_right, selection, fna
         LR_data = lst_det_left.get_array_detections_selected(selection=selection)
         if LR_data["mcc"].any():
             LR_data_exists = True
-            f1ax[2].hist(LR_data["velocity"], vel_range, color=color_map_left(0.4), normed=1)
+            f1ax[2].hist(LR_data["rvelocity"], vel_range, color=color_map_left(0.4), normed=1)
             number_of_dets_left = np.size(LR_data["mcc"])
 
             if selection["beam_tp"].count(0):
                 selection_tp = copy.deepcopy(selection)
                 selection_tp["beam_tp"] = [0]
                 LR0_data = lst_det_left.get_array_detections_selected(selection=selection_tp)
-                f1ax[1].hist(LR0_data["velocity"], vel_range,
+                f1ax[1].hist(LR0_data["rvelocity"], vel_range,
                              color=color_map_left(0.2), normed=1, label='beam 0')
                 f1ax[0].plot(LR0_data["x"], LR0_data["y"],
                              color=color_map_left(0.2), marker='o', ls='None', label='Left RDR, beam 0')
-                f1ax[6].plot(-180 * LR0_data["azimuth"] / np.pi, LR0_data["velocity"],
+                f1ax[6].plot(-180 * LR0_data["razimuth"] / np.pi, LR0_data["rvelocity"],
                              color=color_map_left(0.2), marker='o', ls='None', label='Left RDR, beam 0')
-                f1ax[5].plot(-180 * LR0_data["azimuth"] / np.pi, LR0_data["range"],
+                f1ax[5].plot(-180 * LR0_data["razimuth"] / np.pi, LR0_data["range"],
                              color=color_map_left(0.2), marker='o', ls='None', label='Left RDR, beam 0')
                 number_of_dets_left_processed += np.size(LR0_data["mcc"])
 
@@ -81,13 +81,13 @@ def static_plot_grid_hist_selections(lst_det_left, lst_det_right, selection, fna
                 selection_tp = copy.deepcopy(selection)
                 selection_tp["beam_tp"] = [1]
                 LR1_data = lst_det_left.get_array_detections_selected(selection=selection_tp)
-                f1ax[1].hist(LR1_data["velocity"], vel_range,
+                f1ax[1].hist(LR1_data["rvelocity"], vel_range,
                              color=color_map_left(0.4), normed=1, label='beam 1')
                 f1ax[0].plot(LR1_data["x"], LR1_data["y"],
                              color=color_map_left(0.4), marker='o', ls='None', label='Left RDR, beam 1')
-                f1ax[6].plot(-180 * LR1_data["azimuth"] / np.pi, LR1_data["velocity"],
+                f1ax[6].plot(-180 * LR1_data["razimuth"] / np.pi, LR1_data["rvelocity"],
                              color=color_map_left(0.4), marker='o', ls='None', label='Left RDR, beam 1')
-                f1ax[5].plot(-180 * LR1_data["azimuth"] / np.pi, LR1_data["range"],
+                f1ax[5].plot(-180 * LR1_data["razimuth"] / np.pi, LR1_data["range"],
                              color=color_map_left(0.4), marker='o', ls='None', label='Left RDR, beam 1')
                 number_of_dets_left_processed += np.size(LR1_data["mcc"])
 
@@ -109,13 +109,13 @@ def static_plot_grid_hist_selections(lst_det_left, lst_det_right, selection, fna
                 selection_tp = copy.deepcopy(selection)
                 selection_tp["beam_tp"] = [3]
                 LR3_data = lst_det_left.get_array_detections_selected(selection=selection_tp)
-                f1ax[1].hist(LR3_data["velocity"], vel_range,
+                f1ax[1].hist(LR3_data["rvelocity"], vel_range,
                              color=color_map_left(0.8), normed=1, label='beam 3')
                 f1ax[0].plot(LR3_data["x"], LR3_data["y"],
                              color=color_map_left(0.8), marker='o', ls='None', label='Left RDR, beam 3')
-                f1ax[6].plot(-180 * LR3_data["azimuth"] / np.pi, LR3_data["velocity"],
+                f1ax[6].plot(-180 * LR3_data["razimuth"] / np.pi, LR3_data["rvelocity"],
                              color=color_map_left(0.8), marker='o', ls='None', label='Left RDR, beam 3')
-                f1ax[5].plot(-180 * LR3_data["azimuth"] / np.pi, LR3_data["range"],
+                f1ax[5].plot(-180 * LR3_data["razimuth"] / np.pi, LR3_data["range"],
                              color=color_map_left(0.8), marker='o', ls='None', label='Left RDR, beam 3')
                 number_of_dets_left_processed += np.size(LR3_data["mcc"])
 

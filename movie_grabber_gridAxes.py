@@ -9,9 +9,12 @@ def main(conf_data):
     lst_det_left = None
     lst_det_right = None
 
-    selection = {"beam_tp":conf_data["beams_tp"],
-                 "mcc_tp":None, "x_tp":None, "y_tp":None,
-                 "rng_tp":None, "vel_tp":(-5,5), "az_tp":None}
+    # selection = {"beam_tp":conf_data["beams_tp"],
+    #              "mcc_tp":None, "x_tp":None, "y_tp":None,
+    #              "rng_tp":None, "vel_tp":(-5,5), "az_tp":None}
+    selection = {"beam_tp": conf_data["beams_tp"],
+                 "mcc_tp": None, "x_tp": None, "y_tp": None,
+                 "rng_tp": None, "vel_tp": None, "az_tp": None, "trackID_tp": None}
 
     # Load Data from .mat files
     if conf_data["filename_LeftRadar"]:
@@ -21,7 +24,7 @@ def main(conf_data):
         leftradar_path = ''.join(l)
 
         lst_det_left = dc.DetectionList()
-        lst_det_left.append_from_m_file(leftradar_path, True, conf_data["EGO_car_width"])
+        lst_det_left.append_data_from_m_file(leftradar_path, True, conf_data["EGO_car_width"])
         mcc_interval_left = lst_det_left.get_mcc_interval()
         print("MCC Left starts at: ", mcc_interval_left[0], "and ends at: ", mcc_interval_left[1])
 
@@ -32,7 +35,7 @@ def main(conf_data):
         rightradar_path = ''.join(l)
 
         lst_det_right = dc.DetectionList()
-        lst_det_right.append_from_m_file(rightradar_path, False, conf_data["EGO_car_width"])
+        lst_det_right.append_data_from_m_file(rightradar_path, False, conf_data["EGO_car_width"])
         mcc_interval_right = lst_det_right.get_mcc_interval()
         print("MCC Right starts at: ", mcc_interval_right[0], "and ends at: ", mcc_interval_right[1])
 

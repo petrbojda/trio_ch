@@ -76,7 +76,7 @@ def main(config_data):
                 print('filter_framework: Number of detections for a LR mcc ', i, 'is: ',
                       len(lst_det_per_loop_cycle_LR))
                 track_mgmt_LR.new_detections(lst_det_per_loop_cycle_LR)
-                lst_not_assigned_LR,new_track_LR = track_mgmt_LR.port_data("track_init")
+                lst_not_assigned_LR, new_track_LR = track_mgmt_LR.port_data("track_init")
                 if new_track_LR:
                     print("filter_framework: Type of ported new_track list",type(new_track_LR))
                     print("filter_framework: Type of ported new_track element", type(new_track_LR[-1]))

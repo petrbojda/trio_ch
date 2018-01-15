@@ -21,7 +21,7 @@ def static_plot_grid_hist_selections(lst_det_left, lst_det_right, selection, fna
     vel_range = range(-90, 70)
 
     f1.clf()
-    # the rect parameter will be ignore as we will set axes_locator
+    # the rect parameter is ignored as we set the axes_locator
     rect = (0.05, 0.07, 0.9, 0.87)
     f1ax = [f1.add_axes(rect, label="%d" % i) for i in range(7)]
     horiz = [Size.Scaled(5.), Size.Fixed(1.0), Size.Scaled(1.5), Size.Fixed(1.0), Size.Scaled(2.)]
@@ -461,11 +461,6 @@ def static_plotREF_selections(lst_det_left, lst_det_right,
         f1.savefig(fname_det, format='eps', dpi=1200)
     else:
         plt.show()
-
-
-
-
-
 
 
 

@@ -64,6 +64,7 @@ class TrackManager(list):
             else:
                 # The detection 'det' was assigned to an existing track and its appropriate filter or set of filters
                 # needs to be updated.
+                pass
 
 
     def port_data(self,requested_data_type):

@@ -1,11 +1,13 @@
 import scipy.io as sio
 import numpy as np
 import numpy.linalg as npla
+from scipy.linalg import block_diag
 import configparser
 import argparse
 import itertools
 import copy
 import tracking_filters as tf
+from utils import Q_discrete_white_noise
 
 
 class DetectionPoint(object):
@@ -751,13 +753,6 @@ class Track(list):
         self._rrange_interval = (0, 0)
         self._mcc_interval = (0, 0)
 
-    def init_tracker(self,type='kalman_filter', dim_x=4, dim_z=2 ):
-        if not(self._tracker):
-            self._tracker = tf.KalmanFilter(dim_x=dim_x, dim_z=dim_z)
-            return True
-        else:
-            return False
-
     def append_point(self, mcc, x, y, dx, dy, beam):
         self.append(TrackPoint(mcc, x, y, dx, dy, beam))
         self._y_interval = (min([elem.y for elem in self]), max([elem.y for elem in self]))
@@ -802,6 +797,54 @@ class Track(list):
         self._mcc_interval = (min([elem.mcc for elem in self]), max([elem.mcc for elem in self]))
         return self._trackID
 
+    def test_trackpoint_in_gate(self,tp):
+        if self._predicted_gate.test_trackpoint_in_gate(tp):
+            aim = self._predicted_gate.get_trackpoint_dist_from_center(tp)
+        else:
+            aim = 0
+        return aim
+
+    def test_detection_in_gate(self,detection):
+        if self._predicted_gate.test_detection_in_gate(detection):
+            aim = self._predicted_gate.get_detection_dist_from_center(detection)
+        else:
+            aim = 0
+        return aim
+
+    def init_tracker(self,type='kalman_filter', dim_x=4, dim_z=2, dt=50.0e-3, init_x=np.array([[0, 0, 0, 0]]).T):
+        if not(self._tracker):
+            self._tracker = tf.KalmanFilter(dim_x=dim_x, dim_z=dim_z)
+
+            self._tracker.F = np.array([[1, dt, 0, 0],
+                                        [0, 1, 0, 0],
+                                        [0, 0, 1, dt],
+                                        [0, 0, 0, 1]])
+            q = Q_discrete_white_noise(dim=2, dt=dt, var=0.001)
+            self._tracker.Q = block_diag(q, q)
+            self._tracker.x = init_x
+            self._tracker.P = np.eye(4) * 5.0
+            # TODO: finish initialization
+            return True
+        else:
+            return False
+
+    def start_tracker(self):
+
+        return self._predicted_point
+
+    def update_tracker(self):
+
+        return self._predicted_point
+
+    def get_mcc_interval(self):
+        return self._mcc_interval
+
+    def get_ID(self):
+        return self._trackID
+
+    def get_predicted_gate(self):
+        return self._predicted_gate
+
     def get_array_trackpoints(self):
         mcc_sel = [elem.mcc for elem in self]
         x_sel = [elem.x for elem in self]
@@ -817,33 +860,6 @@ class Track(list):
                       "y": np.array(y_sel),
                       "beam": np.array(beam_sel)}
         return track_data
-
-    def test_trackpoint_in_gate(self,tp):
-        if self._predicted_gate.test_trackpoint_in_gate(tp):
-            aim = self._predicted_gate.get_trackpoint_dist_from_center(tp)
-        else:
-            aim = 0
-        return aim
-
-    def test_detection_in_gate(self,detection):
-        if self._predicted_gate.test_detection_in_gate(detection):
-            aim = self._predicted_gate.get_detection_dist_from_center(detection)
-        else:
-            aim = 0
-        return aim
-
-    def update_filter(self):
-
-        return self._predicted_point
-
-    def get_mcc_interval(self):
-        return self._mcc_interval
-
-    def get_ID(self):
-        return self._trackID
-
-    def get_predicted_gate(self):
-        return self._predicted_gate
 
     def set_predicted_gate(self, predicted_gate):
         self._predicted_gate = copy.copy(predicted_gate)

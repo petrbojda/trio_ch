@@ -63,7 +63,8 @@ class TrackManager(list):
                     print("track_mgmt: A new track was created. Currently ",len(self), "tracks is in the list.")
                     self[-1].init_tracker(type=self._tracker_type['filter_type'],
                                           dim_x=self._tracker_type['dim_x'],
-                                          dim_z=self._tracker_type['dim_z'])
+                                          dim_z=self._tracker_type['dim_z'],
+                                          dt = self._Tsampling)
                     print("track_mgmt: tracker initialized for the new track:",self[-1]._tracker)
                     print("track_mgmt: new track's first 3 points:",self[-1])
             else:

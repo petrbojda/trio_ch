@@ -3,11 +3,11 @@ import data_containers as dc
 
 class TrackManager(list):
 
-    def __init__(self, gate = None, flt_type='G-H', Tsampling=50.0e-3):
+    def __init__(self, gate = None, tracker_type={'filter_type': 'kalman_filter', 'dim_x': 4, 'dim_z': 2}, Tsampling=50.0e-3):
         super().__init__()
         self._Tsampling = Tsampling
         self._gate = gate
-        self._flt_type = flt_type
+        self._tracker_type = tracker_type
         self._n_of_Tracks = np.array([0])
         self._lst_not_assigned_detections = dc.UnAssignedDetectionList(
                                                             self._Tsampling,
@@ -61,14 +61,19 @@ class TrackManager(list):
                     # a new track is started with a detection "det"
                     self.append_track(newly_formed_track)
                     print("track_mgmt: A new track was created. Currently ",len(self), "tracks is in the list.")
+                    self[-1].init_tracker(type=self._tracker_type['filter_type'],
+                                          dim_x=self._tracker_type['dim_x'],
+                                          dim_z=self._tracker_type['dim_z'])
+                    print("track_mgmt: tracker initialized for the new track:",self[-1]._tracker)
+                    print("track_mgmt: new track's first 3 points:",self[-1])
             else:
-                # The detection 'det' was assigned to an existing track and its appropriate filter or set of filters
-                # needs to be updated.
+                # The detection 'det' was assigned to an existing track and its appropriate tracker
+                # needs to update.
                 pass
 
 
-    def port_data(self,requested_data_type):
-        if requested_data_type == "track_init":
+    def port_data(self,requested_data):
+        if requested_data == "track_init":
             if self:
                 print("track_mgmt: porting track_init data. Number of tracks: ", len(self), "The last track ported.")
                 return self._lst_not_assigned_detections, self[-1]

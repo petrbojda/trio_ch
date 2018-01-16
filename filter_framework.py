@@ -2,7 +2,6 @@
 
 import data_containers as dc
 import track_management as tm
-import filter_management as fm
 import radar_plots as rp
 import numpy as np
 
@@ -16,11 +15,13 @@ def main(config_data):
     # An exact value or interval of 'mcc', 'azimuth', 'range' ... etc can be
     # specified here to block unwanted data to enter.
 
-    track_mgmt_LR = tm.TrackManager()
-    track_mgmt_RR = tm.TrackManager()
+    # In this example only linear KF is being used, classical constant velocity model,
+    # measurement contains only 2D vector (rho, theta)
+    used_tracker_type = {'filter_type': 'kalman_filter', 'dim_x': 4, 'dim_z': 2}
 
-    filter_mgmt_LR = fm.FilterManager()
-    filter_mgmt_RR = fm.FilterManager()
+    track_mgmt_LR = tm.TrackManager(tracker_type=used_tracker_type)
+    track_mgmt_RR = tm.TrackManager(tracker_type=used_tracker_type)
+
 
     # Load Data from .mat files
     if config_data["filename_LeftRadar"]:
@@ -76,6 +77,8 @@ def main(config_data):
                 print('filter_framework: Number of detections for a LR mcc ', i, 'is: ',
                       len(lst_det_per_loop_cycle_LR))
                 track_mgmt_LR.new_detections(lst_det_per_loop_cycle_LR)
+                # Let's see what data is in a list of not assigned detections and
+                # how the new track is formed / if any
                 lst_not_assigned_LR, new_track_LR = track_mgmt_LR.port_data("track_init")
                 if new_track_LR:
                     print("filter_framework: Type of ported new_track list",type(new_track_LR))
@@ -87,10 +90,10 @@ def main(config_data):
                                                       new_track_LR)
             else:
                 print('filter_framework: There is no detection for current LR mcc ',i)
-
-        i_prev = i + 1
         # This line is redundant if only one mcc is being processed per loop cycle.
-        # However if mcc_step is different than 1, it might be good to keep it here.
+        # However if mcc_step is different than 1, it might be good to keep it here:
+        i_prev = i + 1
+
 
 
 #     TODO: graphical representation of the results

@@ -5,6 +5,7 @@ import configparser
 import argparse
 import itertools
 import copy
+import tracking_filters as tf
 
 
 class DetectionPoint(object):
@@ -737,6 +738,7 @@ class ReferenceList(list):
 class Track(list):
     def __init__(self, trackID):
         super().__init__()
+        self._tracker = None
         self._predicted_gate = Gate(beam=[], cx=0, cy=0, dx=2, dy=2, rvelocity=0, razimuth=0, rrange=0)
         self._predicted_point = TrackPoint()
         self._trackID = trackID
@@ -748,6 +750,13 @@ class Track(list):
         self._razimuth_interval = (0, 0)
         self._rrange_interval = (0, 0)
         self._mcc_interval = (0, 0)
+
+    def init_tracker(self,type='kalman_filter', dim_x=4, dim_z=2 ):
+        if not(self._tracker):
+            self._tracker = tf.KalmanFilter(dim_x=dim_x, dim_z=dim_z)
+            return True
+        else:
+            return False
 
     def append_point(self, mcc, x, y, dx, dy, beam):
         self.append(TrackPoint(mcc, x, y, dx, dy, beam))

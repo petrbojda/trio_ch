@@ -4,9 +4,26 @@ import data_containers as dc
 import track_management as tm
 import radar_plots as rp
 import numpy as np
+import logging
+import logging.config
 
+class NoLoggerConfiguration(Exception): pass
 
 def main(config_data):
+    if config_data["filename_LOGcfg"]:
+        cfg_logfile_path = config_data["filename_LOGcfg"]
+        logging.config.fileConfig(cfg_logfile_path)
+        # create logger
+        logger = logging.getLogger(__name__)
+        # logfile_level = config_data["log_level"]
+        # level_of_logging = getattr(logging,logfile_level.upper())
+        # logging.basicConfig(filename=logfile_path,level=level_of_logging)
+        logger.info('Started the test_implementing')
+        logger.info('Configuration file: %s',cfg_logfile_path)
+        logger.info(90 * '=')
+    else:
+        raise(NoLoggerConfiguration())
+
     selection = {"beam_tp": config_data["beams_tp"],
                  "mcc_tp": None, "x_tp": None, "y_tp": None,
                  "rng_tp": None, "vel_tp": (-5, 5), "az_tp": None,
@@ -33,8 +50,7 @@ def main(config_data):
         lst_det_LR = dc.DetectionList()
         lst_det_LR.append_data_from_m_file(leftradar_path, True, config_data["EGO_car_width"])
         mcc_interval_LR = lst_det_LR.get_mcc_interval()
-        print("filter_framework: MCC Left starts at: ", mcc_interval_LR[0],
-              "and ends at: ", mcc_interval_LR[1])
+        logger.info('MCC Left starts at: %s and ends at: ', mcc_interval_LR[0], mcc_interval_LR[1])
 
     if config_data["filename_RightRadar"]:
         l = []
@@ -45,8 +61,7 @@ def main(config_data):
         lst_det_RR = dc.DetectionList()
         lst_det_RR.append_data_from_m_file(rightradar_path, False, config_data["EGO_car_width"])
         mcc_interval_RR = lst_det_RR.get_mcc_interval()
-        print("filter_framework: MCC Right starts at: ", mcc_interval_RR[0],
-              "and ends at: ", mcc_interval_RR[1])
+        logger.info('MCC Right starts at: %s and ends at: ', mcc_interval_RR[0], mcc_interval_RR[1])
 
     # Calculate valid mcc interval for detections to be presented
     if config_data["filename_LeftRadar"] and config_data["filename_RightRadar"]:
@@ -59,8 +74,12 @@ def main(config_data):
         mcc_start = mcc_interval_RR[0]
         # mcc_end = mcc_interval_RR[1]
     mcc_end = mcc_start + 1000
-    print("filter_framework: MCC starts at: ", mcc_start, "MCC ends at: ", mcc_end)
+    logger.info('MCC starts at: %s and ends at: ', mcc_start, mcc_end)
     mcc_step = 1
+
+    # Prepare options to plot results
+    if config_data["plot_tp"]:
+        l = []
 
     #----------------- Filtering loop
     i_prev = mcc_start
@@ -79,21 +98,22 @@ def main(config_data):
                 track_mgmt_LR.new_detections(lst_det_per_loop_cycle_LR)
                 # Let's see what data is in a list of not assigned detections and
                 # how the new track is formed / if any
-                lst_not_assigned_LR, new_track_LR = track_mgmt_LR.port_data("track_init")
-                list_of_tracks = track_mgmt_LR.port_data("tracks_array")
-                if new_track_LR:
-                    print("filter_framework: Type of ported new_track list",type(new_track_LR))
-                    print("filter_framework: Type of ported new_track element", type(new_track_LR[-1]))
-                else:
-                    print("filter_framework: new_track not ported/created")
-                rp.static_plotTrackMan_initialization(lst_det_per_loop_cycle_LR,
-                                                      lst_not_assigned_LR,
-                                                      new_track_LR,
-                                                      list_of_tracks)
+
             else:
                 print('filter_framework: There is no detection for current LR mcc:',i)
         print('filter_framework: Predict cycle started for LR at mcc:', i)
         track_mgmt_LR.predict(i)
+        lst_not_assigned_LR, new_track_LR = track_mgmt_LR.port_data("track_init")
+        list_of_tracks = track_mgmt_LR.port_data("tracks_array")
+        if new_track_LR:
+            print("filter_framework: Type of ported new_track list", type(new_track_LR))
+            print("filter_framework: Type of ported new_track element", type(new_track_LR[-1]))
+        else:
+            print("filter_framework: new_track not ported/created")
+        rp.static_plotTrackMan_initialization(lst_det_per_loop_cycle_LR,
+                                              lst_not_assigned_LR,
+                                              new_track_LR,
+                                              list_of_tracks)
         # This line is redundant if only one mcc is being processed per loop cycle.
         # However if mcc_step is different than 1, it might be good to keep it here:
         i_prev = i + 1
@@ -105,4 +125,7 @@ def main(config_data):
 if __name__ == "__main__":
     config_data = dc.parse_CMDLine("./analysis.cnf")
     if config_data:
-        main(config_data)
+        try:
+            main(config_data)
+        except NoLoggerConfiguration:
+            print("The log file cannot be created. Specify it's filename in a main config file.")

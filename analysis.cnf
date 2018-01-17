@@ -64,3 +64,8 @@ modules_dir: /home/petr/Projects/TRIO/Radar/srcpy/
 	EGO_track_center: -1.43
 	Target_car_width: 2.17
 	Target_car_length: 4.52
+
+[LOG_file]
+# Configuration file to set up logging process
+	cfg_filename: logging.cnf
+

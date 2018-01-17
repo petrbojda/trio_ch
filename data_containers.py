@@ -959,12 +959,14 @@ def cnf_file_scenario_select(cnf_file, scenario):
     filename_RightDGPS = config.get(scenario, 'right_dgps')
     filename_BothDGPS = config.get(scenario, 'both_dgps')
     DGPS_xcompensation = config.get(scenario, 'DGPS_xcompensation')
+    filename_loger_configuration = config.get('LOG_file', 'cfg_filename')
 
     data_filenames = {"filename_LeftRadar": filename_LeftRadar,
                       "filename_RightRadar": filename_RightRadar,
                       "filename_LeftDGPS": filename_LeftDGPS,
                       "filename_RightDGPS": filename_RightDGPS,
                       "filename_BothDGPS": filename_BothDGPS,
+                      "filename_LOGcfg": filename_loger_configuration,
                       "DGPS_xcompensation": DGPS_xcompensation}
     return (data_filenames)
 
@@ -999,6 +1001,9 @@ def parse_CMDLine(cnf_file):
     #      Output folder
     parser.add_argument("-o", "--output",
                         help="Sets path to the folder where output files will be stored.")
+    #      Ploting option
+    parser.add_argument("-p", "--plot",
+                        help="Set the plot options.")
     #      Select a scenario
     argv = parser.parse_args()
 
@@ -1012,6 +1017,11 @@ def parse_CMDLine(cnf_file):
         radar_tp = argv.radar
     else:
         radar_tp = "B"
+
+    if argv.plot:
+        plot_tp = argv.plot
+    else:
+        plot_tp = "all"
 
     if argv.dataset:
         dataset = argv.dataset
@@ -1048,6 +1058,7 @@ def parse_CMDLine(cnf_file):
         print('\t \t left_dgps:', data_filenames["filename_LeftDGPS"])
         print('\t \t right_dgps:', data_filenames["filename_RightDGPS"])
         print('\t \t both_dgps:', data_filenames["filename_BothDGPS"])
+        print('\t \t loger_cfg_file:', data_filenames["filename_LOGcfg"])
         print("Radar to process:", radar_tp)
 
         for n_beams in range(0, 4):
@@ -1060,10 +1071,12 @@ def parse_CMDLine(cnf_file):
                          "filename_LeftDGPS": data_filenames["filename_LeftDGPS"],
                          "filename_RightDGPS": data_filenames["filename_RightDGPS"],
                          "filename_BothDGPS": data_filenames["filename_BothDGPS"],
+                         "filename_LOGcfg": data_filenames["filename_LOGcfg"],
                          "DGPS_xcompensation": data_filenames["DGPS_xcompensation"],
                          "EGO_car_width": conf_data["EGO_car_width"],
                          "beams_tp": beams_tp,
                          "radar_tp": radar_tp,
+                         "plot_tp": plot_tp,
                          "output_folder": output}
 
         if radar_tp == "L":

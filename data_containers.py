@@ -916,7 +916,7 @@ class Track(list):
 
 
 
-def cnf_file_read(cnf_file):
+def cnf_file_parser(cnf_file):
     # Reads the configuration file
     config = configparser.ConfigParser()
     config.read(cnf_file)  # "./analysis.cnf"
@@ -946,10 +946,19 @@ def cnf_file_read(cnf_file):
                  "list_of_scenarios": lst_scenarios_names,
                  "Number_of_scenarios": n_o_sc,
                  "EGO_car_width": ego_car_width}
-    return (conf_data)
+
+    # Read data-preprocessor settings
+    radar_select = config.get('DataProcessSettings', 'radar')
+    number_of_mcc = config.get('DataProcessSettings', 'number_of_mcc')
+
+    data_preprocessor_settings = {
+        "radar_select": radar_select,
+        "number_of_mcc": number_of_mcc}
+
+    return conf_data, data_preprocessor_settings
 
 
-def cnf_file_scenario_select(cnf_file, scenario):
+def cnf_datapaths_parser(cnf_file, scenario):
     config = configparser.ConfigParser()
     config.read(cnf_file)  # "./analysis.cnf"
 
@@ -959,21 +968,23 @@ def cnf_file_scenario_select(cnf_file, scenario):
     filename_RightDGPS = config.get(scenario, 'right_dgps')
     filename_BothDGPS = config.get(scenario, 'both_dgps')
     DGPS_xcompensation = config.get(scenario, 'DGPS_xcompensation')
-    filename_loger_configuration = config.get('LOG_file', 'cfg_filename')
+    filename_logger_configuration = config.get('LOG_file', 'cfg_filename')
 
     data_filenames = {"filename_LeftRadar": filename_LeftRadar,
                       "filename_RightRadar": filename_RightRadar,
                       "filename_LeftDGPS": filename_LeftDGPS,
                       "filename_RightDGPS": filename_RightDGPS,
                       "filename_BothDGPS": filename_BothDGPS,
-                      "filename_LOGcfg": filename_loger_configuration,
+                      "filename_LOGcfg": filename_logger_configuration,
                       "DGPS_xcompensation": DGPS_xcompensation}
-    return (data_filenames)
+    return data_filenames
 
 
 def parse_CMDLine(cnf_file):
     global path_data_folder
-    conf_data = cnf_file_read(cnf_file)
+    conf_data, data_preprocessor_settings = cnf_file_parser(cnf_file)
+    number_of_mcc_to_process = data_preprocessor_settings["number_of_mcc"]
+
     # Parses a set of input arguments comming from a command line
     parser = argparse.ArgumentParser(
         description='''
@@ -1015,6 +1026,8 @@ def parse_CMDLine(cnf_file):
 
     if argv.radar:
         radar_tp = argv.radar
+    elif data_preprocessor_settings["radar_select"]:
+        radar_tp = data_preprocessor_settings["radar_select"]
     else:
         radar_tp = "B"
 
@@ -1048,22 +1061,8 @@ def parse_CMDLine(cnf_file):
         else:
             print("Wrong dataset selected.")
 
-        data_filenames = cnf_file_scenario_select(cnf_file, argv.scenario)
+        data_filenames = cnf_datapaths_parser(cnf_file, argv.scenario)
 
-        print("Dataset to process:", dataset)
-        print("Data files are stored in:", path_data_folder)
-        print("Data for the scenario are in:")
-        print('\t \t left_radar:', data_filenames["filename_LeftRadar"])
-        print('\t \t right_radar:', data_filenames["filename_RightRadar"])
-        print('\t \t left_dgps:', data_filenames["filename_LeftDGPS"])
-        print('\t \t right_dgps:', data_filenames["filename_RightDGPS"])
-        print('\t \t both_dgps:', data_filenames["filename_BothDGPS"])
-        print('\t \t loger_cfg_file:', data_filenames["filename_LOGcfg"])
-        print("Radar to process:", radar_tp)
-
-        for n_beams in range(0, 4):
-            if beams_tp.count(n_beams):
-                print("Beam", n_beams, "will be processed:", beams_tp.count(n_beams), "times.")
         conf_data_out = {"scenario": argv.scenario,
                          "path_data_folder": path_data_folder,
                          "filename_LeftRadar": data_filenames["filename_LeftRadar"],
@@ -1077,7 +1076,8 @@ def parse_CMDLine(cnf_file):
                          "beams_tp": beams_tp,
                          "radar_tp": radar_tp,
                          "plot_tp": plot_tp,
-                         "output_folder": output}
+                         "output_folder": output,
+                         "number_of_mcc_to_process": number_of_mcc_to_process}
 
         if radar_tp == "L":
             conf_data_out["filename_RightRadar"] = None

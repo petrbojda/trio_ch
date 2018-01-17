@@ -1,0 +1,24 @@
+# Configuration file to set appropriate paths to data and modules.
+# Created as a part of the project at the Czech Technical University
+# by Petr Bojda, 11-29-2017.
+
+[Datasets]
+radar_01: dets01.csv
+dgps_01: ref01.csv
+
+[CSV_Headers]
+detections_XY: mcc,x,y,vel
+references_XY: mcc,x,y,dx,dy
+
+[RADAR_detections]
+attributes: mcc,x,y,rho,theta,rvel
+types: int, float, float, float, float, float
+units: 1, meters, meters, meters, degrees, mps
+
+[DGPS_references]
+attributes: mcc,x,y,dx,dy
+types: int, float, float, float, float
+units: 1, meters, meters, mps, mps
+
+[LOG_file]
+cfg_filename: logging.cnf

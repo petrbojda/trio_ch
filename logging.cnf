@@ -1,0 +1,28 @@
+[loggers]
+keys=root
+
+[handlers]
+keys=fileHandler
+
+[formatters]
+keys=fileFormatter, fileFormatter_line_continuous
+
+[logger_root]
+level=DEBUG
+handlers=fileHandler
+qualname=test_implementing
+propagate=0
+
+[handler_fileHandler]
+class=FileHandler
+level=DEBUG
+formatter=fileFormatter
+args=('filter_framework.log','w')
+
+[formatter_fileFormatter]
+format=%(asctime)s - %(name)s - %(levelname)s - %(message)s
+datefmt=
+
+[formatter_fileFormatter_line_continuous]
+format=\x1b[80D\x1b[1A\x1b[K%(message)s
+

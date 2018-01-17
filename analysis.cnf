@@ -69,3 +69,9 @@ modules_dir: /home/petr/Projects/TRIO/Radar/srcpy/
 # Configuration file to set up logging process
 	cfg_filename: logging.cnf
 
+
+[DataProcessSettings]
+# Configuration options of the data preprocessor
+    radar: L
+    # L, R or B
+    number_of_mcc: 10000

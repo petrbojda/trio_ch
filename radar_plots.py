@@ -464,12 +464,13 @@ def static_plotREF_selections(lst_det_left, lst_det_right,
 
 
 
-def static_plotTrackMan_initialization(lst_detections, lst_not_assigned, new_track):
+def static_plotTrackMan_initialization(lst_detections, lst_not_assigned, new_track, list_of_tracks):
     # Plot starts here:
     cms = matplotlib.cm
     color_map_new_det = cms.Blues
     color_map_not_assig = cms.Greys
     color_map_newly_formed = cms.Oranges
+    color_map_tracks = cms.Greens
 
     f1 = plt.figure(1, (15, 8))
 
@@ -481,6 +482,8 @@ def static_plotTrackMan_initialization(lst_detections, lst_not_assigned, new_tra
     number_of_new_dets_processed = 0
     number_of_unassig_dets_processed = 0
     number_of_track_points = 0
+    number_of_active_tracks = 0
+    number_of_deactivated_tracks = 0
     # Newly Incoming Detection Plot
     if lst_detections:
         print("radar_plt: Plotting newly incoming detection list of the length:",len(lst_detections))
@@ -509,6 +512,22 @@ def static_plotTrackMan_initialization(lst_detections, lst_not_assigned, new_tra
 
         plt.draw()
 
+    if list_of_tracks:
+        print("radar_plt: Plotting existing tracks:",len(list_of_tracks))
+
+        for elem in list_of_tracks:
+            if elem["active"]:
+                brightness = 0.8
+                number_of_active_tracks += 1
+            else:
+                brightness = 0.3
+                number_of_deactivated_tracks += 1
+
+            f1ax1.plot(elem["x"], elem["y"],
+                   color=color_map_tracks(brightness), ls='-')
+        plt.draw()
+        print("radar_plt: active tracks:", number_of_active_tracks,
+               "deactivated tracks:",number_of_deactivated_tracks)
     # # Newly Formed Track Plot
     if new_track:
         print("radar_plt: Plotting newly formed track of the length:",len(new_track))
@@ -522,6 +541,10 @@ def static_plotTrackMan_initialization(lst_detections, lst_not_assigned, new_tra
         print("radar_plt: new_track_data[x]:", new_track_data["x"], "new_track_data[y]:", new_track_data["y"])
 
         plt.draw()
+
+
+
+
 
     # Legend and Title of the plot
     lgd2 = f1ax1.legend(loc='upper right', bbox_to_anchor=(1.0, 1.0))

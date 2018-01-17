@@ -66,6 +66,13 @@ class DetectionPoint(object):
     def get_mcc(self):
         return self._mcc
 
+    def get_xy_array(self):
+        dx = self._vel * np.cos(self._azimuth)
+        dy = self._vel * np.sin(self._azimuth)
+        x = np.array([self._x, dx, self._y, dy])
+        return x.reshape(4, 1)
+        return np.array([[x, dx, y, dy]]).T
+
 class ReferencePoint(object):
     def __init__(self, mccL=0, mccR=0, TAR_dist=0.0, TAR_distX=0.0, TAR_distY=0.0,
                  TAR_velX=0.0, TAR_velY=0.0, TAR_hdg=0.0,
@@ -159,6 +166,16 @@ class TrackPoint(object):
         x = np.array([self.x, self.dx, self.y, self.dy])
         return x.reshape(4, 1)
 
+    def get_xy_array(self):
+        dx = self.rvelocity * np.cos(self.razimuth)
+        dy = self.rvelocity * np.sin(self.razimuth)
+        x = np.array([self.x,dx, self.y, dy])
+        return x.reshape(4, 1)
+
+    def get_z_array(self):
+        z = np.array([self.x, self.y])
+        return z.reshape(2, 1)
+
 class Gate(object):
     def __init__(self, beam=[], cx=0, cy=0, dx=0, dy=0,
                  rvelocity=0, razimuth=0, rrange=0):
@@ -177,7 +194,7 @@ class Gate(object):
     def set_center_y(self, cy):
         self._centery = cy
 
-    def set_center_point(self, detection):
+    def set_center_point_from_det(self, detection):
         self._centerx = detection._x
         self._centery = detection._y
 
@@ -226,6 +243,10 @@ class Gate(object):
         diff = np.array([self._diff_x, self._diff_y])
         aim = (npla.norm(diff) - npla.norm(c-d)) / npla.norm(diff)
         return aim
+
+    def get_center_array(self):
+        xy = np.array([self._centerx, self._centery])
+        return xy.reshape(2, 1)
 
 
 
@@ -588,7 +609,7 @@ class UnAssignedDetectionList(DetectionList):
 
     def test_det_in_gate_3points(self,detection, detection_1, detection_2):
         expected_point = self.two_point_projection(detection_1, detection_2)
-        self._gate_pattern.set_center_point(expected_point)
+        self._gate_pattern.set_center_point_from_det(expected_point)
         return self._gate_pattern.test_detection_in_gate(detection)
 
     def new_detection(self, detection):
@@ -742,7 +763,6 @@ class Track(list):
         super().__init__()
         self._tracker = None
         self._predicted_gate = Gate(beam=[], cx=0, cy=0, dx=2, dy=2, rvelocity=0, razimuth=0, rrange=0)
-        self._predicted_point = TrackPoint()
         self._trackID = trackID
         self._velx_interval = (0, 0)
         self._x_interval = (0, 0)
@@ -752,6 +772,14 @@ class Track(list):
         self._razimuth_interval = (0, 0)
         self._rrange_interval = (0, 0)
         self._mcc_interval = (0, 0)
+        self._last_update = None
+        self._active = True
+
+    def activate(self):
+        self._active = True
+
+    def deactivate(self):
+        self._active = False
 
     def append_point(self, mcc, x, y, dx, dy, beam):
         self.append(TrackPoint(mcc, x, y, dx, dy, beam))
@@ -823,18 +851,39 @@ class Track(list):
             self._tracker.Q = block_diag(q, q)
             self._tracker.x = init_x
             self._tracker.P = np.eye(4) * 5.0
-            # TODO: finish initialization
+            self._tracker.H = np.array([[1 / 0.3048, 0, 0, 0],
+                                        [0, 0, 1 / 0.3048, 0]])
+            self._tracker.R = np.array([[0.2, 0],[0, 0.1]])
+            self._predicted_gate.set_center_x(self._tracker.x[0])
+            self._predicted_gate.set_center_y(self._tracker.x[2])
+            print("data_cont: Track initialized at:", self._tracker.x)
             return True
         else:
             return False
 
     def start_tracker(self):
-
-        return self._predicted_point
+        self._tracker.update(self[1].get_z_array())
+        self._tracker.predict()
+        self._tracker.update(self[2].get_z_array())
+        self._last_update = self[2].mcc
+        self._predicted_gate.set_center_x(self._tracker.x[0])
+        self._predicted_gate.set_center_y(self._tracker.x[2])
+        print("data_cont: Track started, currently at:", self._predicted_gate.get_center_array())
 
     def update_tracker(self):
+        self._tracker.update(self[-1].get_z_array())
+        self._last_update = self[-1].mcc
+        self._predicted_gate.set_center_x(self._tracker.x[0])
+        self._predicted_gate.set_center_y(self._tracker.x[2])
+        print("data_cont: Track being updated at mcc:",self._last_update,
+              "current posteriori:", self._predicted_gate.get_center_array())
 
-        return self._predicted_point
+    def predict(self):
+        self._tracker.predict()
+        self._predicted_gate.set_center_x(self._tracker.x[0])
+        self._predicted_gate.set_center_y(self._tracker.x[2])
+        print("data_cont: Track's predict() called, last update at mcc:",self._last_update,
+              "current apriori:", self._predicted_gate.get_center_array())
 
     def get_mcc_interval(self):
         return self._mcc_interval
@@ -853,7 +902,8 @@ class Track(list):
         rvelocity_sel = [elem.rvelocity for elem in self]
         beam_sel = [elem.beam for elem in self]
 
-        track_data = {"mcc": np.array(mcc_sel),
+        track_data = {"active":self._active,
+                      "mcc": np.array(mcc_sel),
                       "razimuth": np.array(razimuth_sel),
                       "rvelocity": np.array(rvelocity_sel),
                       "x": np.array(x_sel),
@@ -864,8 +914,6 @@ class Track(list):
     def set_predicted_gate(self, predicted_gate):
         self._predicted_gate = copy.copy(predicted_gate)
 
-    def set_prediction(self, prediction):
-        self._predicted_point = prediction
 
 
 def cnf_file_read(cnf_file):

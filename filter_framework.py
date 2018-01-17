@@ -71,7 +71,7 @@ def main(config_data):
         if lst_det_LR:
             lst_det_per_loop_cycle_LR = lst_det_LR.get_lst_detections_selected(selection=selection)
 
-            # TODO: Is it correct to assign this for every iteration? Potential to write
+            # Is it correct to assign this for every iteration? Potential to write
             # more effective code.
             if lst_det_per_loop_cycle_LR:
                 print('filter_framework: Number of detections for a LR mcc ', i, 'is: ',
@@ -80,6 +80,7 @@ def main(config_data):
                 # Let's see what data is in a list of not assigned detections and
                 # how the new track is formed / if any
                 lst_not_assigned_LR, new_track_LR = track_mgmt_LR.port_data("track_init")
+                list_of_tracks = track_mgmt_LR.port_data("tracks_array")
                 if new_track_LR:
                     print("filter_framework: Type of ported new_track list",type(new_track_LR))
                     print("filter_framework: Type of ported new_track element", type(new_track_LR[-1]))
@@ -87,9 +88,12 @@ def main(config_data):
                     print("filter_framework: new_track not ported/created")
                 rp.static_plotTrackMan_initialization(lst_det_per_loop_cycle_LR,
                                                       lst_not_assigned_LR,
-                                                      new_track_LR)
+                                                      new_track_LR,
+                                                      list_of_tracks)
             else:
-                print('filter_framework: There is no detection for current LR mcc ',i)
+                print('filter_framework: There is no detection for current LR mcc:',i)
+        print('filter_framework: Predict cycle started for LR at mcc:', i)
+        track_mgmt_LR.predict(i)
         # This line is redundant if only one mcc is being processed per loop cycle.
         # However if mcc_step is different than 1, it might be good to keep it here:
         i_prev = i + 1

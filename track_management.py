@@ -32,17 +32,22 @@ class TrackManager(list):
         print ("track_mgmt: Detections to assign", lst_detections)
         aim=[]
         self._lst_not_assigned_detections.remove_detections([0, lst_detections[0].get_mcc() - 10])
+        # track update loop - each new detection as assigned to an existing track
+        # triggers the update cycle of the track
         for det in lst_detections:
             if self:
                 print("track_mgmt: Currently some tracks exist in a list. Will be scrutinized. Number of tracks:",
                           len(self))
                 for elem in self:
-                    aim.append(elem.test_detection_in_gate(det))
+                    if elem._active and elem._last_update != det._mcc:
+                        aim.append(elem.test_detection_in_gate(det))
                 print("track_mgmt: The vector of all distances from each track's gate center, the aim, is:",aim)
                 if max(aim):
                     print("track_mgmt: max(aim) is",max(aim),"pointing at the track number:",aim.index(max(aim)))
                     self[aim.index(max(aim))].append_detection(det)
                     print("track_mgmt: The detection was assigned to a track number:", aim.index(max(aim)))
+                    self[aim.index(max(aim))].update_tracker()
+                    print("track_mgmt:track updated")
                     unassigned = False
                 else:
                     print("track_mgmt: Some track exists but the detection doesn't fit in.")
@@ -64,10 +69,13 @@ class TrackManager(list):
                     self[-1].init_tracker(type=self._tracker_type['filter_type'],
                                           dim_x=self._tracker_type['dim_x'],
                                           dim_z=self._tracker_type['dim_z'],
-                                          dt = self._Tsampling)
+                                          dt=self._Tsampling,
+                                          init_x=self[-1][0].get_xy_array())
                     print("track_mgmt: tracker initialized for the new track:",self[-1]._tracker)
+                    self[-1].start_tracker()
                     print("track_mgmt: new track's first 3 points:",self[-1])
             else:
+                # TODO: tracker update to finish here
                 # The detection 'det' was assigned to an existing track and its appropriate tracker
                 # needs to update.
                 pass
@@ -81,6 +89,24 @@ class TrackManager(list):
             else:
                 print("track_mgmt: porting track_init data. No track in the list, None track ported.")
                 return self._lst_not_assigned_detections, None
+        if requested_data == "tracks_array":
+            if self:
+                list_of_tracks = []
+                print("track_mgmt: porting tracks_aray data. Number of tracks: ", len(self), "The last track ported.")
+                for elem in self:
+                    list_of_tracks.append(elem.get_array_trackpoints())
+                return list_of_tracks
+
+            else:
+                print("track_mgmt: porting tracks_aray data. No track in the list, None ported.")
+                return None
+
+    def predict(self,mcc):
+        for elem in self:
+            if elem._last_update < mcc-10:
+                elem.deactivate()
+            else:
+                elem.predict()
 
 
 

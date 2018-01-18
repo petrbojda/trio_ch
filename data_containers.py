@@ -2,6 +2,7 @@ import scipy.io as sio
 import numpy as np
 import numpy.linalg as npla
 from scipy.linalg import block_diag
+import logging
 import configparser
 import argparse
 import itertools
@@ -618,6 +619,7 @@ class UnAssignedDetectionList(DetectionList):
         :param detection: The detection which is going to be tested.
         :type detection: DetectionPoint
         """
+        logger = logging.getLogger(__name__).debug
         aimed = []
         if len(self)>1:
             for det1, det2 in itertools.combinations(self,2):
@@ -851,12 +853,12 @@ class Track(list):
             self._tracker.Q = block_diag(q, q)
             self._tracker.x = init_x
             self._tracker.P = np.eye(4) * 5.0
-            self._tracker.H = np.array([[1 / 0.3048, 0, 0, 0],
-                                        [0, 0, 1 / 0.3048, 0]])
+            self._tracker.H = np.array([[1, 0, 0, 0],
+                                        [0, 0, 1, 0]])
             self._tracker.R = np.array([[0.2, 0],[0, 0.1]])
             self._predicted_gate.set_center_x(self._tracker.x[0])
             self._predicted_gate.set_center_y(self._tracker.x[2])
-            print("data_cont: Track initialized at:", self._tracker.x)
+            logging.getLogger(__name__).debug("Track initialized at: %s", self._tracker.x)
             return True
         else:
             return False
@@ -868,22 +870,22 @@ class Track(list):
         self._last_update = self[2].mcc
         self._predicted_gate.set_center_x(self._tracker.x[0])
         self._predicted_gate.set_center_y(self._tracker.x[2])
-        print("data_cont: Track started, currently at:", self._predicted_gate.get_center_array())
+        logging.getLogger(__name__).debug("Track started, currently at %s", self._predicted_gate.get_center_array())
 
     def update_tracker(self):
         self._tracker.update(self[-1].get_z_array())
         self._last_update = self[-1].mcc
         self._predicted_gate.set_center_x(self._tracker.x[0])
         self._predicted_gate.set_center_y(self._tracker.x[2])
-        print("data_cont: Track being updated at mcc:",self._last_update,
-              "current posteriori:", self._predicted_gate.get_center_array())
+        logging.getLogger(__name__).debug(" Track being updated at mcc: %d, current posteriori %s", self._last_update,
+                                          self._predicted_gate.get_center_array())
 
     def predict(self):
         self._tracker.predict()
         self._predicted_gate.set_center_x(self._tracker.x[0])
         self._predicted_gate.set_center_y(self._tracker.x[2])
-        print("data_cont: Track's predict() called, last update at mcc:",self._last_update,
-              "current apriori:", self._predicted_gate.get_center_array())
+        logging.getLogger(__name__).debug(" Track's predict() called, last update at mcc: %d, current apriori %s", self._last_update,
+                                          self._predicted_gate.get_center_array())
 
     def get_mcc_interval(self):
         return self._mcc_interval

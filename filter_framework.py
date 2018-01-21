@@ -26,7 +26,7 @@ def main(config_data):
 
     selection = {"beam_tp": config_data["beams_tp"],
                  "mcc_tp": None, "x_tp": None, "y_tp": None,
-                 "rng_tp": None, "vel_tp": (-5, 5), "az_tp": None,
+                 "rng_tp": None, "vel_tp": None, "az_tp": None,
                  "trackID_tp": None, }
     # Structure 'selection' constrains  data to use as input to the tracker.
     # An exact value or interval of 'mcc', 'azimuth', 'range' ... etc can be
@@ -131,7 +131,7 @@ def main(config_data):
         #-------------- Left radar filter
         if lst_det_LR:
             lst_det_per_loop_cycle_LR = lst_det_LR.get_lst_detections_selected(selection=selection)
-
+            lst_det_per_loop_cycle_LR.calculate_intervals()
             # Is it correct to assign this for every iteration? Potential to write
             # more effective code.
             if lst_det_per_loop_cycle_LR:

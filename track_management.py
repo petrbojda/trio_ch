@@ -1,4 +1,5 @@
 import numpy as np
+import logging
 import data_containers as dc
 
 class TrackManager(list):
@@ -28,10 +29,20 @@ class TrackManager(list):
         self.append(track)
 
     def new_detections(self,lst_detections):
-        print ("track_mgmt: Detections to assign, mcc:",lst_detections[0].get_mcc(),"Agreed on:", len(lst_detections))
-        print ("track_mgmt: Detections to assign", lst_detections)
+        logger = logging.getLogger(__name__)
+        logger.debug("TrackManager.new_detections: Tested new %s detections",
+                     len(lst_detections))
+        logger.debug("TrackManager.new_detections: \t \t with MCCs from %s to %s",
+                    lst_detections.get_mcc_interval()[0],
+                    lst_detections.get_mcc_interval()[1])
+
         aim=[]
+        logger.debug("TrackManager.new_detections: In a _lst_not_assigned_detections is %s detections.",
+                     len(self._lst_not_assigned_detections))
         self._lst_not_assigned_detections.remove_detections([0, lst_detections[0].get_mcc() - 10])
+        logger.debug("TrackManager.new_detections: \t after 10 mccs removal: %s detections.",
+                     len(self._lst_not_assigned_detections))
+
         # track update loop - each new detection as assigned to an existing track
         # triggers the update cycle of the track
         for det in lst_detections:
@@ -42,7 +53,7 @@ class TrackManager(list):
                     if elem._active and elem._last_update != det._mcc:
                         aim.append(elem.test_detection_in_gate(det))
                 print("track_mgmt: The vector of all distances from each track's gate center, the aim, is:",aim)
-                if max(aim):
+                if aim:
                     print("track_mgmt: max(aim) is",max(aim),"pointing at the track number:",aim.index(max(aim)))
                     self[aim.index(max(aim))].append_detection(det)
                     print("track_mgmt: The detection was assigned to a track number:", aim.index(max(aim)))

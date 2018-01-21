@@ -72,7 +72,7 @@ class DetectionPoint(object):
         dy = self._vel * np.sin(self._azimuth)
         x = np.array([self._x, dx, self._y, dy])
         return x.reshape(4, 1)
-        return np.array([[x, dx, y, dy]]).T
+
 
 class ReferencePoint(object):
     def __init__(self, mccL=0, mccR=0, TAR_dist=0.0, TAR_distX=0.0, TAR_distY=0.0,
@@ -178,75 +178,100 @@ class TrackPoint(object):
         return z.reshape(2, 1)
 
 class Gate(object):
-    def __init__(self, beam=[], cx=0, cy=0, dx=0, dy=0,
-                 rvelocity=0, razimuth=0, rrange=0):
-        self._centerx = cx
-        self._diff_x = dx
-        self._centery = cy
-        self._diff_y = dy
+    def __init__(self, beam=[], x=0, y=0, diffx=0, diffy=0, dx=0, dy=0, diffdx=0, diffdy=0,
+                 rvelocity=0, d_rvelocity = 0, razimuth=0, d_razimuth=0, rrange=0, d_rrange=0):
+        self._x = x
+        self._diff_x = diffx
+        self._y = y
+        self._diff_y = diffy
+        self._dx = dx
+        self._diff_dx = diffdx
+        self._dy = dy
+        self._diff_dy = diffdy
         self._beam = beam
-        self._razimuth = razimuth
-        self._rvelocity = rvelocity
-        self._rrange = rrange
+        self._raz = razimuth
+        self._diff_raz = d_razimuth
+        self._rvel = rvelocity
+        self._diff_rvel = d_rvelocity
+        self._rrng = rrange
+        self._diff_rrng = d_rrange
+        logging.getLogger(__name__).debug("Gate.__init__: diff_x = %s, diff_y = %s",self._diff_x, self._diff_y)
 
-    def set_center_x(self, cx):
-        self._centerx = cx
-
-    def set_center_y(self, cy):
-        self._centery = cy
 
     def set_center_point_from_det(self, detection):
-        self._centerx = detection._x
-        self._centery = detection._y
+        self._x = detection._x
+        self._y = detection._y
+        self._beam = detection._beam
+        self._raz = detection._azimuth
+        self._rrng = detection._rng
+        self._rrvel = detection._vel
 
-    def set_diff_x(self, dx):
-        self._diff_x = dx
+    def test_detection_in_gate(self, detection, **kwargs):
+        if kwargs:
+            test_x = self._x - self._diff_x/2 < detection._x < self._x + self._diff_x/2 if 'x' in kwargs else True
+            test_y = self._y - self._diff_y/2 < detection._y < self._y + self._diff_y/2 if 'y' in kwargs else True
+            test_vel = self._rvel - self._diff_rvel/2 < detection._vel < self._x + self._diff_rvel/2 \
+                if 'rvel' in kwargs else True
+            test_rng = self._rrng - self._diff_rrng/2 < detection._rng < self._rrng + self._diff_rrng/2 \
+                if 'rrng' in kwargs else True
+            test_az = self._raz - self._diff_raz/2 < detection._azimuth < self._raz + self._diff_raz/2 \
+                if 'rvel' in kwargs else True
+            if 'beam' in kwargs:
+                test_beam = detection._beam in self._beam
+            else:
+                test_beam = True
 
-    def set_diff_y(self, dy):
-        self._diff_y = dy
+            return test_x & test_y & test_vel & test_rng & test_az & test_beam
+        else:
+            gate_x_min = self._x - self._diff_x/2
+            gate_x_max = self._x + self._diff_x/2
+            gate_y_min = self._y - self._diff_y/2
+            gate_y_max = self._y + self._diff_y/2
+            return  (gate_x_min < detection._x < gate_x_max) & \
+                    (gate_y_min < detection._y < gate_y_max)
 
-    def set_beam(self, beam):
-        self._beam = beam
+    def test_trackpoint_in_gate(self, tp, **kwargs):
+        if kwargs:
+            test_x = self._x - self._diff_x/2 < tp.x < self._x + self._diff_x/2 if 'x' in kwargs else True
+            test_y = self._y - self._diff_y/2 < tp.y < self._y + self._diff_y/2 if 'y' in kwargs else True
+            test_dx = self._dx - self._diff_dx/2 < tp.dx < self._dx + self._diff_dx/2 if 'dx' in kwargs else True
+            test_dy = self._dy - self._diff_dy/2 < tp.dy < self._dy + self._diff_dy/2 if 'dy' in kwargs else True
+            test_vel = self._rvel - self._diff_rvel/2 < tp.rvelocity < self._x + self._diff_rvel/2 \
+                if 'rvel' in kwargs else True
+            test_rng = self._rrng - self._diff_rrng/2 < tp.rrange < self._rrng + self._diff_rrng/2 \
+                if 'rrng' in kwargs else True
+            test_az = self._raz - self._diff_raz/2 < tp.razimuth < self._raz + self._diff_raz/2 \
+                if 'rvel' in kwargs else True
+            if 'beam' in kwargs:
+                test_beam = tp.beam in self._beam
+            else:
+                test_beam = True
 
-    def set_razimuth(self, razimuth):
-        self._razimuth = razimuth
-
-    def set_rvelocity(self, rvelocity):
-        self._rvelocity = rvelocity
-
-    def set_rrange(self, rrange):
-        self._rrange = rrange
-
-    def test_detection_in_gate(self, detection):
-        gate_x_min = self._centerx - self._diff_x/2
-        gate_x_max = self._centerx + self._diff_x/2
-        gate_y_min = self._centery - self._diff_y/2
-        gate_y_max = self._centery + self._diff_y/2
-        return (gate_x_min < detection._x < gate_x_max) & (gate_y_min < detection._y < gate_y_max)
-
-    def test_trackpoint_in_gate(self, tp):
-        gate_x_min = self._centerx - self._diff_x/2
-        gate_x_max = self._centerx + self._diff_x/2
-        gate_y_min = self._centery - self._diff_y/2
-        gate_y_max = self._centery + self._diff_y/2
-        return (gate_x_min < tp.x < gate_x_max) & (gate_y_min < tp.y < gate_y_max)
+            return test_x & test_y & test_vel & test_rng & test_az & test_beam & test_dx & test_dy
+        else:
+            gate_x_min = self._x - self._diff_x/2
+            gate_x_max = self._x + self._diff_x/2
+            gate_y_min = self._y - self._diff_y/2
+            gate_y_max = self._y + self._diff_y/2
+            return  (gate_x_min < tp.x < gate_x_max) & \
+                    (gate_y_min < tp.y < gate_y_max)
 
     def get_detection_dist_from_center(self, detection):
-        c = np.array([self._centerx,self._centery])
+        c = np.array([self._x,self._y])
         d = np.array([detection._x, detection._y])
         diff = np.array([self._diff_x, self._diff_y])
         aim = (npla.norm(diff) - npla.norm(c-d)) / npla.norm(diff)
         return aim
 
     def get_trackpoint_dist_from_center(self, tp):
-        c = np.array([self._centerx,self._centery])
+        c = np.array([self._x,self._y])
         d = np.array([tp.x, tp.y])
         diff = np.array([self._diff_x, self._diff_y])
         aim = (npla.norm(diff) - npla.norm(c-d)) / npla.norm(diff)
         return aim
 
     def get_center_array(self):
-        xy = np.array([self._centerx, self._centery])
+        xy = np.array([self._x, self._y])
         return xy.reshape(2, 1)
 
 
@@ -261,13 +286,11 @@ class DetectionList(list):
         self._rng_interval = (0, 0)
         self._mcc_interval = (0, 0)
         self._trackID_interval = (0, 0)
+        logging.getLogger(__name__).debug("DetectionList.__init__: list initialized")
 
     def append_detection(self, detection_point):
         self.append(detection_point)
-        self._y_interval = (min([elem._y for elem in self]), max([elem._y for elem in self]))
-        self._x_interval = (min([elem._x for elem in self]), max([elem._x for elem in self]))
-        self._vel_interval = (min([elem._vel for elem in self]), max([elem._vel for elem in self]))
-        self._mcc_interval = (min([elem._mcc for elem in self]), max([elem._mcc for elem in self]))
+        self.calculate_intervals()
 
     def append_data_from_m_file(self, data_path, left, car_width):
         radar_data = sio.loadmat(data_path)
@@ -283,14 +306,18 @@ class DetectionList(list):
                                        azimuth=float(detections[itr, 7]),
                                        left=bool(left),
                                        car_width=float(car_width)))
+        self.calculate_intervals()
+        logging.getLogger(__name__).debug("DetectionList.append_data_from_m_file: points appended = %s", no_d)
 
+    def calculate_intervals(self):
         self._y_interval = (min([elem._y for elem in self]), max([elem._y for elem in self]))
         self._x_interval = (min([elem._x for elem in self]), max([elem._x for elem in self]))
         self._azimuth_interval = (min([elem._azimuth for elem in self]), max([elem._azimuth for elem in self]))
         self._vel_interval = (min([elem._vel for elem in self]), max([elem._vel for elem in self]))
         self._rng_interval = (min([elem._rng for elem in self]), max([elem._rng for elem in self]))
         self._mcc_interval = (min([elem._mcc for elem in self]), max([elem._mcc for elem in self]))
-        self._trackID_interval = (min([elem._trackID for elem in self]), max([elem._trackID for elem in self]))
+        return self._mcc_interval
+
 
     def get_mcc_interval(self):
         return self._mcc_interval
@@ -424,7 +451,8 @@ class DetectionList(list):
                       "trackID": np.array(trackID_sel),
                       "beam": np.array(beam_sel),
                       "mcc": np.array(mcc_sel)}
-
+        logging.getLogger(__name__).debug("DetectionList.get_array_detections_selected: number of detections selected is %s MCCs from %s to %s",
+                                          len(mcc_sel), min(mcc_sel), max(mcc_sel))
         return radar_data
 
     def get_array_detections(self):
@@ -511,6 +539,8 @@ class DetectionList(list):
                             az_i[0] <= elem._azimuth <= az_i[1]):
                 lst_selected_detection.append(elem)
 
+        logging.getLogger(__name__).debug("DetectionList.get_lst_detections_selected: number of detections selected is %s MCCs from %s to %s",
+                                          len(self), lst_selected_detection[0]._mcc, lst_selected_detection[-1]._mcc)
         return lst_selected_detection
 
     def extend_with_selection(self, radar_data_list, **kwarg):
@@ -587,8 +617,11 @@ class UnAssignedDetectionList(DetectionList):
         super().__init__()
         self._Tsampling = Tsampling
         self._lst_tracks_possible = []
-        self._gate_pattern = Gate(beam=[], cx=0, cy=0, dx=2, dy=2, rvelocity=0, razimuth=0)
-
+        self._gate_pattern = Gate(beam=[], x=0, y=0, diffx=gate._diff_x, diffy=gate._diff_y, dx=0, dy=0,
+                                  diffdx=0, diffdy=0, rvelocity=0, d_rvelocity = gate._diff_rvel, razimuth=0,
+                                  d_razimuth=gate._diff_raz, rrange=0, d_rrange=gate._diff_rrng)
+        logging.getLogger(__name__).debug("UnAssignedDetectionList.__init__: list initialized, gate: dim_x=%s, dim_y=%s",
+                                          self._gate_pattern._diff_x, self._gate_pattern._diff_y)
 
     def two_point_projection(self, start_detection, end_detection):
         """ Extrapolates two detections in terms of the first order polynomial.
@@ -602,6 +635,8 @@ class UnAssignedDetectionList(DetectionList):
         :type end_detection: DetectionPoint
         :rtype: DetectionPoint
         """
+        gate = copy.copy(self._gate_pattern)
+        if
         projected_point = DetectionPoint()
         x = 2 * end_detection._x - start_detection._x
         y = 2 * end_detection._y - start_detection._y
@@ -610,8 +645,15 @@ class UnAssignedDetectionList(DetectionList):
 
     def test_det_in_gate_3points(self,detection, detection_1, detection_2):
         expected_point = self.two_point_projection(detection_1, detection_2)
-        self._gate_pattern.set_center_point_from_det(expected_point)
-        return self._gate_pattern.test_detection_in_gate(detection)
+        if expected_point:
+            self._gate_pattern.set_center_point_from_det(expected_point)
+            self._gate_pattern.test_detection_in_gate(detection)
+            return  # dictionary (det1, det2, det3, distance in gate)
+        else:
+            return False
+
+
+
 
     def new_detection(self, detection):
         """Tests whether or not the list of unassigned detections can form a new track.
@@ -619,35 +661,47 @@ class UnAssignedDetectionList(DetectionList):
         :param detection: The detection which is going to be tested.
         :type detection: DetectionPoint
         """
-        logger = logging.getLogger(__name__).debug
+        logger = logging.getLogger(__name__)
+        logger.info("UnAssignedDetectionList.new_detection: tested new detection with MCC: %s", detection._mcc)
+        logger.debug("\t at x: %s, y: %s", detection._x, detection._y)
         aimed = []
         if len(self)>1:
             for det1, det2 in itertools.combinations(self,2):
-                print("data_cont: length of Unassigned list is:",len(self),"currently combining:",det1._mcc, det2._mcc)
-                print("data_cont: mcc:", det1._mcc, "at x", det1._x, "y", det1._y, "and mcc:", det2._mcc, "at x", det2._x, "y", det2._y)
+                logger.debug("UnAssignedDetectionList.new_detection: number of unassigned detections in a list: %s ",
+                             len(self))
+                logger.debug("\t\t\t\tcombining det1 %s, det2 %s", det1._mcc, det2._mcc)
+                logger.debug("\t\t\t\t\t det1 x: %s, y: %s", det1._x, det1._y)
+                logger.debug("\t\t\t\t\t det2 x: %s, y: %s", det2._x, det2._y)
                 if self.test_det_in_gate_3points(detection, det1, det2):
                     self._lst_tracks_possible.append(Track(0))
                     self._lst_tracks_possible[-1].append_detection(det1)
                     self._lst_tracks_possible[-1].append_detection(det2)
                     self._lst_tracks_possible[-1].append_detection(detection)
                     self._lst_tracks_possible[-1].set_predicted_gate(self._gate_pattern)
-                    print("data_cont: perspective track:", len(self._lst_tracks_possible), "currently processing one aiming:",
-                          self._lst_tracks_possible[-1].test_trackpoint_in_gate(self._lst_tracks_possible[-1][-1]))
+                    logger.debug("\t detection in gate, likely future track formed, currently %s possible tracks in a list",len(self._lst_tracks_possible))
+                    logger.debug("\t currently processing track fits the center of a selection gate at %s",
+                           self._lst_tracks_possible[-1].test_trackpoint_in_gate(self._lst_tracks_possible[-1][-1]))
                     aimed.append(self._lst_tracks_possible[-1].test_trackpoint_in_gate(self._lst_tracks_possible[-1][-1]))
+                else:
+                    logger.debug("\t Detection is not in a gate of the three point extrapolation, Track is not considered.")
             if aimed:
                 track_to_return = copy.copy(self._lst_tracks_possible[aimed.index(max(aimed))])
+                # TODO: Once a new track is created, detections included must be deleted from a list of unassigned detections
                 aimed.clear()
+                logger.info(
+                    "UnAssignedDetectionList.new_detection: Detection triggers a new track. %s detections remain in a list of unassigned.",
+                    len(self))
             else:
                 track_to_return = False
                 self.append(detection)
-                print("data_cont: Detection stored in an unassigned list. Now it contains:", len(self), "unassigned detections")
+                logger.info("UnAssignedDetectionList.new_detection: Detection stored in an unassigned list. Now it contains: %s",
+                       len(self))
             self._lst_tracks_possible.clear()
         else:
             self.append(detection)
-            print("data_cont: Detection stored in an unassigned list. Now it contains:", len(self),
-                  "unassigned detections")
+            logger.info("UnAssignedDetectionList.new_detection:Detection stored in an unassigned list. Now it contains: %s",
+                   len(self))
             track_to_return = False
-
         return track_to_return
 
     def remove_detections(self, mcc_interval):
@@ -669,8 +723,11 @@ class ReferenceList(list):
         no_dL = len(DGPS_data["MCC_LeftRadar"])
         no_dR = len(DGPS_data["MCC_RightRadar"])
         no_d = max(no_dL, no_dR)
-        print("DGPSdata Left:", len(DGPS_data["MCC_LeftRadar"]))
-        print("DGPSdata Left list:", int(DGPS_data["MCC_LeftRadar"][20]))
+        logging.getLogger(__name__).debug("ReferenceList.append_from_m_file:  DGPSdata Left: %s",
+                                          len(DGPS_data["MCC_LeftRadar"]))
+        logging.getLogger(__name__).debug("ReferenceList.append_from_m_file:  DGPSdata Left list: %s",
+                                          int(DGPS_data["MCC_LeftRadar"][20]))
+
         for itr in range(0, no_d - 1):
             self.append(ReferencePoint(mccL=int(DGPS_data["MCC_LeftRadar"][itr]),
                                        mccR=int(DGPS_data["MCC_RightRadar"][itr]),
@@ -764,7 +821,8 @@ class Track(list):
     def __init__(self, trackID):
         super().__init__()
         self._tracker = None
-        self._predicted_gate = Gate(beam=[], cx=0, cy=0, dx=2, dy=2, rvelocity=0, razimuth=0, rrange=0)
+        self._predicted_gate = Gate(beam=[], x=0, y=0, diffx=2, diffy=2, dx=0, dy=0, diffdx=0, diffdy=0,
+                 rvelocity=0, d_rvelocity = 0, razimuth=0, d_razimuth=0, rrange=0, d_rrange=0)
         self._trackID = trackID
         self._velx_interval = (0, 0)
         self._x_interval = (0, 0)
@@ -856,9 +914,13 @@ class Track(list):
             self._tracker.H = np.array([[1, 0, 0, 0],
                                         [0, 0, 1, 0]])
             self._tracker.R = np.array([[0.2, 0],[0, 0.1]])
-            self._predicted_gate.set_center_x(self._tracker.x[0])
-            self._predicted_gate.set_center_y(self._tracker.x[2])
-            logging.getLogger(__name__).debug("Track initialized at: %s", self._tracker.x)
+            self._predicted_gate._x = self._tracker.x[0]
+            self._predicted_gate._y = self._tracker.x[2]
+            logging.getLogger(__name__).debug("Track.init_tracker: Tracker initialized with: ")
+            logging.getLogger(__name__).debug("\t state vector x:\t %02.5f", self._tracker.x[0])
+            logging.getLogger(__name__).debug("\t \t \t \t \t \t %02.5f", self._tracker.x[1])
+            logging.getLogger(__name__).debug("\t \t \t \t \t \t %02.5f", self._tracker.x[2])
+            logging.getLogger(__name__).debug("\t \t \t \t \t \t %02.5f", self._tracker.x[3])
             return True
         else:
             return False
@@ -868,24 +930,34 @@ class Track(list):
         self._tracker.predict()
         self._tracker.update(self[2].get_z_array())
         self._last_update = self[2].mcc
-        self._predicted_gate.set_center_x(self._tracker.x[0])
-        self._predicted_gate.set_center_y(self._tracker.x[2])
-        logging.getLogger(__name__).debug("Track started, currently at %s", self._predicted_gate.get_center_array())
+        self._predicted_gate._x = self._tracker.x[0]
+        self._predicted_gate._y = self._tracker.x[2]
+        logging.getLogger(__name__).debug("Track.start_tracker: Tracker started, current posteriori")
+        logging.getLogger(__name__).debug(" \t\t x = %02.5f",
+                                          self._predicted_gate.get_center_array()[0])
+        logging.getLogger(__name__).debug(" \t\t y = %02.5f",
+                                          self._predicted_gate.get_center_array()[1])
 
     def update_tracker(self):
         self._tracker.update(self[-1].get_z_array())
         self._last_update = self[-1].mcc
-        self._predicted_gate.set_center_x(self._tracker.x[0])
-        self._predicted_gate.set_center_y(self._tracker.x[2])
-        logging.getLogger(__name__).debug(" Track being updated at mcc: %d, current posteriori %s", self._last_update,
-                                          self._predicted_gate.get_center_array())
+        self._predicted_gate._x = self._tracker.x[0]
+        self._predicted_gate._y = self._tracker.x[2]
+        logging.getLogger(__name__).debug("Track.update_tracker: Tracker's update cycle called, current posteriori")
+        logging.getLogger(__name__).debug(" \t\t x = %02.5f",
+                                          self._predicted_gate.get_center_array()[0])
+        logging.getLogger(__name__).debug(" \t\t y = %02.5f",
+                                          self._predicted_gate.get_center_array()[1])
 
     def predict(self):
         self._tracker.predict()
-        self._predicted_gate.set_center_x(self._tracker.x[0])
-        self._predicted_gate.set_center_y(self._tracker.x[2])
-        logging.getLogger(__name__).debug(" Track's predict() called, last update at mcc: %d, current apriori %s", self._last_update,
-                                          self._predicted_gate.get_center_array())
+        self._predicted_gate._x = self._tracker.x[0]
+        self._predicted_gate._y = self._tracker.x[2]
+        logging.getLogger(__name__).debug("Track.predict: Tracker's predict cycle called, current apriori")
+        logging.getLogger(__name__).debug(" \t\t x = %02.5f",
+                                          self._predicted_gate.get_center_array()[0])
+        logging.getLogger(__name__).debug(" \t\t y = %02.5f",
+                                          self._predicted_gate.get_center_array()[1])
 
     def get_mcc_interval(self):
         return self._mcc_interval

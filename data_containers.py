@@ -48,6 +48,8 @@ class DetectionPoint(object):
         self._azimuth = azimuth
         self._x = self._rng * np.cos(self._azimuth)
         self._y = self._y_correction_dir * (self._rng * np.sin(self._azimuth) + car_width / 2)
+        # TODO: correct for the center of the EGO car, move the origin of a polar coordinate system from a location of a radar antenna
+        # to the point of the center of the EGO car
 
     def set_XY (self,x,y):
         """ For an existing detection sets its _x and _y attributes independently
@@ -59,9 +61,18 @@ class DetectionPoint(object):
         """
         self._x = x
         self._y = y
+        # TODO:  add calculations for range and azimuth
+
+    def set_XYvel(self, x, y, rvel):
+        self._x = x
+        self._y = y
+        self._vel = rvel
+        # TODO: add calculations for range and azimuth
+
 
     def equalsXY(self,detection_point):
         test = (self._x == detection_point._x) and (self._y == detection_point._y)
+        # TODO: add calculations for range and azimuth
         return test
 
     def get_mcc(self):
@@ -72,6 +83,41 @@ class DetectionPoint(object):
         dy = self._vel * np.sin(self._azimuth)
         x = np.array([self._x, dx, self._y, dy])
         return x.reshape(4, 1)
+
+    def test_in_range_of(self, detection, **kwargs):
+        if 'dist' in kwargs:
+            dx = detection._x - self._x
+            dy = detection._y - self._y
+            test_dist = kwargs['dist'] > npla.norm([dx,dy])
+        else:
+            logging.getLogger(__name__).critical(
+                "DetectionPoint.test_in_range_of: distance from the det1 not defined, a criteria dist is always True")
+            test_dist = True
+
+        if 'vel' in kwargs:
+            test_vel = detection._vel - kwargs['vel'] < self._vel < detection._vel + kwargs['vel']
+        else:
+            logging.getLogger(__name__).critical(
+                "DetectionPoint.test_in_range_of: radar velocity of the det1 not defined, a criteria vel is always True")
+            test_vel = True
+
+        if 'az' in kwargs:
+            test_az = detection._azimuth - kwargs['az'] < self._azimuth < detection._azimuth + kwargs['az']
+        else:
+            logging.getLogger(__name__).debug(
+                "DetectionPoint.test_in_range_of: extent of azimuths is not defined, a criteria az is always True")
+            test_az = True
+
+        if 'beam' in kwargs:
+            test_beam = (self._beam in kwargs['beam']) & (detection._beam in kwargs['beam'])
+        else:
+            logging.getLogger(__name__).debug(
+                "DetectionPoint.test_in_range_of: extent of beams is not defined, a criteria beam is always True")
+            test_beam = True
+
+        return test_dist & test_vel &  test_az & test_beam
+
+
 
 
 class ReferencePoint(object):
@@ -204,7 +250,7 @@ class Gate(object):
         self._beam = detection._beam
         self._raz = detection._azimuth
         self._rrng = detection._rng
-        self._rrvel = detection._vel
+        self._rvel = detection._vel
 
     def test_detection_in_gate(self, detection, **kwargs):
         if kwargs:
@@ -227,8 +273,11 @@ class Gate(object):
             gate_x_max = self._x + self._diff_x/2
             gate_y_min = self._y - self._diff_y/2
             gate_y_max = self._y + self._diff_y/2
+            gate_rvel_min = self._rvel - self._diff_rvel / 2
+            gate_rvel_max = self._rvel + self._diff_rvel / 2
             return  (gate_x_min < detection._x < gate_x_max) & \
-                    (gate_y_min < detection._y < gate_y_max)
+                    (gate_y_min < detection._y < gate_y_max) & \
+                    (gate_rvel_min < detection._vel < gate_rvel_max)
 
     def test_trackpoint_in_gate(self, tp, **kwargs):
         if kwargs:
@@ -623,7 +672,7 @@ class UnAssignedDetectionList(DetectionList):
         logging.getLogger(__name__).debug("UnAssignedDetectionList.__init__: list initialized, gate: dim_x=%s, dim_y=%s",
                                           self._gate_pattern._diff_x, self._gate_pattern._diff_y)
 
-    def two_point_projection(self, start_detection, end_detection):
+    def two_point_projection(self, det1, det2):
         """ Extrapolates two detections in terms of the first order polynomial.
         The extrapolation is computed from x,y coordinates.
 
@@ -635,20 +684,27 @@ class UnAssignedDetectionList(DetectionList):
         :type end_detection: DetectionPoint
         :rtype: DetectionPoint
         """
-        gate = copy.copy(self._gate_pattern)
-        if
-        projected_point = DetectionPoint()
-        x = 2 * end_detection._x - start_detection._x
-        y = 2 * end_detection._y - start_detection._y
-        projected_point.set_XY(x,y)
-        return projected_point
+
+        if det2.test_in_range_of (det1,dist=2,vel=.2):
+            projected_point = DetectionPoint()
+            x = 2 * det2._x - det1._x
+            y = 2 * det2._y - det1._y
+            projected_point.set_XY(x,y)
+            # TODO: set the velocity for projected point too, compute it as an avg of det1 and det2
+            logging.getLogger(__name__).debug(
+                "UnAssignedDetectionList.two_point_projection: projected point exists at: x=%s, y=%s", x, y)
+            return projected_point
+        else:
+            logging.getLogger(__name__).debug(
+                "UnAssignedDetectionList.two_point_projection: projected point does not exist, det2 not in range of det1.")
+            return False
 
     def test_det_in_gate_3points(self,detection, detection_1, detection_2):
         expected_point = self.two_point_projection(detection_1, detection_2)
         if expected_point:
             self._gate_pattern.set_center_point_from_det(expected_point)
             self._gate_pattern.test_detection_in_gate(detection)
-            return  # dictionary (det1, det2, det3, distance in gate)
+            return  # TODO: return dictionary (det1, det2, det3, distance in gate)
         else:
             return False
 
@@ -673,6 +729,9 @@ class UnAssignedDetectionList(DetectionList):
                 logger.debug("\t\t\t\t\t det1 x: %s, y: %s", det1._x, det1._y)
                 logger.debug("\t\t\t\t\t det2 x: %s, y: %s", det2._x, det2._y)
                 if self.test_det_in_gate_3points(detection, det1, det2):
+                    # TODO: reformulate: don't form a possible track, make list of triple-detections instead
+                    # in order to keep knowledge about which detections from the list are used to start a new track.
+                    # These needs to be removed from the unassigned list.
                     self._lst_tracks_possible.append(Track(0))
                     self._lst_tracks_possible[-1].append_detection(det1)
                     self._lst_tracks_possible[-1].append_detection(det2)

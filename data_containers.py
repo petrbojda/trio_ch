@@ -38,16 +38,21 @@ class DetectionPoint(object):
         :param car_width: The width of an EGO car. (is being used to align left and right RADAR measurement)
         :type car_width: float
         """
-        self._y_correction_dir = -1 if left else 1
+        self._y_correction_dir = 1 if left else -1
         self._mcc = mcc
         self._beam = beam
         self._nodet = nodet_permcc
         self._trackID = trackID
-        self._rng = rng
-        self._vel = vel
-        self._azimuth = azimuth
-        self._x = self._rng * np.cos(self._azimuth)
-        self._y = self._y_correction_dir * (self._rng * np.sin(self._azimuth) + car_width / 2)
+
+        self._x = rng * np.cos(azimuth)
+        self._y = self._y_correction_dir * (rng * np.sin(azimuth) + car_width / 2)
+        self._azimuth = np.arctan(self._y/self._x)
+        self._rng = np.sqrt(self._x**2 + self._y**2)
+
+        velx = vel * np.cos(azimuth)
+        vely = self._y_correction_dir * (vel * np.sin(azimuth) + car_width / 2)
+        self._vel = np.sqrt(velx**2 + vely**2)
+
         # TODO: correct for the center of the EGO car, move the origin of a polar coordinate system from a location of a radar antenna
         # to the point of the center of the EGO car
 
@@ -61,11 +66,26 @@ class DetectionPoint(object):
         """
         self._x = x
         self._y = y
+        self._azimuth = np.arctan(self._y / self._x)
+        self._rng = np.sqrt(self._x ** 2 + self._y ** 2)
         # TODO:  add calculations for range and azimuth
 
-    def set_XYvel(self, x, y, rvel):
+    def set_XYvel(self, x, y, vel):
         self._x = x
         self._y = y
+        self._azimuth = np.arctan(self._y / self._x)
+        self._rng = np.sqrt(self._x ** 2 + self._y ** 2)
+        self._vel = vel
+        # TODO: add calculations for range and azimuth
+
+    def set_XYrvel(self, x, y, rvel):
+        self._x = x
+        self._y = y
+        self._azimuth = np.arctan(self._y / self._x)
+        self._rng = np.sqrt(self._x ** 2 + self._y ** 2)
+        velx = rvel * np.cos(self._azimuth)
+        vely = self._y_correction_dir * (rvel * np.sin(self._azimuth) + car_width / 2)
+        self._vel = np.sqrt(velx ** 2 + vely ** 2)
         self._vel = rvel
         # TODO: add calculations for range and azimuth
 

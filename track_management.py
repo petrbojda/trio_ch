@@ -15,15 +15,14 @@ class TrackManager(list):
         self._Tsampling = Tsampling
         self._tracker_type = tracker_type
         self._n_of_Tracks = np.array([0])
-        logging.getLogger(__name__).debug("TrackManager.__init__: A new track manager created with gate %s, gate %s"
-                                          "tracker_type %s, Tsampling %s, number of tracks %s",
-                                          self._gate, self._tracker_type,
-                                          self._Tsampling, self._n_of_Tracks)
+        logging.getLogger(__name__).debug("TrackManager.__init__: A new track manager will be created with a gate:")
+        logging.getLogger(__name__).debug("TrackManager.__init__: \t \t %s", self._gate)
+        logging.getLogger(__name__).debug("TrackManager.__init__: \t \t tracker_type %s,",  self._tracker_type)
+        logging.getLogger(__name__).debug(
+            "TrackManager.__init__: \t \t Tsampl %s, number of tracks %s", self._Tsampling, self._n_of_Tracks)
         self._lst_not_assigned_detections = dc.UnAssignedDetectionList(self._Tsampling, self._gate)
-        logging.getLogger(__name__).debug("TrackManager.__init__: A new track manager created with gate %s, gate %s"
-                                           "tracker_type %s, Tsampling %s, number of tracks %s"
-                                           " and number of unassigned dets %s", self._gate, self._tracker_type,
-                                           self._Tsampling, self._n_of_Tracks, len(self._lst_not_assigned_detections))
+        logging.getLogger(__name__).debug("TrackManager.__init__: \t just created, number of unassigned dets %s",
+                                          len(self._lst_not_assigned_detections))
 
 
     def append_track(self,track):

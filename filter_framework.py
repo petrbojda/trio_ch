@@ -32,13 +32,6 @@ def main(config_data):
     # An exact value or interval of 'mcc', 'azimuth', 'range' ... etc can be
     # specified here to block unwanted data to enter.
 
-    # In this example only linear KF is being used, classical constant velocity model,
-    # measurement contains only 2D vector (rho, theta)
-    used_tracker_type = {'filter_type': 'kalman_filter', 'dim_x': 4, 'dim_z': 2}
-
-    track_mgmt_LR = tm.TrackManager(tracker_type=used_tracker_type)
-    track_mgmt_RR = tm.TrackManager(tracker_type=used_tracker_type)
-
     logger.info("Dataset to process: %s", config_data["scenario"])
     logger.info("Data files are stored in: %s", config_data["path_data_folder"])
     logger.info("Data for the scenario are in:")
@@ -49,6 +42,16 @@ def main(config_data):
     logger.info('\t \t both_dgps: %s', config_data["filename_BothDGPS"])
     logger.info('\t \t logger_cfg_file: %s', config_data["filename_LOGcfg"])
     logger.info("Radar to process: %s", config_data["radar_tp"])
+    logger.info(76 * '=')
+
+    # In this example only linear KF is being used, classical constant velocity model,
+    # measurement contains only 2D vector (rho, theta)
+    used_tracker_type = {'filter_type': 'kalman_filter', 'dim_x': 4, 'dim_z': 2}
+
+    track_mgmt_LR = tm.TrackManager(tracker_type=used_tracker_type)
+    track_mgmt_RR = tm.TrackManager(tracker_type=used_tracker_type)
+
+
 
     for n_beams in range(0, 4):
         if config_data["beams_tp"].count(n_beams):

@@ -48,13 +48,9 @@ class DetectionPoint(object):
         self._y = self._y_correction_dir * (rng * np.sin(azimuth) + car_width / 2)
         self._azimuth = np.arctan(self._y/self._x)
         self._rng = np.sqrt(self._x**2 + self._y**2)
+        self._vel = vel
 
-        velx = vel * np.cos(azimuth)
-        vely = self._y_correction_dir * (vel * np.sin(azimuth) + car_width / 2)
-        self._vel = np.sqrt(velx**2 + vely**2)
 
-        # TODO: correct for the center of the EGO car, move the origin of a polar coordinate system from a location of a radar antenna
-        # to the point of the center of the EGO car
 
     def set_XY (self,x,y):
         """ For an existing detection sets its _x and _y attributes independently
@@ -68,7 +64,7 @@ class DetectionPoint(object):
         self._y = y
         self._azimuth = np.arctan(self._y / self._x)
         self._rng = np.sqrt(self._x ** 2 + self._y ** 2)
-        # TODO:  add calculations for range and azimuth
+
 
     def set_XYvel(self, x, y, vel):
         self._x = x
@@ -76,18 +72,6 @@ class DetectionPoint(object):
         self._azimuth = np.arctan(self._y / self._x)
         self._rng = np.sqrt(self._x ** 2 + self._y ** 2)
         self._vel = vel
-        # TODO: add calculations for range and azimuth
-
-    def set_XYrvel(self, x, y, rvel):
-        self._x = x
-        self._y = y
-        self._azimuth = np.arctan(self._y / self._x)
-        self._rng = np.sqrt(self._x ** 2 + self._y ** 2)
-        velx = rvel * np.cos(self._azimuth)
-        vely = self._y_correction_dir * (rvel * np.sin(self._azimuth) + car_width / 2)
-        self._vel = np.sqrt(velx ** 2 + vely ** 2)
-        self._vel = rvel
-        # TODO: add calculations for range and azimuth
 
 
     def equalsXY(self,detection_point):
@@ -709,8 +693,8 @@ class UnAssignedDetectionList(DetectionList):
             projected_point = DetectionPoint()
             x = 2 * det2._x - det1._x
             y = 2 * det2._y - det1._y
-            projected_point.set_XY(x,y)
-            # TODO: set the velocity for projected point too, compute it as an avg of det1 and det2
+            vel = np.average([det1._vel, det2._vel])
+            projected_point.set_XYvel(x,y,vel)
             logging.getLogger(__name__).debug(
                 "UnAssignedDetectionList.two_point_projection: projected point exists at: x=%s, y=%s", x, y)
             return projected_point

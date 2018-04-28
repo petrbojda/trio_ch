@@ -6,17 +6,25 @@ class TrackManager(list):
 
     def __init__(self, gate = None, tracker_type={'filter_type': 'kalman_filter', 'dim_x': 4, 'dim_z': 2}, Tsampling=50.0e-3):
         super().__init__()
-        self._Tsampling = Tsampling
-        self._gate = gate
-        self._tracker_type = tracker_type
-        self._n_of_Tracks = np.array([0])
-        self._lst_not_assigned_detections = dc.UnAssignedDetectionList(
-                                                            self._Tsampling,
-                                                            self._gate)
         if gate is None:
-            self._gate = {'x': 3, 'y': 1, 'dx': 0.65, 'dy': 0.3}
+            self._gate = dc.Gate(beam=[], x=0, y=0, diffx=3, diffy=1, dx=0, dy=0, diffdx=0.65, diffdy=0.3,
+            rvelocity=0, d_rvelocity = 0, razimuth=0, d_razimuth=0, rrange=0, d_rrange=0)
+            #{'x': 3, 'y': 1, 'dx': 0.65, 'dy': 0.3}
         else:
             self._gate = gate
+        self._Tsampling = Tsampling
+        self._tracker_type = tracker_type
+        self._n_of_Tracks = np.array([0])
+        logging.getLogger(__name__).debug("TrackManager.__init__: A new track manager created with gate %s, gate %s"
+                                          "tracker_type %s, Tsampling %s, number of tracks %s",
+                                          self._gate, self._tracker_type,
+                                          self._Tsampling, self._n_of_Tracks)
+        self._lst_not_assigned_detections = dc.UnAssignedDetectionList(self._Tsampling, self._gate)
+        logging.getLogger(__name__).debug("TrackManager.__init__: A new track manager created with gate %s, gate %s"
+                                           "tracker_type %s, Tsampling %s, number of tracks %s"
+                                           " and number of unassigned dets %s", self._gate, self._tracker_type,
+                                           self._Tsampling, self._n_of_Tracks, len(self._lst_not_assigned_detections))
+
 
     def append_track(self,track):
         """ A new track is being appended to the list of tracks, a new tracking filter is also created
@@ -47,21 +55,21 @@ class TrackManager(list):
         # triggers the update cycle of the track
         for det in lst_detections:
             if self:
-                print("track_mgmt: Currently some tracks exist in a list. Will be scrutinized. Number of tracks:",
+                logger.debug("track_mgmt: Currently some tracks exist in a list. Will be scrutinized. Number of tracks:",
                           len(self))
                 for elem in self:
                     if elem._active and elem._last_update != det._mcc:
                         aim.append(elem.test_detection_in_gate(det))
-                print("track_mgmt: The vector of all distances from each track's gate center, the aim, is:",aim)
+                        logger.debug("track_mgmt: The vector of all distances from each track's gate center, the aim, is:",aim)
                 if aim:
-                    print("track_mgmt: max(aim) is",max(aim),"pointing at the track number:",aim.index(max(aim)))
+                    logger.debug("track_mgmt: max(aim) is",max(aim),"pointing at the track number:",aim.index(max(aim)))
                     self[aim.index(max(aim))].append_detection(det)
-                    print("track_mgmt: The detection was assigned to a track number:", aim.index(max(aim)))
+                    logger.debug("track_mgmt: The detection was assigned to a track number:", aim.index(max(aim)))
                     self[aim.index(max(aim))].update_tracker()
-                    print("track_mgmt:track updated")
+                    logger.debug("track_mgmt:track updated")
                     unassigned = False
                 else:
-                    print("track_mgmt: Some track exists but the detection doesn't fit in.")
+                    logger.debug("track_mgmt: Some track exists but the detection doesn't fit in.")
                     unassigned = True
             else:
                 unassigned = True

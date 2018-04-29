@@ -138,11 +138,8 @@ def main(config_data):
             # Is it correct to assign this for every iteration? Potential to write
             # more effective code.
             if lst_det_per_loop_cycle_LR:
-                logger.debug('Number of detections for a LR mcc %d is %d', i, len(lst_det_per_loop_cycle_LR))
+                logger.debug('Filtering loop: Number of detections for a LR mcc %d is %d', i, len(lst_det_per_loop_cycle_LR))
                 track_mgmt_LR.new_detections(lst_det_per_loop_cycle_LR)
-                # Let's see what data is in a list of not assigned detections and
-                # how the new track is formed / if any
-
             else:
                 logger.debug('There is no detection for current LR mcc %d.', i)
         logger.debug('Predict cycle for each track in a list of %d started for LR at mcc: %d.',len(track_mgmt_LR), i)

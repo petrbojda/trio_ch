@@ -46,7 +46,7 @@ class TrackManager(list):
         aim=[]
         logger.debug("new_detections: In a _lst_not_assigned_detections is %s detections.",
                      len(self._lst_not_assigned_detections))
-        self._lst_not_assigned_detections.remove_detections([0, lst_detections[0].get_mcc() - 10])
+        self._lst_not_assigned_detections.remove_detections_by_mcc([0, lst_detections[0].get_mcc() - 10])
         logger.debug("new_detections: \t after 10 mccs removal: %s detections.",
                      len(self._lst_not_assigned_detections))
 

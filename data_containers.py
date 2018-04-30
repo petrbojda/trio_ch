@@ -713,9 +713,6 @@ class UnAssignedDetectionList(DetectionList):
         else:
             return False
 
-
-
-
     def new_detection(self, detection):
         """Tests whether or not the list of unassigned detections can form a new track.
 
@@ -733,44 +730,50 @@ class UnAssignedDetectionList(DetectionList):
                 logger.debug("\t\t\t\tcombining det1 %s, det2 %s", det1._mcc, det2._mcc)
                 logger.debug("\t\t\t\t\t det1 x: %s, y: %s", det1._x, det1._y)
                 logger.debug("\t\t\t\t\t det2 x: %s, y: %s", det2._x, det2._y)
-                aim.append(self.test_det_in_gate_3points(detection, det1, det2))
-                    # TODO: reformulate: don't form a possible track, make list of triple-detections instead
-                    # in order to keep knowledge about which detections from the list are used to start a new track.
-                    # These needs to be removed from the unassigned list.
-
-                    logger.debug("\t Detection is not in a gate of the three point extrapolation, Track is not considered.")
+                tri_combined = self.test_det_in_gate_3points(detection, det1, det2)
+                if tri_combined:
+                    aim.append(tri_combined)
+                    logger.debug("\t Detection is in a gate with distance %s.", aim[-1]['dist'])
+                else:
+                    logger.debug("\t Detection doesn't fit within the gate.")
             if aim:
+                logger.debug("UnAssignedDetectionList.new_detection: searching for the best fit.")
+                logger.debug("\t\t\tThere is %s combinations where detection fit in a gate.",len(aim))
                 max_aim = heapq.nlargest(1, aim, key=lambda s: s['dist'])
-                track_to_return = Track()
-                track_to_return.append(max_aim['det1'])
-                track_to_return.append(max_aim['det2'])
-                track_to_return.append(max_aim['det3'])
-                #track_to_return = copy.copy(self._lst_tracks_possible[aim.index(max(aim))])
-                # TODO: Once a new track is created, detections included must be deleted from a list of unassigned detections
+                logger.debug("\t maximum distance is %s.", max_aim['dist'])
+                new_track = Track()
+                new_track.append(max_aim['det1'])
+                new_track.append(max_aim['det2'])
+                new_track.append(max_aim['det3'])
+                logger.debug("\t\t\ttherefore a new track will be created.")
                 aim.clear()
-                logger.info(
-                    "UnAssignedDetectionList.new_detection: Detection triggers a new track. %s detections remain in a list of unassigned.",
-                    len(self))
+                self.remove(max_aim('det1'))
+                logger.debug("\t\t\tremoved det 1: %s.",max_aim('det1'))
+                self.remove(max_aim('det2'))
+                logger.debug("\t\t\tremoved det 2: %s.", max_aim('det2'))
+                logger.info("UnAssignedDetectionList.new_detection: "
+                            "Detection triggers a new track. %s detections remain in a list of unassigned.", len(self))
+                return new_track
             else:
-                track_to_return = False
                 self.append(detection)
-                logger.info("UnAssignedDetectionList.new_detection: Detection stored in an unassigned list. Now it contains: %s",
-                       len(self))
-
+                logger.info("UnAssignedDetectionList.new_detection: "
+                            "Detection stored in an unassigned list. Now it contains: %s dets", len(self))
+                return False
         else:
             self.append(detection)
-            logger.info("UnAssignedDetectionList.new_detection:Detection stored in an unassigned list. Now it contains: %s",
-                   len(self))
-            track_to_return = False
-        return track_to_return
+            logger.info("UnAssignedDetectionList.new_detection:"
+                        "Detection stored in an unassigned list. Now it contains: %s dets", len(self))
+            return False
 
-    def remove_detections(self, mcc_interval):
+
+    def remove_detections_by_mcc(self, mcc_interval):
         mcc_i = mcc_interval if (len(mcc_interval) == 2) else (mcc_interval, mcc_interval)
         for elem in self:
             if mcc_i[0] <= elem._mcc <= mcc_i[1]:
                 self.remove(elem)
 
-
+    def remove_detection(self, detection):
+        self.remove(detection)
 
 class ReferenceList(list):
     def __init__(self):

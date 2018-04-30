@@ -7,6 +7,7 @@ import configparser
 import argparse
 import itertools
 import copy
+import heapq
 import tracking_filters as tf
 from utils import Q_discrete_white_noise
 
@@ -707,8 +708,8 @@ class UnAssignedDetectionList(DetectionList):
         expected_point = self.two_point_projection(detection_1, detection_2)
         if expected_point:
             self._gate_pattern.set_center_point_from_det(expected_point)
-            self._gate_pattern.test_detection_in_gate(detection)
-            return  # TODO: return dictionary (det1, det2, det3, distance in gate)
+            distance = self._gate_pattern.test_detection_in_gate(detection)
+            return  {'det1':detection_1,'det2':detection_2,'det3':detection,'dist':distance}
         else:
             return False
 
@@ -724,7 +725,7 @@ class UnAssignedDetectionList(DetectionList):
         logger = logging.getLogger(__name__)
         logger.info("UnAssignedDetectionList.new_detection: tested new detection with MCC: %s", detection._mcc)
         logger.debug("\t at x: %s, y: %s", detection._x, detection._y)
-        aimed = []
+        aim = []
         if len(self)>1:
             for det1, det2 in itertools.combinations(self,2):
                 logger.debug("UnAssignedDetectionList.new_detection: number of unassigned detections in a list: %s ",
@@ -732,25 +733,21 @@ class UnAssignedDetectionList(DetectionList):
                 logger.debug("\t\t\t\tcombining det1 %s, det2 %s", det1._mcc, det2._mcc)
                 logger.debug("\t\t\t\t\t det1 x: %s, y: %s", det1._x, det1._y)
                 logger.debug("\t\t\t\t\t det2 x: %s, y: %s", det2._x, det2._y)
-                if self.test_det_in_gate_3points(detection, det1, det2):
+                aim.append(self.test_det_in_gate_3points(detection, det1, det2))
                     # TODO: reformulate: don't form a possible track, make list of triple-detections instead
                     # in order to keep knowledge about which detections from the list are used to start a new track.
                     # These needs to be removed from the unassigned list.
-                    self._lst_tracks_possible.append(Track(0))
-                    self._lst_tracks_possible[-1].append_detection(det1)
-                    self._lst_tracks_possible[-1].append_detection(det2)
-                    self._lst_tracks_possible[-1].append_detection(detection)
-                    self._lst_tracks_possible[-1].set_predicted_gate(self._gate_pattern)
-                    logger.debug("\t detection in gate, likely future track formed, currently %s possible tracks in a list",len(self._lst_tracks_possible))
-                    logger.debug("\t currently processing track fits the center of a selection gate at %s",
-                           self._lst_tracks_possible[-1].test_trackpoint_in_gate(self._lst_tracks_possible[-1][-1]))
-                    aimed.append(self._lst_tracks_possible[-1].test_trackpoint_in_gate(self._lst_tracks_possible[-1][-1]))
-                else:
+
                     logger.debug("\t Detection is not in a gate of the three point extrapolation, Track is not considered.")
-            if aimed:
-                track_to_return = copy.copy(self._lst_tracks_possible[aimed.index(max(aimed))])
+            if aim:
+                max_aim = heapq.nlargest(1, aim, key=lambda s: s['dist'])
+                track_to_return = Track()
+                track_to_return.append(max_aim['det1'])
+                track_to_return.append(max_aim['det2'])
+                track_to_return.append(max_aim['det3'])
+                #track_to_return = copy.copy(self._lst_tracks_possible[aim.index(max(aim))])
                 # TODO: Once a new track is created, detections included must be deleted from a list of unassigned detections
-                aimed.clear()
+                aim.clear()
                 logger.info(
                     "UnAssignedDetectionList.new_detection: Detection triggers a new track. %s detections remain in a list of unassigned.",
                     len(self))
@@ -759,7 +756,7 @@ class UnAssignedDetectionList(DetectionList):
                 self.append(detection)
                 logger.info("UnAssignedDetectionList.new_detection: Detection stored in an unassigned list. Now it contains: %s",
                        len(self))
-            self._lst_tracks_possible.clear()
+
         else:
             self.append(detection)
             logger.info("UnAssignedDetectionList.new_detection:Detection stored in an unassigned list. Now it contains: %s",

@@ -1,175 +1,312 @@
-2018-05-01 14:47:35,270 - __main__ - INFO - Started the test_implementing
-2018-05-01 14:47:35,270 - __main__ - INFO - Configuration file: logging.cnf
-2018-05-01 14:47:35,270 - __main__ - INFO - ============================================================================
-2018-05-01 14:47:35,270 - __main__ - INFO - Dataset to process: BSDL
-2018-05-01 14:47:35,270 - __main__ - INFO - Data files are stored in: /home/petr/Projects/TRIO/Radar/data/data01/
-2018-05-01 14:47:35,271 - __main__ - INFO - Data for the scenario are in:
-2018-05-01 14:47:35,271 - __main__ - INFO - 	 	 left_radar: CVUT_WORK_BSDL_left_t35_LeftRadar_RADAR
-2018-05-01 14:47:35,271 - __main__ - INFO - 	 	 right_radar: None
-2018-05-01 14:47:35,271 - __main__ - INFO - 	 	 left_dgps: CVUT_WORK_BSDL_left_t35_DGPS
-2018-05-01 14:47:35,271 - __main__ - INFO - 	 	 right_dgps CVUT_WORK_BSDL_right_t45_DGPS:
-2018-05-01 14:47:35,271 - __main__ - INFO - 	 	 both_dgps: 
-2018-05-01 14:47:35,271 - __main__ - INFO - 	 	 logger_cfg_file: logging.cnf
-2018-05-01 14:47:35,271 - __main__ - INFO - Radar to process: L
-2018-05-01 14:47:35,271 - __main__ - INFO - ============================================================================
-2018-05-01 14:47:35,271 - data_containers - DEBUG - Gate.__init__: diff_x = 3, diff_y = 1
-2018-05-01 14:47:35,271 - track_management - DEBUG - __init__: A new track manager will be created with a gate:
-2018-05-01 14:47:35,271 - track_management - DEBUG - __init__: 	 	 <data_containers.Gate object at 0x7fece98a6f98>
-2018-05-01 14:47:35,272 - track_management - DEBUG - __init__: 	 	 tracker_type {'filter_type': 'kalman_filter', 'dim_x': 4, 'dim_z': 2},
-2018-05-01 14:47:35,272 - track_management - DEBUG - __init__: 	 	 Tsampl 0.05, number of tracks [0]
-2018-05-01 14:47:35,272 - data_containers - DEBUG - DetectionList.__init__: list initialized
-2018-05-01 14:47:35,272 - data_containers - DEBUG - Gate.__init__: diff_x = 3, diff_y = 1
-2018-05-01 14:47:35,272 - data_containers - DEBUG - UnAssignedDetectionList.__init__: list initialized, gate: dim_x=3, dim_y=1
-2018-05-01 14:47:35,272 - track_management - DEBUG - __init__: 	 just created, number of unassigned dets 0
-2018-05-01 14:47:35,273 - data_containers - DEBUG - Gate.__init__: diff_x = 3, diff_y = 1
-2018-05-01 14:47:35,273 - track_management - DEBUG - __init__: A new track manager will be created with a gate:
-2018-05-01 14:47:35,273 - track_management - DEBUG - __init__: 	 	 <data_containers.Gate object at 0x7fece98b4240>
-2018-05-01 14:47:35,273 - track_management - DEBUG - __init__: 	 	 tracker_type {'filter_type': 'kalman_filter', 'dim_x': 4, 'dim_z': 2},
-2018-05-01 14:47:35,273 - track_management - DEBUG - __init__: 	 	 Tsampl 0.05, number of tracks [0]
-2018-05-01 14:47:35,273 - data_containers - DEBUG - DetectionList.__init__: list initialized
-2018-05-01 14:47:35,273 - data_containers - DEBUG - Gate.__init__: diff_x = 3, diff_y = 1
-2018-05-01 14:47:35,273 - data_containers - DEBUG - UnAssignedDetectionList.__init__: list initialized, gate: dim_x=3, dim_y=1
-2018-05-01 14:47:35,274 - track_management - DEBUG - __init__: 	 just created, number of unassigned dets 0
-2018-05-01 14:47:35,274 - __main__ - INFO - Beams 0 will be processed: 1 times
-2018-05-01 14:47:35,274 - __main__ - INFO - Beams 1 will be processed: 1 times
-2018-05-01 14:47:35,274 - __main__ - INFO - Beams 2 will be processed: 1 times
-2018-05-01 14:47:35,274 - __main__ - INFO - Beams 3 will be processed: 1 times
-2018-05-01 14:47:35,274 - __main__ - INFO - ============================================================================
-2018-05-01 14:47:35,274 - __main__ - INFO - Left Radar Data:
-2018-05-01 14:47:35,274 - data_containers - DEBUG - DetectionList.__init__: list initialized
-2018-05-01 14:47:35,354 - data_containers - DEBUG - DetectionList.append_data_from_m_file: points appended = 4189
-2018-05-01 14:47:35,354 - __main__ - INFO - MCC Left start: 77073, end: 80262, dMCC=3189, number of detections: 4188.
-2018-05-01 14:47:35,354 - __main__ - INFO - ============================================================================
-2018-05-01 14:47:35,354 - __main__ - INFO - Data Preprocessor Settings:
-2018-05-01 14:47:35,354 - __main__ - DEBUG - Just left radar will be processed 
-2018-05-01 14:47:35,354 - __main__ - DEBUG - Number of processed MCCs from cnf file: 10000.
-2018-05-01 14:47:35,355 - __main__ - INFO - Processing will start at: 77073, end: 80262, dMCC=3189.
-2018-05-01 14:47:35,355 - __main__ - DEBUG - Inside of the MCC interval from 77073 to 80262: 
-2018-05-01 14:47:35,355 - __main__ - DEBUG - ===========================================================================
-2018-05-01 14:47:35,355 - __main__ - DEBUG - Filtering loop:
-2018-05-01 14:47:35,355 - data_containers - DEBUG - DetectionList.__init__: list initialized
-2018-05-01 14:47:35,356 - data_containers - DEBUG - DetectionList.get_lst_detections_selected: number of detections selected is 4188 MCCs from 77073 to 77073
-2018-05-01 14:47:35,356 - __main__ - DEBUG - Filtering loop: Number of detections for a LR mcc 77073 is 1
-2018-05-01 14:47:35,356 - track_management - DEBUG - new_detections: Tested will be new 1 detections
-2018-05-01 14:47:35,356 - track_management - DEBUG - new_detections: 	 	 with MCCs from 77073 to 77073
-2018-05-01 14:47:35,356 - track_management - DEBUG - new_detections: In a _lst_not_assigned_detections is 0 detections.
-2018-05-01 14:47:35,356 - track_management - DEBUG - new_detections: 	 after 10 mccs removal: 0 detections.
-2018-05-01 14:47:35,356 - track_management - DEBUG - new_detections, no track exists yet. Processing detection at mcc: 77073
-2018-05-01 14:47:35,356 - data_containers - INFO - UnAssignedDetectionList.new_detection: tested new detection with MCC: 77073
-2018-05-01 14:47:35,357 - data_containers - DEBUG - 	 at x: -6.61098070151, y: 43.1285836077
-2018-05-01 14:47:35,357 - data_containers - INFO - UnAssignedDetectionList.new_detection:Detection stored in an unassigned list. Now it contains: 1 dets
-2018-05-01 14:47:35,357 - __main__ - DEBUG - Predict cycle for each track in a list of 0 started for LR at mcc: 77073.
-2018-05-01 14:47:35,357 - __main__ - DEBUG - New_track not ported/created
-2018-05-01 14:47:40,813 - data_containers - DEBUG - DetectionList.__init__: list initialized
-2018-05-01 14:47:40,816 - data_containers - DEBUG - DetectionList.get_lst_detections_selected: number of detections selected is 4188 MCCs from 77074 to 77074
-2018-05-01 14:47:40,816 - __main__ - DEBUG - Filtering loop: Number of detections for a LR mcc 77074 is 2
-2018-05-01 14:47:40,817 - track_management - DEBUG - new_detections: Tested will be new 2 detections
-2018-05-01 14:47:40,817 - track_management - DEBUG - new_detections: 	 	 with MCCs from 77074 to 77074
-2018-05-01 14:47:40,817 - track_management - DEBUG - new_detections: In a _lst_not_assigned_detections is 1 detections.
-2018-05-01 14:47:40,817 - track_management - DEBUG - new_detections: 	 after 10 mccs removal: 1 detections.
-2018-05-01 14:47:40,817 - track_management - DEBUG - new_detections, no track exists yet. Processing detection at mcc: 77074
-2018-05-01 14:47:40,817 - data_containers - INFO - UnAssignedDetectionList.new_detection: tested new detection with MCC: 77074
-2018-05-01 14:47:40,817 - data_containers - DEBUG - 	 at x: 7.09973970675, y: 3.39413394039
-2018-05-01 14:47:40,817 - data_containers - INFO - UnAssignedDetectionList.new_detection:Detection stored in an unassigned list. Now it contains: 2 dets
-2018-05-01 14:47:40,818 - track_management - DEBUG - new_detections, no track exists yet. Processing detection at mcc: 77074
-2018-05-01 14:47:40,818 - data_containers - INFO - UnAssignedDetectionList.new_detection: tested new detection with MCC: 77074
-2018-05-01 14:47:40,818 - data_containers - DEBUG - 	 at x: 9.96625826147, y: 1.93696150065
-2018-05-01 14:47:40,818 - data_containers - DEBUG - UnAssignedDetectionList.new_detection: number of unassigned detections in a list: 2 
-2018-05-01 14:47:40,818 - data_containers - DEBUG - 				combining det1 77073, det2 77074
-2018-05-01 14:47:40,818 - data_containers - DEBUG - 					 det1 x: -6.61098070151, y: 43.1285836077
-2018-05-01 14:47:40,818 - data_containers - DEBUG - 					 det2 x: 7.09973970675, y: 3.39413394039
-2018-05-01 14:47:40,819 - data_containers - DEBUG - DetectionPoint.test_in_range_of: extent of azimuths is not defined, a criteria az is always True
-2018-05-01 14:47:40,819 - data_containers - DEBUG - DetectionPoint.test_in_range_of: extent of beams is not defined, a criteria beam is always True
-2018-05-01 14:47:40,819 - data_containers - DEBUG - UnAssignedDetectionList.two_point_projection: projected point does not exist, det2 not in range of det1.
-2018-05-01 14:47:40,819 - data_containers - DEBUG - 	 Detection doesn't fit within the gate.
-2018-05-01 14:47:40,819 - data_containers - INFO - UnAssignedDetectionList.new_detection: Detection stored in an unassigned list. Now it contains: 3 dets
-2018-05-01 14:47:40,819 - __main__ - DEBUG - Predict cycle for each track in a list of 0 started for LR at mcc: 77074.
-2018-05-01 14:47:40,820 - __main__ - DEBUG - New_track not ported/created
-2018-05-01 14:47:42,481 - data_containers - DEBUG - DetectionList.__init__: list initialized
-2018-05-01 14:47:42,497 - data_containers - DEBUG - DetectionList.get_lst_detections_selected: number of detections selected is 4188 MCCs from 77075 to 77075
-2018-05-01 14:47:42,497 - __main__ - DEBUG - Filtering loop: Number of detections for a LR mcc 77075 is 2
-2018-05-01 14:47:42,497 - track_management - DEBUG - new_detections: Tested will be new 2 detections
-2018-05-01 14:47:42,497 - track_management - DEBUG - new_detections: 	 	 with MCCs from 77075 to 77075
-2018-05-01 14:47:42,497 - track_management - DEBUG - new_detections: In a _lst_not_assigned_detections is 3 detections.
-2018-05-01 14:47:42,497 - track_management - DEBUG - new_detections: 	 after 10 mccs removal: 3 detections.
-2018-05-01 14:47:42,497 - track_management - DEBUG - new_detections, no track exists yet. Processing detection at mcc: 77075
-2018-05-01 14:47:42,497 - data_containers - INFO - UnAssignedDetectionList.new_detection: tested new detection with MCC: 77075
-2018-05-01 14:47:42,497 - data_containers - DEBUG - 	 at x: 7.26817520404, y: 3.13603866652
-2018-05-01 14:47:42,497 - data_containers - DEBUG - UnAssignedDetectionList.new_detection: number of unassigned detections in a list: 3 
-2018-05-01 14:47:42,497 - data_containers - DEBUG - 				combining det1 77073, det2 77074
-2018-05-01 14:47:42,497 - data_containers - DEBUG - 					 det1 x: -6.61098070151, y: 43.1285836077
-2018-05-01 14:47:42,497 - data_containers - DEBUG - 					 det2 x: 7.09973970675, y: 3.39413394039
-2018-05-01 14:47:42,498 - data_containers - DEBUG - DetectionPoint.test_in_range_of: extent of azimuths is not defined, a criteria az is always True
-2018-05-01 14:47:42,498 - data_containers - DEBUG - DetectionPoint.test_in_range_of: extent of beams is not defined, a criteria beam is always True
-2018-05-01 14:47:42,498 - data_containers - DEBUG - UnAssignedDetectionList.two_point_projection: projected point does not exist, det2 not in range of det1.
-2018-05-01 14:47:42,498 - data_containers - DEBUG - 	 Detection doesn't fit within the gate.
-2018-05-01 14:47:42,498 - data_containers - DEBUG - UnAssignedDetectionList.new_detection: number of unassigned detections in a list: 3 
-2018-05-01 14:47:42,498 - data_containers - DEBUG - 				combining det1 77073, det2 77074
-2018-05-01 14:47:42,498 - data_containers - DEBUG - 					 det1 x: -6.61098070151, y: 43.1285836077
-2018-05-01 14:47:42,498 - data_containers - DEBUG - 					 det2 x: 9.96625826147, y: 1.93696150065
-2018-05-01 14:47:42,498 - data_containers - DEBUG - DetectionPoint.test_in_range_of: extent of azimuths is not defined, a criteria az is always True
-2018-05-01 14:47:42,498 - data_containers - DEBUG - DetectionPoint.test_in_range_of: extent of beams is not defined, a criteria beam is always True
-2018-05-01 14:47:42,498 - data_containers - DEBUG - UnAssignedDetectionList.two_point_projection: projected point does not exist, det2 not in range of det1.
-2018-05-01 14:47:42,498 - data_containers - DEBUG - 	 Detection doesn't fit within the gate.
-2018-05-01 14:47:42,498 - data_containers - DEBUG - UnAssignedDetectionList.new_detection: number of unassigned detections in a list: 3 
-2018-05-01 14:47:42,498 - data_containers - DEBUG - 				combining det1 77074, det2 77074
-2018-05-01 14:47:42,498 - data_containers - DEBUG - 					 det1 x: 7.09973970675, y: 3.39413394039
-2018-05-01 14:47:42,498 - data_containers - DEBUG - 					 det2 x: 9.96625826147, y: 1.93696150065
-2018-05-01 14:47:42,498 - data_containers - DEBUG - DetectionPoint.test_in_range_of: extent of azimuths is not defined, a criteria az is always True
-2018-05-01 14:47:42,498 - data_containers - DEBUG - DetectionPoint.test_in_range_of: extent of beams is not defined, a criteria beam is always True
-2018-05-01 14:47:42,499 - data_containers - DEBUG - UnAssignedDetectionList.two_point_projection: projected point does not exist, det2 not in range of det1.
-2018-05-01 14:47:42,499 - data_containers - DEBUG - 	 Detection doesn't fit within the gate.
-2018-05-01 14:47:42,499 - data_containers - INFO - UnAssignedDetectionList.new_detection: Detection stored in an unassigned list. Now it contains: 4 dets
-2018-05-01 14:47:42,499 - track_management - DEBUG - new_detections, no track exists yet. Processing detection at mcc: 77075
-2018-05-01 14:47:42,499 - data_containers - INFO - UnAssignedDetectionList.new_detection: tested new detection with MCC: 77075
-2018-05-01 14:47:42,499 - data_containers - DEBUG - 	 at x: 9.96612318685, y: 2.4862258703
-2018-05-01 14:47:42,499 - data_containers - DEBUG - UnAssignedDetectionList.new_detection: number of unassigned detections in a list: 4 
-2018-05-01 14:47:42,499 - data_containers - DEBUG - 				combining det1 77073, det2 77074
-2018-05-01 14:47:42,499 - data_containers - DEBUG - 					 det1 x: -6.61098070151, y: 43.1285836077
-2018-05-01 14:47:42,499 - data_containers - DEBUG - 					 det2 x: 7.09973970675, y: 3.39413394039
-2018-05-01 14:47:42,499 - data_containers - DEBUG - DetectionPoint.test_in_range_of: extent of azimuths is not defined, a criteria az is always True
-2018-05-01 14:47:42,499 - data_containers - DEBUG - DetectionPoint.test_in_range_of: extent of beams is not defined, a criteria beam is always True
-2018-05-01 14:47:42,499 - data_containers - DEBUG - UnAssignedDetectionList.two_point_projection: projected point does not exist, det2 not in range of det1.
-2018-05-01 14:47:42,499 - data_containers - DEBUG - 	 Detection doesn't fit within the gate.
-2018-05-01 14:47:42,499 - data_containers - DEBUG - UnAssignedDetectionList.new_detection: number of unassigned detections in a list: 4 
-2018-05-01 14:47:42,499 - data_containers - DEBUG - 				combining det1 77073, det2 77074
-2018-05-01 14:47:42,499 - data_containers - DEBUG - 					 det1 x: -6.61098070151, y: 43.1285836077
-2018-05-01 14:47:42,499 - data_containers - DEBUG - 					 det2 x: 9.96625826147, y: 1.93696150065
-2018-05-01 14:47:42,499 - data_containers - DEBUG - DetectionPoint.test_in_range_of: extent of azimuths is not defined, a criteria az is always True
-2018-05-01 14:47:42,500 - data_containers - DEBUG - DetectionPoint.test_in_range_of: extent of beams is not defined, a criteria beam is always True
-2018-05-01 14:47:42,500 - data_containers - DEBUG - UnAssignedDetectionList.two_point_projection: projected point does not exist, det2 not in range of det1.
-2018-05-01 14:47:42,500 - data_containers - DEBUG - 	 Detection doesn't fit within the gate.
-2018-05-01 14:47:42,500 - data_containers - DEBUG - UnAssignedDetectionList.new_detection: number of unassigned detections in a list: 4 
-2018-05-01 14:47:42,500 - data_containers - DEBUG - 				combining det1 77073, det2 77075
-2018-05-01 14:47:42,500 - data_containers - DEBUG - 					 det1 x: -6.61098070151, y: 43.1285836077
-2018-05-01 14:47:42,500 - data_containers - DEBUG - 					 det2 x: 7.26817520404, y: 3.13603866652
-2018-05-01 14:47:42,500 - data_containers - DEBUG - DetectionPoint.test_in_range_of: extent of azimuths is not defined, a criteria az is always True
-2018-05-01 14:47:42,500 - data_containers - DEBUG - DetectionPoint.test_in_range_of: extent of beams is not defined, a criteria beam is always True
-2018-05-01 14:47:42,500 - data_containers - DEBUG - UnAssignedDetectionList.two_point_projection: projected point does not exist, det2 not in range of det1.
-2018-05-01 14:47:42,500 - data_containers - DEBUG - 	 Detection doesn't fit within the gate.
-2018-05-01 14:47:42,500 - data_containers - DEBUG - UnAssignedDetectionList.new_detection: number of unassigned detections in a list: 4 
-2018-05-01 14:47:42,500 - data_containers - DEBUG - 				combining det1 77074, det2 77074
-2018-05-01 14:47:42,500 - data_containers - DEBUG - 					 det1 x: 7.09973970675, y: 3.39413394039
-2018-05-01 14:47:42,500 - data_containers - DEBUG - 					 det2 x: 9.96625826147, y: 1.93696150065
-2018-05-01 14:47:42,500 - data_containers - DEBUG - DetectionPoint.test_in_range_of: extent of azimuths is not defined, a criteria az is always True
-2018-05-01 14:47:42,500 - data_containers - DEBUG - DetectionPoint.test_in_range_of: extent of beams is not defined, a criteria beam is always True
-2018-05-01 14:47:42,500 - data_containers - DEBUG - UnAssignedDetectionList.two_point_projection: projected point does not exist, det2 not in range of det1.
-2018-05-01 14:47:42,500 - data_containers - DEBUG - 	 Detection doesn't fit within the gate.
-2018-05-01 14:47:42,501 - data_containers - DEBUG - UnAssignedDetectionList.new_detection: number of unassigned detections in a list: 4 
-2018-05-01 14:47:42,501 - data_containers - DEBUG - 				combining det1 77074, det2 77075
-2018-05-01 14:47:42,501 - data_containers - DEBUG - 					 det1 x: 7.09973970675, y: 3.39413394039
-2018-05-01 14:47:42,501 - data_containers - DEBUG - 					 det2 x: 7.26817520404, y: 3.13603866652
-2018-05-01 14:47:42,501 - data_containers - DEBUG - DetectionPoint.test_in_range_of: extent of azimuths is not defined, a criteria az is always True
-2018-05-01 14:47:42,501 - data_containers - DEBUG - DetectionPoint.test_in_range_of: extent of beams is not defined, a criteria beam is always True
-2018-05-01 14:47:42,506 - data_containers - DEBUG - UnAssignedDetectionList.two_point_projection: projected point exists at: x=7.43661070133, y=2.87794339265
-2018-05-01 14:47:42,507 - data_containers - DEBUG - 	 Detection is in a gate with distance False.
-2018-05-01 14:47:42,507 - data_containers - DEBUG - UnAssignedDetectionList.new_detection: number of unassigned detections in a list: 4 
-2018-05-01 14:47:42,507 - data_containers - DEBUG - 				combining det1 77074, det2 77075
-2018-05-01 14:47:42,507 - data_containers - DEBUG - 					 det1 x: 9.96625826147, y: 1.93696150065
-2018-05-01 14:47:42,507 - data_containers - DEBUG - 					 det2 x: 7.26817520404, y: 3.13603866652
-2018-05-01 14:47:42,507 - data_containers - DEBUG - DetectionPoint.test_in_range_of: extent of azimuths is not defined, a criteria az is always True
-2018-05-01 14:47:42,507 - data_containers - DEBUG - DetectionPoint.test_in_range_of: extent of beams is not defined, a criteria beam is always True
-2018-05-01 14:47:42,507 - data_containers - DEBUG - UnAssignedDetectionList.two_point_projection: projected point does not exist, det2 not in range of det1.
-2018-05-01 14:47:42,507 - data_containers - DEBUG - 	 Detection doesn't fit within the gate.
-2018-05-01 14:47:42,507 - data_containers - DEBUG - UnAssignedDetectionList.new_detection: searching for the best fit.
-2018-05-01 14:47:42,507 - data_containers - DEBUG - 			There is 1 combinations where detection fit in a gate.
+2018-05-08 03:25:15,909 - __main__ - INFO - Started the test_implementing
+2018-05-08 03:25:15,910 - __main__ - INFO - Configuration file: logging.cnf
+2018-05-08 03:25:15,911 - __main__ - INFO - ============================================================================
+2018-05-08 03:25:15,911 - __main__ - INFO - Dataset to process: BSDL
+2018-05-08 03:25:15,912 - __main__ - INFO - Data files are stored in: /home/petr/Projects/TRIO/Radar/data/data01/
+2018-05-08 03:25:15,912 - __main__ - INFO - Data for the scenario are in:
+2018-05-08 03:25:15,912 - __main__ - INFO - 	 	 left_radar: CVUT_WORK_BSDL_left_t35_LeftRadar_RADAR
+2018-05-08 03:25:15,912 - __main__ - INFO - 	 	 right_radar: None
+2018-05-08 03:25:15,914 - __main__ - INFO - 	 	 left_dgps: CVUT_WORK_BSDL_left_t35_DGPS
+2018-05-08 03:25:15,914 - __main__ - INFO - 	 	 right_dgps CVUT_WORK_BSDL_right_t45_DGPS:
+2018-05-08 03:25:15,914 - __main__ - INFO - 	 	 both_dgps: 
+2018-05-08 03:25:15,915 - __main__ - INFO - 	 	 logger_cfg_file: logging.cnf
+2018-05-08 03:25:15,915 - __main__ - INFO - Radar to process: L
+2018-05-08 03:25:15,915 - __main__ - INFO - ============================================================================
+2018-05-08 03:25:15,915 - data_containers - DEBUG - Gate.__init__: diff_x = 0.5, diff_y = 0.3
+2018-05-08 03:25:15,915 - track_management - DEBUG - __init__: A new track manager will be created with a gate:
+2018-05-08 03:25:15,916 - track_management - DEBUG - __init__: 	 	 <data_containers.Gate object at 0x7f971003d400>
+2018-05-08 03:25:15,917 - track_management - DEBUG - __init__: 	 	 tracker_type {'filter_type': 'kalman_filter', 'dim_x': 4, 'dim_z': 2},
+2018-05-08 03:25:15,918 - track_management - DEBUG - __init__: 	 	 Tsampl 0.05, number of tracks [0]
+2018-05-08 03:25:15,919 - data_containers - DEBUG - DetectionList.__init__: list initialized
+2018-05-08 03:25:15,919 - data_containers - DEBUG - Gate.__init__: diff_x = 0.5, diff_y = 0.3
+2018-05-08 03:25:15,919 - data_containers - DEBUG - UnAssignedDetectionList.__init__: list initialized, gate: dim_x=0.5, dim_y=0.3
+2018-05-08 03:25:15,919 - track_management - DEBUG - __init__: 	 just created, number of unassigned dets 0
+2018-05-08 03:25:15,921 - data_containers - DEBUG - Gate.__init__: diff_x = 0.5, diff_y = 0.3
+2018-05-08 03:25:15,921 - track_management - DEBUG - __init__: A new track manager will be created with a gate:
+2018-05-08 03:25:15,921 - track_management - DEBUG - __init__: 	 	 <data_containers.Gate object at 0x7f971004d320>
+2018-05-08 03:25:15,921 - track_management - DEBUG - __init__: 	 	 tracker_type {'filter_type': 'kalman_filter', 'dim_x': 4, 'dim_z': 2},
+2018-05-08 03:25:15,922 - track_management - DEBUG - __init__: 	 	 Tsampl 0.05, number of tracks [0]
+2018-05-08 03:25:15,922 - data_containers - DEBUG - DetectionList.__init__: list initialized
+2018-05-08 03:25:15,922 - data_containers - DEBUG - Gate.__init__: diff_x = 0.5, diff_y = 0.3
+2018-05-08 03:25:15,923 - data_containers - DEBUG - UnAssignedDetectionList.__init__: list initialized, gate: dim_x=0.5, dim_y=0.3
+2018-05-08 03:25:15,923 - track_management - DEBUG - __init__: 	 just created, number of unassigned dets 0
+2018-05-08 03:25:15,923 - __main__ - INFO - Beams 0 will be processed: 1 times
+2018-05-08 03:25:15,923 - __main__ - INFO - Beams 1 will be processed: 1 times
+2018-05-08 03:25:15,923 - __main__ - INFO - Beams 2 will be processed: 1 times
+2018-05-08 03:25:15,924 - __main__ - INFO - Beams 3 will be processed: 1 times
+2018-05-08 03:25:15,924 - __main__ - INFO - ============================================================================
+2018-05-08 03:25:15,924 - __main__ - INFO - Left Radar Data:
+2018-05-08 03:25:15,924 - data_containers - DEBUG - DetectionList.__init__: list initialized
+2018-05-08 03:25:16,001 - data_containers - DEBUG - DetectionList.append_data_from_m_file: points appended = 4189
+2018-05-08 03:25:16,002 - __main__ - INFO - MCC Left start: 77073, end: 80262, dMCC=3189, number of detections: 4188.
+2018-05-08 03:25:16,002 - __main__ - INFO - ============================================================================
+2018-05-08 03:25:16,002 - __main__ - INFO - Data Preprocessor Settings:
+2018-05-08 03:25:16,002 - __main__ - DEBUG - Just left radar will be processed 
+2018-05-08 03:25:16,002 - __main__ - DEBUG - Number of processed MCCs from cnf file: 10000.
+2018-05-08 03:25:16,002 - __main__ - INFO - Processing will start at: 77073, end: 80262, dMCC=3189.
+2018-05-08 03:25:16,002 - __main__ - DEBUG - Inside of the MCC interval from 77073 to 80262: 
+2018-05-08 03:25:16,003 - __main__ - DEBUG - ===========================================================================
+2018-05-08 03:25:16,003 - __main__ - DEBUG - Filtering loop:
+2018-05-08 03:25:16,003 - data_containers - DEBUG - DetectionList.__init__: list initialized
+2018-05-08 03:25:16,005 - data_containers - DEBUG - DetectionList.get_lst_detections_selected: number of detections selected is 4188 MCCs from 77073 to 77073
+2018-05-08 03:25:16,005 - __main__ - DEBUG - Filtering loop: Number of detections for a LR mcc 77073 is 1
+2018-05-08 03:25:16,006 - track_management - DEBUG - new_detections: Tested will be new 1 detections
+2018-05-08 03:25:16,006 - track_management - DEBUG - new_detections: 	 	 with MCCs from 77073 to 77073
+2018-05-08 03:25:16,006 - track_management - DEBUG - new_detections: In a _lst_not_assigned_detections is 0 detections.
+2018-05-08 03:25:16,006 - track_management - DEBUG - new_detections: 	 after 10 mccs removal: 0 detections.
+2018-05-08 03:25:16,006 - track_management - DEBUG - new_detections, no track exists yet. Processing detection at mcc: 77073
+2018-05-08 03:25:16,006 - data_containers - INFO - UnAssignedDetectionList.new_detection: tested new detection with MCC: 77073
+2018-05-08 03:25:16,006 - data_containers - DEBUG - 	 at x: -6.61098070151, y: 43.1285836077
+2018-05-08 03:25:16,007 - data_containers - INFO - UnAssignedDetectionList.new_detection:Detection stored in an unassigned list. Now it contains: 1 dets
+2018-05-08 03:25:16,242 - __main__ - DEBUG - Predict cycle for each track in a list of 0 started for LR at mcc: 77073.
+2018-05-08 03:25:16,242 - __main__ - DEBUG - New_track not ported/created
+2018-05-08 03:25:16,242 - data_containers - DEBUG - DetectionList.__init__: list initialized
+2018-05-08 03:25:16,245 - data_containers - DEBUG - DetectionList.get_lst_detections_selected: number of detections selected is 4188 MCCs from 77074 to 77074
+2018-05-08 03:25:16,245 - __main__ - DEBUG - Filtering loop: Number of detections for a LR mcc 77074 is 2
+2018-05-08 03:25:16,245 - track_management - DEBUG - new_detections: Tested will be new 2 detections
+2018-05-08 03:25:16,245 - track_management - DEBUG - new_detections: 	 	 with MCCs from 77074 to 77074
+2018-05-08 03:25:16,245 - track_management - DEBUG - new_detections: In a _lst_not_assigned_detections is 1 detections.
+2018-05-08 03:25:16,246 - track_management - DEBUG - new_detections: 	 after 10 mccs removal: 1 detections.
+2018-05-08 03:25:16,246 - track_management - DEBUG - new_detections, no track exists yet. Processing detection at mcc: 77074
+2018-05-08 03:25:16,246 - data_containers - INFO - UnAssignedDetectionList.new_detection: tested new detection with MCC: 77074
+2018-05-08 03:25:16,246 - data_containers - DEBUG - 	 at x: 7.09973970675, y: 3.39413394039
+2018-05-08 03:25:16,246 - data_containers - INFO - UnAssignedDetectionList.new_detection:Detection stored in an unassigned list. Now it contains: 2 dets
+2018-05-08 03:25:16,269 - track_management - DEBUG - new_detections, no track exists yet. Processing detection at mcc: 77074
+2018-05-08 03:25:16,269 - data_containers - INFO - UnAssignedDetectionList.new_detection: tested new detection with MCC: 77074
+2018-05-08 03:25:16,269 - data_containers - DEBUG - 	 at x: 9.96625826147, y: 1.93696150065
+2018-05-08 03:25:16,270 - data_containers - DEBUG - UnAssignedDetectionList.new_detection: number of unassigned detections in a list: 2 
+2018-05-08 03:25:16,270 - data_containers - DEBUG - 				a permutation of det1 77073, det2 77074
+2018-05-08 03:25:16,270 - data_containers - DEBUG - 					 det1 x: -6.61098070151, y: 43.1285836077
+2018-05-08 03:25:16,270 - data_containers - DEBUG - 					 det2 x: 7.09973970675, y: 3.39413394039
+2018-05-08 03:25:16,270 - data_containers - DEBUG - DetectionPoint.test_in_range_of: extent of azimuths is not defined, a criteria az is always True
+2018-05-08 03:25:16,270 - data_containers - DEBUG - DetectionPoint.test_in_range_of: extent of beams is not defined, a criteria beam is always True
+2018-05-08 03:25:16,271 - data_containers - DEBUG - DetectionPoint.test_in_range_of: tested detection is older than a self
+2018-05-08 03:25:16,271 - data_containers - DEBUG - UnAssignedDetectionList.two_point_projection: projected point does not exist, det2 not in range of det1.
+2018-05-08 03:25:16,271 - data_containers - DEBUG - Gate.__init__: diff_x = 0.5, diff_y = 0.3
+2018-05-08 03:25:16,271 - data_containers - DEBUG - 	 Detection doesn't fit within the gate.
+2018-05-08 03:25:16,271 - data_containers - DEBUG - UnAssignedDetectionList.new_detection: number of unassigned detections in a list: 2 
+2018-05-08 03:25:16,271 - data_containers - DEBUG - 				a permutation of det1 77074, det2 77073
+2018-05-08 03:25:16,271 - data_containers - DEBUG - 					 det1 x: 7.09973970675, y: 3.39413394039
+2018-05-08 03:25:16,272 - data_containers - DEBUG - 					 det2 x: -6.61098070151, y: 43.1285836077
+2018-05-08 03:25:16,272 - data_containers - DEBUG - DetectionPoint.test_in_range_of: extent of azimuths is not defined, a criteria az is always True
+2018-05-08 03:25:16,272 - data_containers - DEBUG - DetectionPoint.test_in_range_of: extent of beams is not defined, a criteria beam is always True
+2018-05-08 03:25:16,272 - data_containers - DEBUG - DetectionPoint.test_in_range_of: tested detection is older than a self
+2018-05-08 03:25:16,272 - data_containers - DEBUG - UnAssignedDetectionList.two_point_projection: projected point does not exist, det2 not in range of det1.
+2018-05-08 03:25:16,272 - data_containers - DEBUG - Gate.__init__: diff_x = 0.5, diff_y = 0.3
+2018-05-08 03:25:16,272 - data_containers - DEBUG - 	 Detection doesn't fit within the gate.
+2018-05-08 03:25:16,273 - data_containers - INFO - UnAssignedDetectionList.new_detection: Detection stored in an unassigned list. Now it contains: 3 dets
+2018-05-08 03:25:16,302 - __main__ - DEBUG - Predict cycle for each track in a list of 0 started for LR at mcc: 77074.
+2018-05-08 03:25:16,302 - __main__ - DEBUG - New_track not ported/created
+2018-05-08 03:25:16,302 - data_containers - DEBUG - DetectionList.__init__: list initialized
+2018-05-08 03:25:16,304 - data_containers - DEBUG - DetectionList.get_lst_detections_selected: number of detections selected is 4188 MCCs from 77075 to 77075
+2018-05-08 03:25:16,305 - __main__ - DEBUG - Filtering loop: Number of detections for a LR mcc 77075 is 2
+2018-05-08 03:25:16,305 - track_management - DEBUG - new_detections: Tested will be new 2 detections
+2018-05-08 03:25:16,305 - track_management - DEBUG - new_detections: 	 	 with MCCs from 77075 to 77075
+2018-05-08 03:25:16,305 - track_management - DEBUG - new_detections: In a _lst_not_assigned_detections is 3 detections.
+2018-05-08 03:25:16,305 - track_management - DEBUG - new_detections: 	 after 10 mccs removal: 3 detections.
+2018-05-08 03:25:16,305 - track_management - DEBUG - new_detections, no track exists yet. Processing detection at mcc: 77075
+2018-05-08 03:25:16,306 - data_containers - INFO - UnAssignedDetectionList.new_detection: tested new detection with MCC: 77075
+2018-05-08 03:25:16,306 - data_containers - DEBUG - 	 at x: 7.26817520404, y: 3.13603866652
+2018-05-08 03:25:16,306 - data_containers - DEBUG - UnAssignedDetectionList.new_detection: number of unassigned detections in a list: 3 
+2018-05-08 03:25:16,306 - data_containers - DEBUG - 				a permutation of det1 77073, det2 77074
+2018-05-08 03:25:16,306 - data_containers - DEBUG - 					 det1 x: -6.61098070151, y: 43.1285836077
+2018-05-08 03:25:16,306 - data_containers - DEBUG - 					 det2 x: 7.09973970675, y: 3.39413394039
+2018-05-08 03:25:16,306 - data_containers - DEBUG - DetectionPoint.test_in_range_of: extent of azimuths is not defined, a criteria az is always True
+2018-05-08 03:25:16,307 - data_containers - DEBUG - DetectionPoint.test_in_range_of: extent of beams is not defined, a criteria beam is always True
+2018-05-08 03:25:16,307 - data_containers - DEBUG - DetectionPoint.test_in_range_of: tested detection is older than a self
+2018-05-08 03:25:16,307 - data_containers - DEBUG - UnAssignedDetectionList.two_point_projection: projected point does not exist, det2 not in range of det1.
+2018-05-08 03:25:16,307 - data_containers - DEBUG - Gate.__init__: diff_x = 0.5, diff_y = 0.3
+2018-05-08 03:25:16,307 - data_containers - DEBUG - 	 Detection doesn't fit within the gate.
+2018-05-08 03:25:16,307 - data_containers - DEBUG - UnAssignedDetectionList.new_detection: number of unassigned detections in a list: 3 
+2018-05-08 03:25:16,308 - data_containers - DEBUG - 				a permutation of det1 77073, det2 77074
+2018-05-08 03:25:16,308 - data_containers - DEBUG - 					 det1 x: -6.61098070151, y: 43.1285836077
+2018-05-08 03:25:16,308 - data_containers - DEBUG - 					 det2 x: 9.96625826147, y: 1.93696150065
+2018-05-08 03:25:16,308 - data_containers - DEBUG - DetectionPoint.test_in_range_of: extent of azimuths is not defined, a criteria az is always True
+2018-05-08 03:25:16,308 - data_containers - DEBUG - DetectionPoint.test_in_range_of: extent of beams is not defined, a criteria beam is always True
+2018-05-08 03:25:16,308 - data_containers - DEBUG - DetectionPoint.test_in_range_of: tested detection is older than a self
+2018-05-08 03:25:16,308 - data_containers - DEBUG - UnAssignedDetectionList.two_point_projection: projected point does not exist, det2 not in range of det1.
+2018-05-08 03:25:16,309 - data_containers - DEBUG - Gate.__init__: diff_x = 0.5, diff_y = 0.3
+2018-05-08 03:25:16,309 - data_containers - DEBUG - 	 Detection doesn't fit within the gate.
+2018-05-08 03:25:16,309 - data_containers - DEBUG - UnAssignedDetectionList.new_detection: number of unassigned detections in a list: 3 
+2018-05-08 03:25:16,309 - data_containers - DEBUG - 				a permutation of det1 77074, det2 77073
+2018-05-08 03:25:16,309 - data_containers - DEBUG - 					 det1 x: 7.09973970675, y: 3.39413394039
+2018-05-08 03:25:16,309 - data_containers - DEBUG - 					 det2 x: -6.61098070151, y: 43.1285836077
+2018-05-08 03:25:16,310 - data_containers - DEBUG - DetectionPoint.test_in_range_of: extent of azimuths is not defined, a criteria az is always True
+2018-05-08 03:25:16,310 - data_containers - DEBUG - DetectionPoint.test_in_range_of: extent of beams is not defined, a criteria beam is always True
+2018-05-08 03:25:16,310 - data_containers - DEBUG - DetectionPoint.test_in_range_of: tested detection is older than a self
+2018-05-08 03:25:16,310 - data_containers - DEBUG - UnAssignedDetectionList.two_point_projection: projected point does not exist, det2 not in range of det1.
+2018-05-08 03:25:16,310 - data_containers - DEBUG - Gate.__init__: diff_x = 0.5, diff_y = 0.3
+2018-05-08 03:25:16,310 - data_containers - DEBUG - 	 Detection doesn't fit within the gate.
+2018-05-08 03:25:16,310 - data_containers - DEBUG - UnAssignedDetectionList.new_detection: number of unassigned detections in a list: 3 
+2018-05-08 03:25:16,311 - data_containers - DEBUG - 				a permutation of det1 77074, det2 77074
+2018-05-08 03:25:16,311 - data_containers - DEBUG - 					 det1 x: 7.09973970675, y: 3.39413394039
+2018-05-08 03:25:16,311 - data_containers - DEBUG - 					 det2 x: 9.96625826147, y: 1.93696150065
+2018-05-08 03:25:16,311 - data_containers - DEBUG - DetectionPoint.test_in_range_of: extent of azimuths is not defined, a criteria az is always True
+2018-05-08 03:25:16,311 - data_containers - DEBUG - DetectionPoint.test_in_range_of: extent of beams is not defined, a criteria beam is always True
+2018-05-08 03:25:16,311 - data_containers - DEBUG - DetectionPoint.test_in_range_of: tested detection is older than a self
+2018-05-08 03:25:16,311 - data_containers - DEBUG - UnAssignedDetectionList.two_point_projection: projected point does not exist, det2 not in range of det1.
+2018-05-08 03:25:16,312 - data_containers - DEBUG - Gate.__init__: diff_x = 0.5, diff_y = 0.3
+2018-05-08 03:25:16,312 - data_containers - DEBUG - 	 Detection doesn't fit within the gate.
+2018-05-08 03:25:16,312 - data_containers - DEBUG - UnAssignedDetectionList.new_detection: number of unassigned detections in a list: 3 
+2018-05-08 03:25:16,312 - data_containers - DEBUG - 				a permutation of det1 77074, det2 77073
+2018-05-08 03:25:16,312 - data_containers - DEBUG - 					 det1 x: 9.96625826147, y: 1.93696150065
+2018-05-08 03:25:16,312 - data_containers - DEBUG - 					 det2 x: -6.61098070151, y: 43.1285836077
+2018-05-08 03:25:16,313 - data_containers - DEBUG - DetectionPoint.test_in_range_of: extent of azimuths is not defined, a criteria az is always True
+2018-05-08 03:25:16,313 - data_containers - DEBUG - DetectionPoint.test_in_range_of: extent of beams is not defined, a criteria beam is always True
+2018-05-08 03:25:16,313 - data_containers - DEBUG - DetectionPoint.test_in_range_of: tested detection is older than a self
+2018-05-08 03:25:16,313 - data_containers - DEBUG - UnAssignedDetectionList.two_point_projection: projected point does not exist, det2 not in range of det1.
+2018-05-08 03:25:16,313 - data_containers - DEBUG - Gate.__init__: diff_x = 0.5, diff_y = 0.3
+2018-05-08 03:25:16,313 - data_containers - DEBUG - 	 Detection doesn't fit within the gate.
+2018-05-08 03:25:16,313 - data_containers - DEBUG - UnAssignedDetectionList.new_detection: number of unassigned detections in a list: 3 
+2018-05-08 03:25:16,314 - data_containers - DEBUG - 				a permutation of det1 77074, det2 77074
+2018-05-08 03:25:16,314 - data_containers - DEBUG - 					 det1 x: 9.96625826147, y: 1.93696150065
+2018-05-08 03:25:16,314 - data_containers - DEBUG - 					 det2 x: 7.09973970675, y: 3.39413394039
+2018-05-08 03:25:16,314 - data_containers - DEBUG - DetectionPoint.test_in_range_of: extent of azimuths is not defined, a criteria az is always True
+2018-05-08 03:25:16,314 - data_containers - DEBUG - DetectionPoint.test_in_range_of: extent of beams is not defined, a criteria beam is always True
+2018-05-08 03:25:16,314 - data_containers - DEBUG - DetectionPoint.test_in_range_of: tested detection is older than a self
+2018-05-08 03:25:16,314 - data_containers - DEBUG - UnAssignedDetectionList.two_point_projection: projected point does not exist, det2 not in range of det1.
+2018-05-08 03:25:16,315 - data_containers - DEBUG - Gate.__init__: diff_x = 0.5, diff_y = 0.3
+2018-05-08 03:25:16,315 - data_containers - DEBUG - 	 Detection doesn't fit within the gate.
+2018-05-08 03:25:16,315 - data_containers - INFO - UnAssignedDetectionList.new_detection: Detection stored in an unassigned list. Now it contains: 4 dets
+2018-05-08 03:25:16,352 - track_management - DEBUG - new_detections, no track exists yet. Processing detection at mcc: 77075
+2018-05-08 03:25:16,352 - data_containers - INFO - UnAssignedDetectionList.new_detection: tested new detection with MCC: 77075
+2018-05-08 03:25:16,352 - data_containers - DEBUG - 	 at x: 9.96612318685, y: 2.4862258703
+2018-05-08 03:25:16,352 - data_containers - DEBUG - UnAssignedDetectionList.new_detection: number of unassigned detections in a list: 4 
+2018-05-08 03:25:16,352 - data_containers - DEBUG - 				a permutation of det1 77073, det2 77074
+2018-05-08 03:25:16,352 - data_containers - DEBUG - 					 det1 x: -6.61098070151, y: 43.1285836077
+2018-05-08 03:25:16,353 - data_containers - DEBUG - 					 det2 x: 7.09973970675, y: 3.39413394039
+2018-05-08 03:25:16,353 - data_containers - DEBUG - DetectionPoint.test_in_range_of: extent of azimuths is not defined, a criteria az is always True
+2018-05-08 03:25:16,353 - data_containers - DEBUG - DetectionPoint.test_in_range_of: extent of beams is not defined, a criteria beam is always True
+2018-05-08 03:25:16,353 - data_containers - DEBUG - DetectionPoint.test_in_range_of: tested detection is older than a self
+2018-05-08 03:25:16,353 - data_containers - DEBUG - UnAssignedDetectionList.two_point_projection: projected point does not exist, det2 not in range of det1.
+2018-05-08 03:25:16,353 - data_containers - DEBUG - Gate.__init__: diff_x = 0.5, diff_y = 0.3
+2018-05-08 03:25:16,354 - data_containers - DEBUG - 	 Detection doesn't fit within the gate.
+2018-05-08 03:25:16,354 - data_containers - DEBUG - UnAssignedDetectionList.new_detection: number of unassigned detections in a list: 4 
+2018-05-08 03:25:16,354 - data_containers - DEBUG - 				a permutation of det1 77073, det2 77074
+2018-05-08 03:25:16,354 - data_containers - DEBUG - 					 det1 x: -6.61098070151, y: 43.1285836077
+2018-05-08 03:25:16,354 - data_containers - DEBUG - 					 det2 x: 9.96625826147, y: 1.93696150065
+2018-05-08 03:25:16,354 - data_containers - DEBUG - DetectionPoint.test_in_range_of: extent of azimuths is not defined, a criteria az is always True
+2018-05-08 03:25:16,355 - data_containers - DEBUG - DetectionPoint.test_in_range_of: extent of beams is not defined, a criteria beam is always True
+2018-05-08 03:25:16,355 - data_containers - DEBUG - DetectionPoint.test_in_range_of: tested detection is older than a self
+2018-05-08 03:25:16,355 - data_containers - DEBUG - UnAssignedDetectionList.two_point_projection: projected point does not exist, det2 not in range of det1.
+2018-05-08 03:25:16,355 - data_containers - DEBUG - Gate.__init__: diff_x = 0.5, diff_y = 0.3
+2018-05-08 03:25:16,355 - data_containers - DEBUG - 	 Detection doesn't fit within the gate.
+2018-05-08 03:25:16,355 - data_containers - DEBUG - UnAssignedDetectionList.new_detection: number of unassigned detections in a list: 4 
+2018-05-08 03:25:16,355 - data_containers - DEBUG - 				a permutation of det1 77073, det2 77075
+2018-05-08 03:25:16,356 - data_containers - DEBUG - 					 det1 x: -6.61098070151, y: 43.1285836077
+2018-05-08 03:25:16,356 - data_containers - DEBUG - 					 det2 x: 7.26817520404, y: 3.13603866652
+2018-05-08 03:25:16,356 - data_containers - DEBUG - DetectionPoint.test_in_range_of: extent of azimuths is not defined, a criteria az is always True
+2018-05-08 03:25:16,356 - data_containers - DEBUG - DetectionPoint.test_in_range_of: extent of beams is not defined, a criteria beam is always True
+2018-05-08 03:25:16,356 - data_containers - DEBUG - DetectionPoint.test_in_range_of: tested detection is older than a self
+2018-05-08 03:25:16,356 - data_containers - DEBUG - UnAssignedDetectionList.two_point_projection: projected point does not exist, det2 not in range of det1.
+2018-05-08 03:25:16,357 - data_containers - DEBUG - Gate.__init__: diff_x = 0.5, diff_y = 0.3
+2018-05-08 03:25:16,357 - data_containers - DEBUG - 	 Detection doesn't fit within the gate.
+2018-05-08 03:25:16,357 - data_containers - DEBUG - UnAssignedDetectionList.new_detection: number of unassigned detections in a list: 4 
+2018-05-08 03:25:16,357 - data_containers - DEBUG - 				a permutation of det1 77074, det2 77073
+2018-05-08 03:25:16,357 - data_containers - DEBUG - 					 det1 x: 7.09973970675, y: 3.39413394039
+2018-05-08 03:25:16,357 - data_containers - DEBUG - 					 det2 x: -6.61098070151, y: 43.1285836077
+2018-05-08 03:25:16,357 - data_containers - DEBUG - DetectionPoint.test_in_range_of: extent of azimuths is not defined, a criteria az is always True
+2018-05-08 03:25:16,358 - data_containers - DEBUG - DetectionPoint.test_in_range_of: extent of beams is not defined, a criteria beam is always True
+2018-05-08 03:25:16,358 - data_containers - DEBUG - DetectionPoint.test_in_range_of: tested detection is older than a self
+2018-05-08 03:25:16,358 - data_containers - DEBUG - UnAssignedDetectionList.two_point_projection: projected point does not exist, det2 not in range of det1.
+2018-05-08 03:25:16,358 - data_containers - DEBUG - Gate.__init__: diff_x = 0.5, diff_y = 0.3
+2018-05-08 03:25:16,358 - data_containers - DEBUG - 	 Detection doesn't fit within the gate.
+2018-05-08 03:25:16,358 - data_containers - DEBUG - UnAssignedDetectionList.new_detection: number of unassigned detections in a list: 4 
+2018-05-08 03:25:16,358 - data_containers - DEBUG - 				a permutation of det1 77074, det2 77074
+2018-05-08 03:25:16,359 - data_containers - DEBUG - 					 det1 x: 7.09973970675, y: 3.39413394039
+2018-05-08 03:25:16,359 - data_containers - DEBUG - 					 det2 x: 9.96625826147, y: 1.93696150065
+2018-05-08 03:25:16,359 - data_containers - DEBUG - DetectionPoint.test_in_range_of: extent of azimuths is not defined, a criteria az is always True
+2018-05-08 03:25:16,359 - data_containers - DEBUG - DetectionPoint.test_in_range_of: extent of beams is not defined, a criteria beam is always True
+2018-05-08 03:25:16,359 - data_containers - DEBUG - DetectionPoint.test_in_range_of: tested detection is older than a self
+2018-05-08 03:25:16,359 - data_containers - DEBUG - UnAssignedDetectionList.two_point_projection: projected point does not exist, det2 not in range of det1.
+2018-05-08 03:25:16,359 - data_containers - DEBUG - Gate.__init__: diff_x = 0.5, diff_y = 0.3
+2018-05-08 03:25:16,360 - data_containers - DEBUG - 	 Detection doesn't fit within the gate.
+2018-05-08 03:25:16,360 - data_containers - DEBUG - UnAssignedDetectionList.new_detection: number of unassigned detections in a list: 4 
+2018-05-08 03:25:16,360 - data_containers - DEBUG - 				a permutation of det1 77074, det2 77075
+2018-05-08 03:25:16,360 - data_containers - DEBUG - 					 det1 x: 7.09973970675, y: 3.39413394039
+2018-05-08 03:25:16,360 - data_containers - DEBUG - 					 det2 x: 7.26817520404, y: 3.13603866652
+2018-05-08 03:25:16,360 - data_containers - DEBUG - DetectionPoint.test_in_range_of: extent of azimuths is not defined, a criteria az is always True
+2018-05-08 03:25:16,361 - data_containers - DEBUG - DetectionPoint.test_in_range_of: extent of beams is not defined, a criteria beam is always True
+2018-05-08 03:25:16,361 - data_containers - DEBUG - DetectionPoint.test_in_range_of: tested detection is older than a self
+2018-05-08 03:25:16,361 - data_containers - DEBUG - UnAssignedDetectionList.two_point_projection: projected point exists at: x=7.43661070133, y=2.87794339265
+2018-05-08 03:25:16,362 - data_containers - DEBUG - Gate.__init__: diff_x = 0.5, diff_y = 0.3
+2018-05-08 03:28:58,549 - data_containers - DEBUG - 	 Detection is in a gate with distance 0.
+2018-05-08 03:28:58,550 - data_containers - DEBUG - UnAssignedDetectionList.new_detection: number of unassigned detections in a list: 4 
+2018-05-08 03:28:58,551 - data_containers - DEBUG - 				a permutation of det1 77074, det2 77073
+2018-05-08 03:28:58,552 - data_containers - DEBUG - 					 det1 x: 9.96625826147, y: 1.93696150065
+2018-05-08 03:28:58,552 - data_containers - DEBUG - 					 det2 x: -6.61098070151, y: 43.1285836077
+2018-05-08 03:28:58,553 - data_containers - DEBUG - DetectionPoint.test_in_range_of: extent of azimuths is not defined, a criteria az is always True
+2018-05-08 03:28:58,554 - data_containers - DEBUG - DetectionPoint.test_in_range_of: extent of beams is not defined, a criteria beam is always True
+2018-05-08 03:28:58,554 - data_containers - DEBUG - DetectionPoint.test_in_range_of: tested detection is older than a self
+2018-05-08 03:28:58,555 - data_containers - DEBUG - UnAssignedDetectionList.two_point_projection: projected point does not exist, det2 not in range of det1.
+2018-05-08 03:28:58,555 - data_containers - DEBUG - Gate.__init__: diff_x = 0.5, diff_y = 0.3
+2018-05-08 03:28:58,556 - data_containers - DEBUG - 	 Detection doesn't fit within the gate.
+2018-05-08 03:28:58,557 - data_containers - DEBUG - UnAssignedDetectionList.new_detection: number of unassigned detections in a list: 4 
+2018-05-08 03:28:58,557 - data_containers - DEBUG - 				a permutation of det1 77074, det2 77074
+2018-05-08 03:28:58,558 - data_containers - DEBUG - 					 det1 x: 9.96625826147, y: 1.93696150065
+2018-05-08 03:28:58,558 - data_containers - DEBUG - 					 det2 x: 7.09973970675, y: 3.39413394039
+2018-05-08 03:28:58,559 - data_containers - DEBUG - DetectionPoint.test_in_range_of: extent of azimuths is not defined, a criteria az is always True
+2018-05-08 03:28:58,560 - data_containers - DEBUG - DetectionPoint.test_in_range_of: extent of beams is not defined, a criteria beam is always True
+2018-05-08 03:28:58,560 - data_containers - DEBUG - DetectionPoint.test_in_range_of: tested detection is older than a self
+2018-05-08 03:28:58,561 - data_containers - DEBUG - UnAssignedDetectionList.two_point_projection: projected point does not exist, det2 not in range of det1.
+2018-05-08 03:28:58,562 - data_containers - DEBUG - Gate.__init__: diff_x = 0.5, diff_y = 0.3
+2018-05-08 03:28:58,562 - data_containers - DEBUG - 	 Detection doesn't fit within the gate.
+2018-05-08 03:28:58,563 - data_containers - DEBUG - UnAssignedDetectionList.new_detection: number of unassigned detections in a list: 4 
+2018-05-08 03:28:58,563 - data_containers - DEBUG - 				a permutation of det1 77074, det2 77075
+2018-05-08 03:28:58,564 - data_containers - DEBUG - 					 det1 x: 9.96625826147, y: 1.93696150065
+2018-05-08 03:28:58,564 - data_containers - DEBUG - 					 det2 x: 7.26817520404, y: 3.13603866652
+2018-05-08 03:28:58,565 - data_containers - DEBUG - DetectionPoint.test_in_range_of: extent of azimuths is not defined, a criteria az is always True
+2018-05-08 03:28:58,566 - data_containers - DEBUG - DetectionPoint.test_in_range_of: extent of beams is not defined, a criteria beam is always True
+2018-05-08 03:28:58,566 - data_containers - DEBUG - DetectionPoint.test_in_range_of: tested detection is older than a self
+2018-05-08 03:28:58,567 - data_containers - DEBUG - UnAssignedDetectionList.two_point_projection: projected point does not exist, det2 not in range of det1.
+2018-05-08 03:28:58,567 - data_containers - DEBUG - Gate.__init__: diff_x = 0.5, diff_y = 0.3
+2018-05-08 03:28:58,568 - data_containers - DEBUG - 	 Detection doesn't fit within the gate.
+2018-05-08 03:28:58,568 - data_containers - DEBUG - UnAssignedDetectionList.new_detection: number of unassigned detections in a list: 4 
+2018-05-08 03:28:58,569 - data_containers - DEBUG - 				a permutation of det1 77075, det2 77073
+2018-05-08 03:28:58,569 - data_containers - DEBUG - 					 det1 x: 7.26817520404, y: 3.13603866652
+2018-05-08 03:28:58,570 - data_containers - DEBUG - 					 det2 x: -6.61098070151, y: 43.1285836077
+2018-05-08 03:28:58,571 - data_containers - DEBUG - DetectionPoint.test_in_range_of: extent of azimuths is not defined, a criteria az is always True
+2018-05-08 03:28:58,571 - data_containers - DEBUG - DetectionPoint.test_in_range_of: extent of beams is not defined, a criteria beam is always True
+2018-05-08 03:28:58,572 - data_containers - DEBUG - DetectionPoint.test_in_range_of: tested detection is older than a self
+2018-05-08 03:28:58,572 - data_containers - DEBUG - UnAssignedDetectionList.two_point_projection: projected point does not exist, det2 not in range of det1.
+2018-05-08 03:28:58,573 - data_containers - DEBUG - Gate.__init__: diff_x = 0.5, diff_y = 0.3
+2018-05-08 03:28:58,573 - data_containers - DEBUG - 	 Detection doesn't fit within the gate.
+2018-05-08 03:28:58,574 - data_containers - DEBUG - UnAssignedDetectionList.new_detection: number of unassigned detections in a list: 4 
+2018-05-08 03:28:58,575 - data_containers - DEBUG - 				a permutation of det1 77075, det2 77074
+2018-05-08 03:28:58,575 - data_containers - DEBUG - 					 det1 x: 7.26817520404, y: 3.13603866652
+2018-05-08 03:28:58,576 - data_containers - DEBUG - 					 det2 x: 7.09973970675, y: 3.39413394039
+2018-05-08 03:28:58,576 - data_containers - DEBUG - DetectionPoint.test_in_range_of: extent of azimuths is not defined, a criteria az is always True
+2018-05-08 03:28:58,577 - data_containers - DEBUG - DetectionPoint.test_in_range_of: extent of beams is not defined, a criteria beam is always True
+2018-05-08 03:28:58,577 - data_containers - DEBUG - DetectionPoint.test_in_range_of: tested detection is older than a self
+2018-05-08 03:28:58,578 - data_containers - DEBUG - UnAssignedDetectionList.two_point_projection: projected point does not exist, det2 not in range of det1.
+2018-05-08 03:28:58,579 - data_containers - DEBUG - Gate.__init__: diff_x = 0.5, diff_y = 0.3
+2018-05-08 03:28:58,579 - data_containers - DEBUG - 	 Detection doesn't fit within the gate.
+2018-05-08 03:28:58,579 - data_containers - DEBUG - UnAssignedDetectionList.new_detection: number of unassigned detections in a list: 4 
+2018-05-08 03:28:58,580 - data_containers - DEBUG - 				a permutation of det1 77075, det2 77074
+2018-05-08 03:28:58,581 - data_containers - DEBUG - 					 det1 x: 7.26817520404, y: 3.13603866652
+2018-05-08 03:28:58,581 - data_containers - DEBUG - 					 det2 x: 9.96625826147, y: 1.93696150065
+2018-05-08 03:28:58,582 - data_containers - DEBUG - DetectionPoint.test_in_range_of: extent of azimuths is not defined, a criteria az is always True
+2018-05-08 03:28:58,582 - data_containers - DEBUG - DetectionPoint.test_in_range_of: extent of beams is not defined, a criteria beam is always True
+2018-05-08 03:28:58,583 - data_containers - DEBUG - DetectionPoint.test_in_range_of: tested detection is older than a self
+2018-05-08 03:28:58,583 - data_containers - DEBUG - UnAssignedDetectionList.two_point_projection: projected point does not exist, det2 not in range of det1.
+2018-05-08 03:28:58,584 - data_containers - DEBUG - Gate.__init__: diff_x = 0.5, diff_y = 0.3
+2018-05-08 03:28:58,584 - data_containers - DEBUG - 	 Detection doesn't fit within the gate.
+2018-05-08 03:28:58,585 - data_containers - DEBUG - UnAssignedDetectionList.new_detection: searching for the best fit.
+2018-05-08 03:28:58,585 - data_containers - DEBUG - 			There is 1 combinations where detection fit in a gate.
+2018-05-08 03:28:58,586 - data_containers - DEBUG - 	 maximum distance is 0.
+2018-05-08 03:28:58,587 - data_containers - DEBUG - Gate.__init__: diff_x = 2, diff_y = 2
+2018-05-08 03:28:58,588 - data_containers - DEBUG - 			therefore a new track will be created.
+2018-05-08 03:28:58,588 - data_containers - DEBUG - 			removed det 1: <data_containers.DetectionPoint object at 0x7f971004d7b8>.
+2018-05-08 03:28:58,592 - data_containers - DEBUG - 			removed det 2: <data_containers.DetectionPoint object at 0x7f971004d3c8>.
+2018-05-08 03:28:58,592 - data_containers - INFO - UnAssignedDetectionList.new_detection: Detection triggers a new track. 2 detections remain in a list of unassigned.
+2018-05-08 03:29:14,376 - track_management - DEBUG - new_detections, no tracks: A new track was created. Currently 1 tracks is in the list.
+2018-05-08 03:29:14,377 - data_containers - DEBUG - Track.init_tracker: Tracker initialized with: 
+2018-05-08 03:29:14,377 - data_containers - DEBUG - 	 state vector x:	 7.09974
+2018-05-08 03:29:14,379 - data_containers - DEBUG - 	 	 	 	 	 	 0.00226
+2018-05-08 03:29:14,380 - data_containers - DEBUG - 	 	 	 	 	 	 3.39413
+2018-05-08 03:29:14,380 - data_containers - DEBUG - 	 	 	 	 	 	 0.00108
+2018-05-08 03:29:14,380 - track_management - DEBUG - new_detections, no tracks: tracker initialized for the new track: <tracking_filters.KalmanFilter object at 0x7f970888ec50>
+2018-05-08 03:29:14,384 - data_containers - DEBUG - Track.start_tracker: Tracker started, current posteriori
+2018-05-08 03:29:14,385 - data_containers - DEBUG -  		 x = 8.63003
+2018-05-08 03:29:14,385 - data_containers - DEBUG -  		 y = 2.79730
+2018-05-08 03:29:14,385 - track_management - DEBUG - new_detections, no tracks: new track's first 3 points: [<data_containers.TrackPoint object at 0x7f970888e198>, <data_containers.TrackPoint object at 0x7f970888e1d0>, <data_containers.TrackPoint object at 0x7f9709267b00>]

@@ -2,6 +2,7 @@
 
 import numpy as np
 import matplotlib.pyplot as plt
+import matplotlib.patches as patches
 import mpl_toolkits.axes_grid.axes_size as Size
 from mpl_toolkits.axes_grid import Divider
 import matplotlib
@@ -462,6 +463,78 @@ def static_plotREF_selections(lst_det_left, lst_det_right,
     else:
         plt.show()
 
+def static_track_init(fig, lst_new_detections, lst_not_assigned, best_fit_det, gate, track, title):
+    # Plot starts here:
+    cms = matplotlib.cm
+    color_map_new_det = cms.Blues
+    color_map_gate = cms.Reds
+    color_map_bestfit = cms.YlOrBr
+    color_map_newly_formed = cms.Oranges
+    color_map_not_assig = cms.Greys
+    color_map_tracks = cms.Greens
+
+    f1 = plt.figure(fig, (15, 8))
+
+    f1ax1 = f1.add_subplot(111)
+    f1ax1.grid(True)
+    f1ax1.axis([-40, 100, -80, 80])
+    plt.title('Detections', loc='left')
+
+    # Newly Incoming Detection Plot
+    if lst_new_detections:
+        new_data = lst_new_detections.get_array_detections()
+
+        f1ax1.plot(new_data["x"], new_data["y"],
+                   color=color_map_new_det(0.8), marker='^', ls='None', label='New Detection')
+        plt.draw()
+
+    # Unassigned Detections Plot
+    if lst_not_assigned:
+        print("radar_plt: Plotting unassigned detection list of the length:", len(lst_new_detections))
+        unassig_data = lst_not_assigned.get_array_detections()
+
+        f1ax1.plot(unassig_data["x"], unassig_data["y"],
+                   color=color_map_not_assig(0.8), marker='+', ls='None', label='Unassigned Detection')
+        # print("radar_plt: Unassigned detections: ", number_of_unassig_dets_processed, "detections. unassig_data has ", len(unassig_data),
+        #      "detections", unassig_data)
+        # print("radar_plt: unassig_data[x]:", unassig_data["x"], "unassig_data[y]:", unassig_data["y"])
+        plt.draw()
+
+    # Unassigned Detections Plot
+    if gate:
+        rect = patches.Rectangle((gate._x - gate._diff_x,gate._y-gate._diff_y),
+                                 2*gate._diff_x,2*gate._diff_y,
+                                 fill=False, edgecolor=color_map_gate(0.8),label='Gate')
+
+        f1ax1.add_patch(rect)
+        f1ax1.errorbar(gate._x,gate._y, xerr=gate._diff_x, yerr=gate._diff_y,
+                       ecolor=color_map_gate(0.5), capthick=2)
+        plt.draw()
+
+    # Unassigned Detections Plot
+    if best_fit_det:
+        circ = patches.Circle((best_fit_det._x, best_fit_det._y), 0.2,
+                                 fill=False, edgecolor=color_map_bestfit(0.6), label='Best Fit')
+        f1ax1.add_patch(circ)
+        f1ax1.errorbar(best_fit_det._x, best_fit_det._y, xerr=0.2, yerr=0.2,
+                       ecolor=color_map_bestfit(0.4), capthick=2)
+        plt.draw()
+
+    if track:
+        brightness = 0.8
+        f1ax1.plot(track["x"], track["y"], color=color_map_tracks(brightness), ls='-')
+        plt.draw()
+
+
+
+    # Legend and Title of the plot
+    lgd2 = f1ax1.legend(loc='upper right', bbox_to_anchor=(1.0, 1.0))
+
+    f1ax1.set_xlabel('x [meters]')
+    f1ax1.set_ylabel('y [meters]')
+    f1.suptitle(title, fontsize=14, fontweight='bold')
+
+    plt.show()
 
 
 def static_plotTrackMan_initialization(lst_detections, lst_not_assigned, new_track, list_of_tracks):
@@ -492,9 +565,9 @@ def static_plotTrackMan_initialization(lst_detections, lst_not_assigned, new_tra
         f1ax1.plot(new_data["x"], new_data["y"],
                    color=color_map_new_det(0.8), marker='^', ls='None', label='New Detection')
         number_of_new_dets_processed += np.size(new_data["mcc"])
-        print("radar_plt: New detections: ", number_of_new_dets_processed, "detections. new_data has ", len(new_data),
-              "detections", new_data)
-        print("radar_plt: new_data[x]:", new_data["x"], "new_data[y]:", new_data["y"])
+        #print("radar_plt: New detections: ", number_of_new_dets_processed, "detections. new_data has ", len(new_data),
+        #      "detections", new_data)
+        #print("radar_plt: new_data[x]:", new_data["x"], "new_data[y]:", new_data["y"])
 
         plt.draw()
 
@@ -506,9 +579,9 @@ def static_plotTrackMan_initialization(lst_detections, lst_not_assigned, new_tra
         f1ax1.plot(unassig_data["x"], unassig_data["y"],
                    color=color_map_not_assig(0.8), marker='+', ls='None', label='Unassigned Detection')
         number_of_unassig_dets_processed += np.size(unassig_data["mcc"])
-        print("radar_plt: Unassigned detections: ", number_of_unassig_dets_processed, "detections. unassig_data has ", len(unassig_data),
-              "detections", unassig_data)
-        print("radar_plt: unassig_data[x]:", unassig_data["x"], "unassig_data[y]:", unassig_data["y"])
+        #print("radar_plt: Unassigned detections: ", number_of_unassig_dets_processed, "detections. unassig_data has ", len(unassig_data),
+        #      "detections", unassig_data)
+        #print("radar_plt: unassig_data[x]:", unassig_data["x"], "unassig_data[y]:", unassig_data["y"])
 
         plt.draw()
 
@@ -526,8 +599,8 @@ def static_plotTrackMan_initialization(lst_detections, lst_not_assigned, new_tra
             f1ax1.plot(elem["x"], elem["y"],
                    color=color_map_tracks(brightness), ls='-')
         plt.draw()
-        print("radar_plt: active tracks:", number_of_active_tracks,
-               "deactivated tracks:",number_of_deactivated_tracks)
+        #print("radar_plt: active tracks:", number_of_active_tracks,
+         #      "deactivated tracks:",number_of_deactivated_tracks)
     # # Newly Formed Track Plot
     if new_track:
         print("radar_plt: Plotting newly formed track of the length:",len(new_track))
@@ -536,9 +609,9 @@ def static_plotTrackMan_initialization(lst_detections, lst_not_assigned, new_tra
         f1ax1.plot(new_track_data["x"], new_track_data["y"],
                    color=color_map_newly_formed(0.8), ls='-', label='New Track')
         number_of_track_points += np.size(new_track_data["mcc"])
-        print("radar_plt: Processed ", number_of_unassig_dets_processed, "track points. new_track_data has ", len(new_track_data),
-              "points", new_track_data)
-        print("radar_plt: new_track_data[x]:", new_track_data["x"], "new_track_data[y]:", new_track_data["y"])
+        #print("radar_plt: Processed ", number_of_unassig_dets_processed, "track points. new_track_data has ", len(new_track_data),
+        #      "points", new_track_data)
+        #print("radar_plt: new_track_data[x]:", new_track_data["x"], "new_track_data[y]:", new_track_data["y"])
 
         plt.draw()
 

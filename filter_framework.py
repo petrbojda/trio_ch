@@ -74,7 +74,7 @@ def main(config_data):
                                                                             mcc_interval_LR[1],
                                                                             mcc_interval_LR[1] - mcc_interval_LR[0],
                                                                             len(lst_det_LR))
-
+    #
     if config_data["filename_RightRadar"]:
         logger.info(76 * '=')
         logger.info("Right Radar Data:")
@@ -133,11 +133,15 @@ def main(config_data):
         selection["mcc_tp"] = (i_prev, i)
         #-------------- Left radar filter
         if lst_det_LR:
+
             lst_det_per_loop_cycle_LR = lst_det_LR.get_lst_detections_selected(selection=selection)
-            lst_det_per_loop_cycle_LR.calculate_intervals()
+            print("The new step of the filtering loop, mcc: ",i,"number of selected dets",len(lst_det_per_loop_cycle_LR),
+                  "number of dets to process: ",len(lst_det_LR))
+
             # Is it correct to assign this for every iteration? Potential to write
             # more effective code.
             if lst_det_per_loop_cycle_LR:
+                lst_det_per_loop_cycle_LR.calculate_intervals()
                 logger.debug('Filtering loop: Number of detections for a LR mcc %d is %d', i, len(lst_det_per_loop_cycle_LR))
                 track_mgmt_LR.new_detections(lst_det_per_loop_cycle_LR)
             else:
@@ -152,12 +156,13 @@ def main(config_data):
             logger.debug("Type of ported new_track element %s", type(new_track_LR[-1]))
         else:
             logger.debug("New_track not ported/created")
-        rp.static_plotTrackMan_initialization(lst_det_per_loop_cycle_LR,
-                                              lst_not_assigned_LR,
-                                              new_track_LR,
-                                              list_of_tracks)
+        # rp.static_plotTrackMan_initialization(lst_det_per_loop_cycle_LR,
+        #                                       lst_not_assigned_LR,
+        #                                       new_track_LR,
+        #                                       list_of_tracks)
+
         # This line is redundant if only one mcc is being processed per loop cycle.
-        # However if mcc_step is different than 1, it might be good to keep it here:
+        # However if mcc_step is different than 1, it might be a good idea to keep it here:
         i_prev = i + 1
 
 

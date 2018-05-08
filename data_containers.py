@@ -12,6 +12,7 @@ import tracking_filters as tf
 from utils import Q_discrete_white_noise
 
 
+
 class DetectionPoint(object):
     def __init__(self, mcc=0, beam=0,
                  nodet_permcc=0, trackID=0, rng=0.0,
@@ -120,7 +121,21 @@ class DetectionPoint(object):
                 "DetectionPoint.test_in_range_of: extent of beams is not defined, a criteria beam is always True")
             test_beam = True
 
-        return test_dist & test_vel &  test_az & test_beam
+        if 'mcc' in kwargs:
+            if kwargs['mcc'] == 'older':
+                test_mcc = detection._mcc > self._mcc
+                logging.getLogger(__name__).debug(
+                    "DetectionPoint.test_in_range_of: tested detection is newer than a self")
+            else:
+                test_mcc = detection._mcc < self._mcc
+                logging.getLogger(__name__).debug(
+                    "DetectionPoint.test_in_range_of: tested detection is older than a self")
+        else:
+            logging.getLogger(__name__).debug(
+                "DetectionPoint.test_in_range_of: time causality condition not stated, mcc criteria is always True")
+            test_mcc = True
+
+        return test_dist & test_vel & test_az & test_beam & test_mcc
 
 
 
@@ -593,8 +608,12 @@ class DetectionList(list):
                             az_i[0] <= elem._azimuth <= az_i[1]):
                 lst_selected_detection.append(elem)
 
-        logging.getLogger(__name__).debug("DetectionList.get_lst_detections_selected: number of detections selected is %s MCCs from %s to %s",
-                                          len(self), lst_selected_detection[0]._mcc, lst_selected_detection[-1]._mcc)
+        if lst_selected_detection:
+            logging.getLogger(__name__).debug("DetectionList.get_lst_detections_selected: number of detections selected is %s MCCs from %s to %s",
+                                               len(self), lst_selected_detection[0]._mcc, lst_selected_detection[-1]._mcc)
+        else:
+            logging.getLogger(__name__).debug(
+                "DetectionList.get_lst_detections_selected: No detection selected at %s. ", len(self))
         return lst_selected_detection
 
     def extend_with_selection(self, radar_data_list, **kwarg):
@@ -671,11 +690,11 @@ class UnAssignedDetectionList(DetectionList):
         super().__init__()
         self._Tsampling = Tsampling
         self._lst_tracks_possible = []
-        self._gate_pattern = Gate(beam=[], x=0, y=0, diffx=gate._diff_x, diffy=gate._diff_y, dx=0, dy=0,
-                                  diffdx=0, diffdy=0, rvelocity=0, d_rvelocity = gate._diff_rvel, razimuth=0,
-                                  d_razimuth=gate._diff_raz, rrange=0, d_rrange=gate._diff_rrng)
+        self._gate = Gate(beam=[], x=0, y=0, diffx=gate._diff_x, diffy=gate._diff_y, dx=0, dy=0,
+                          diffdx=0, diffdy=0, rvelocity=0, d_rvelocity = gate._diff_rvel, razimuth=0,
+                          d_razimuth=gate._diff_raz, rrange=0, d_rrange=gate._diff_rrng)
         logging.getLogger(__name__).debug("UnAssignedDetectionList.__init__: list initialized, gate: dim_x=%s, dim_y=%s",
-                                          self._gate_pattern._diff_x, self._gate_pattern._diff_y)
+                                          self._gate._diff_x, self._gate._diff_y)
 
     def two_point_projection(self, det1, det2):
         """ Extrapolates two detections in terms of the first order polynomial.
@@ -690,7 +709,7 @@ class UnAssignedDetectionList(DetectionList):
         :rtype: DetectionPoint
         """
 
-        if det2.test_in_range_of (det1,dist=2,vel=.2):
+        if det2.test_in_range_of (det1,dist=2,vel=.2,mcc='newer'):
             projected_point = DetectionPoint()
             x = 2 * det2._x - det1._x
             y = 2 * det2._y - det1._y
@@ -706,12 +725,19 @@ class UnAssignedDetectionList(DetectionList):
 
     def test_det_in_gate_3points(self,detection, detection_1, detection_2):
         expected_point = self.two_point_projection(detection_1, detection_2)
+        gate = Gate( beam=[], x=0, y=0, diffx=self._gate._diff_x, diffy=self._gate._diff_y, dx=0, dy=0,
+                     diffdx=0, diffdy=0, rvelocity=0, d_rvelocity = self._gate._diff_rvel, razimuth=0,
+                     d_razimuth=self._gate._diff_raz, rrange=0, d_rrange=self._gate._diff_rrng)
         if expected_point:
-            self._gate_pattern.set_center_point_from_det(expected_point)
-            distance = self._gate_pattern.test_detection_in_gate(detection)
-            return  {'det1':detection_1,'det2':detection_2,'det3':detection,'dist':distance}
+            gate.set_center_point_from_det(expected_point)
+            if gate.test_detection_in_gate(detection):
+                aim = gate.get_detection_dist_from_center(detection)
+            else:
+                aim = 0
+            return {'det1': detection_1, 'det2': detection_2, 'det3': detection, 'dist': aim, 'gate': gate}
         else:
             return False
+
 
     def new_detection(self, detection):
         """Tests whether or not the list of unassigned detections can form a new track.
@@ -724,10 +750,10 @@ class UnAssignedDetectionList(DetectionList):
         logger.debug("\t at x: %s, y: %s", detection._x, detection._y)
         aim = []
         if len(self)>1:
-            for det1, det2 in itertools.combinations(self,2):
+            for det1, det2 in itertools.permutations(self,2):
                 logger.debug("UnAssignedDetectionList.new_detection: number of unassigned detections in a list: %s ",
                              len(self))
-                logger.debug("\t\t\t\tcombining det1 %s, det2 %s", det1._mcc, det2._mcc)
+                logger.debug("\t\t\t\ta permutation of det1 %s, det2 %s", det1._mcc, det2._mcc)
                 logger.debug("\t\t\t\t\t det1 x: %s, y: %s", det1._x, det1._y)
                 logger.debug("\t\t\t\t\t det2 x: %s, y: %s", det2._x, det2._y)
                 tri_combined = self.test_det_in_gate_3points(detection, det1, det2)
@@ -740,24 +766,27 @@ class UnAssignedDetectionList(DetectionList):
                 logger.debug("UnAssignedDetectionList.new_detection: searching for the best fit.")
                 logger.debug("\t\t\tThere is %s combinations where detection fit in a gate.",len(aim))
                 max_aim = heapq.nlargest(1, aim, key=lambda s: s['dist'])
-                logger.debug("\t maximum distance is %s.", max_aim['dist'])
-                new_track = Track()
-                new_track.append(max_aim['det1'])
-                new_track.append(max_aim['det2'])
-                new_track.append(max_aim['det3'])
+                logger.debug("\t maximum distance is %s.", max_aim[0]['dist'])
+                new_track = Track(45)
+                new_track.append_detection(max_aim[0]['det1'])
+                new_track.append_detection(max_aim[0]['det2'])
+                new_track.append_detection(max_aim[0]['det3'])
+                best_fit_gate = max_aim[0]['gate']
                 logger.debug("\t\t\ttherefore a new track will be created.")
                 aim.clear()
-                self.remove(max_aim('det1'))
-                logger.debug("\t\t\tremoved det 1: %s.",max_aim('det1'))
-                self.remove(max_aim('det2'))
-                logger.debug("\t\t\tremoved det 2: %s.", max_aim('det2'))
+                self.remove(max_aim[0]['det1'])
+                logger.debug("\t\t\tremoved det 1: %s.",max_aim[0]['det1'])
+                self.remove(max_aim[0]['det2'])
+                logger.debug("\t\t\tremoved det 2: %s.", max_aim[0]['det2'])
                 logger.info("UnAssignedDetectionList.new_detection: "
                             "Detection triggers a new track. %s detections remain in a list of unassigned.", len(self))
-                return new_track
+
+                return {'new_track':new_track, 'best_fit_gate': best_fit_gate}
             else:
                 self.append(detection)
                 logger.info("UnAssignedDetectionList.new_detection: "
                             "Detection stored in an unassigned list. Now it contains: %s dets", len(self))
+
                 return False
         else:
             self.append(detection)
@@ -989,6 +1018,7 @@ class Track(list):
             return False
 
     def start_tracker(self):
+        # TODO error - 'DetectionPoint' object has no attribute 'get_z_array'
         self._tracker.update(self[1].get_z_array())
         self._tracker.predict()
         self._tracker.update(self[2].get_z_array())

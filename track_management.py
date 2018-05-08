@@ -1,13 +1,14 @@
 import numpy as np
 import logging
 import data_containers as dc
+import radar_plots as rp
 
 class TrackManager(list):
 
     def __init__(self, gate = None, tracker_type={'filter_type': 'kalman_filter', 'dim_x': 4, 'dim_z': 2}, Tsampling=50.0e-3):
         super().__init__()
         if gate is None:
-            self._gate = dc.Gate(beam=[], x=0, y=0, diffx=3, diffy=1, dx=0, dy=0, diffdx=0.65, diffdy=0.3,
+            self._gate = dc.Gate(beam=[], x=0, y=0, diffx=0.5, diffy=0.3, dx=0, dy=0, diffdx=0.65, diffdy=0.3,
             rvelocity=0, d_rvelocity = 0, razimuth=0, d_razimuth=0, rrange=0, d_rrange=0)
             #{'x': 3, 'y': 1, 'dx': 0.65, 'dy': 0.3}
         else:
@@ -54,19 +55,19 @@ class TrackManager(list):
         # triggers the update cycle of the track
         for det in lst_detections:
             if self:
-                logger.debug("new_detections, tracks exist: Currently some tracks exist in a list. Will be scrutinized. Number of tracks:",
-                          len(self))
+                logger.debug("new_detections, tracks exist: Currently some tracks exist in a list. Will be scrutinized. Number of tracks: %d",
+                              len(self))
                 for elem in self:
                     if elem._active and elem._last_update != det._mcc:
                         aim.append(elem.test_detection_in_gate(det))
-                        logger.debug("new_detections, tracks exist: The vector of all distances from each track's gate center, the aim, is:",aim)
+                        logger.debug("new_detections, tracks exist: The vector of all distances from each track's gate center, the aim, is: %5.3f", aim[-1])
                     else:
                         logger.debug("new_detections, tracks exist: none of tracks is active or they have been updated in this mcc")
                         aim.append(0)
-                if aim:
-                    logger.debug("new_detections, tracks exist: max(aim) is",max(aim),"pointing at the track number:",aim.index(max(aim)))
+                if aim[-1]:
+                    logger.debug("new_detections, tracks exist: max(aim) is %5.3f pointing at the track number: %d",max(aim),aim.index(max(aim)))
                     self[aim.index(max(aim))].append_detection(det)
-                    logger.debug("new_detections, tracks exist: The detection was assigned to a track number:", aim.index(max(aim)))
+                    logger.debug("new_detections, tracks exist: The detection was assigned to a track number: %d", aim.index(max(aim)))
                     self[aim.index(max(aim))].update_tracker()
                     logger.debug("new_detections, tracks exist: track updated")
                     unassigned = False
@@ -84,8 +85,20 @@ class TrackManager(list):
                 # test unassigned detections
                 newly_formed_track = self._lst_not_assigned_detections.new_detection(det)
                 if newly_formed_track:
-                    # a new track is started with a detection "det"
-                    self.append_track(newly_formed_track)
+                    title = 'A new track created at {0}. Incomming {1} new detections, {2} unassigned '.format(det._mcc,
+                                                                                                               len(lst_detections),
+                                                                                                               len(self._lst_not_assigned_detections)
+                                                                                                               )
+                    rp.static_track_init(3,
+                                         lst_detections,
+                                         self._lst_not_assigned_detections,
+                                         det,
+                                         newly_formed_track['best_fit_gate'],
+                                         newly_formed_track['new_track'].get_array_trackpoints(),
+                                         title)
+
+                     # a new track is started with a detection "det"
+                    self.append_track(newly_formed_track['new_track'])
                     logger.debug("new_detections, no tracks: A new track was created. Currently %d tracks is in the list.",len(self))
                     self[-1].init_tracker(type=self._tracker_type['filter_type'],
                                           dim_x=self._tracker_type['dim_x'],
@@ -95,12 +108,23 @@ class TrackManager(list):
                     logger.debug("new_detections, no tracks: tracker initialized for the new track: %s",self[-1]._tracker)
                     self[-1].start_tracker()
                     logger.debug("new_detections, no tracks: new track's first 3 points: %s",self[-1])
+                else:
+                    title = 'No track created at {0}. Incomming {1} new detections, {2} unassigned '.format(det._mcc,
+                                                                                                            len(lst_detections),
+                                                                                                            len(self._lst_not_assigned_detections)
+                                                                                                            )
+                    rp.static_track_init(3,
+                                         lst_detections,
+                                         self._lst_not_assigned_detections,
+                                         None,
+                                         None,
+                                         None,
+                                         title)
             else:
                 # TODO: tracker update to finish here
                 # The detection 'det' was assigned to an existing track and its appropriate tracker
                 # needs to update.
                 pass
-
 
     def port_data(self,requested_data):
         if requested_data == "track_init":

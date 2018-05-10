@@ -17,18 +17,12 @@ Tracking Filter
     :members:
 
 
-Extended Kalman Filter
+Kalman Filter
 ----------------------
 
-.. autoclass:: ExtendedKalmanFilter
+.. autoclass:: KalmanFilter
     :members:
 
 
 
-
-Fading Kalman Filter
---------------------
-
-.. autoclass:: FadingKalmanFilter
-    :members:
 

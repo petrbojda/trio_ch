@@ -58,8 +58,8 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = 'Automotive Rearlooking RADAR Tracker'
-copyright = '2017, Petr Bojda'
+project = 'Analytic_RCW_Tracker'
+copyright = '2017, Dept. of Measurement, Czech Technical University'
 author = 'Petr Bojda'
 
 # The version info for the project you're documenting, acts as replacement for

@@ -139,7 +139,7 @@ class ‘list’ with additional methods. Points are inherited from a basic ‘o
 <h2>TrackPoint<a class="headerlink" href="#trackpoint" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="data_containers.TrackPoint">
-<em class="property">class </em><code class="descclassname">data_containers.</code><code class="descname">TrackPoint</code><span class="sig-paren">(</span><em>mcc=0</em>, <em>beam=[]</em>, <em>x=0</em>, <em>y=0</em>, <em>dx=0</em>, <em>dy=0</em>, <em>Rvelocity=0</em>, <em>Razimuth=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/data_containers.html#TrackPoint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#data_containers.TrackPoint" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">data_containers.</code><code class="descname">TrackPoint</code><span class="sig-paren">(</span><em>mcc=0</em>, <em>beam=[]</em>, <em>x=0</em>, <em>y=0</em>, <em>dx=0</em>, <em>dy=0</em>, <em>rvelocity=0</em>, <em>razimuth=0</em>, <em>rrange=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/data_containers.html#TrackPoint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#data_containers.TrackPoint" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creates a point which is a part of the track.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -155,8 +155,8 @@ class ‘list’ with additional methods. Points are inherited from a basic ‘o
 <li><strong>y</strong> (<em>float</em>) – Y coordinate</li>
 <li><strong>dx</strong> (<em>float</em>) – the time derivative of x</li>
 <li><strong>dy</strong> (<em>float</em>) – the time derivative of y</li>
-<li><strong>Rvelocity</strong> (<em>float</em>) – an absolute velocity as measured by RADAR</li>
-<li><strong>Razimuth</strong> (<em>float</em>) – an azimuth as measured by RADAR</li>
+<li><strong>rvelocity</strong> (<em>float</em>) – an absolute velocity as measured by RADAR</li>
+<li><strong>razimuth</strong> (<em>float</em>) – an azimuth as measured by RADAR</li>
 </ul>
 </td>
 </tr>
@@ -205,8 +205,22 @@ class ‘list’ with additional methods. Points are inherited from a basic ‘o
 </tbody>
 </table>
 <dl class="method">
+<dt id="data_containers.UnAssignedDetectionList.new_detection">
+<code class="descname">new_detection</code><span class="sig-paren">(</span><em>detection</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/data_containers.html#UnAssignedDetectionList.new_detection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#data_containers.UnAssignedDetectionList.new_detection" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests whether or not the list of unassigned detections can form a new track.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>detection</strong> (<a class="reference internal" href="#data_containers.DetectionPoint" title="data_containers.DetectionPoint"><em>DetectionPoint</em></a>) – The detection which is going to be tested.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
 <dt id="data_containers.UnAssignedDetectionList.two_point_projection">
-<code class="descname">two_point_projection</code><span class="sig-paren">(</span><em>start_detection</em>, <em>end_detection</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/data_containers.html#UnAssignedDetectionList.two_point_projection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#data_containers.UnAssignedDetectionList.two_point_projection" title="Permalink to this definition">¶</a></dt>
+<code class="descname">two_point_projection</code><span class="sig-paren">(</span><em>det1</em>, <em>det2</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/data_containers.html#UnAssignedDetectionList.two_point_projection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#data_containers.UnAssignedDetectionList.two_point_projection" title="Permalink to this definition">¶</a></dt>
 <dd><p>Extrapolates two detections in terms of the first order polynomial.
 The extrapolation is computed from x,y coordinates.</p>
 <table class="docutils field-list" frame="void" rules="none">

@@ -65,6 +65,34 @@ modules_dir: /home/petr/Projects/TRIO/Radar/srcpy/
 	Target_car_width: 2.17
 	Target_car_length: 4.52
 
+[Track_management]
+# Parameters to configure track management
+	unassigned_dets_memory: 10
+	track_life_memory: 4
+	gate_track_init_x: 4.69
+	gate_track_init_y: 4.69
+	gate_track_init_dx: 4.69
+	gate_track_init_dy: 4.69
+	gate_track_init_beam: 4.69
+	gate_track_init_raz: 4.69
+	gate_track_init_rvel: 4.69
+	gate_track_init_rrng: 4.69
+
+[TrackerKF]
+# Parameters to configure tracker
+	time_step: 1.88
+	max_velocity: 150
+	gate_update_x: 4.69
+	gate_update_y: 4.69
+	gate_update_dx: 4.69
+	gate_update_dy: 4.69
+	gate_update_beam: 4.69
+	gate_update_raz: 4.69
+	gate_update_rvel: 4.69
+	gate_update_rrng: 4.69
+
+
+
 [LOG_file]
 # Configuration file to set up logging process
 	cfg_filename: logging.cnf

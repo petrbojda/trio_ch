@@ -273,6 +273,7 @@ class Gate(object):
         self._rvel = detection._vel
 
     def test_detection_in_gate(self, detection, **kwargs):
+        # TODO: this function probably doesn't work correctly, needs to be verified
         if kwargs:
             test_x = self._x - self._diff_x/2 < detection._x < self._x + self._diff_x/2 if 'x' in kwargs else True
             test_y = self._y - self._diff_y/2 < detection._y < self._y + self._diff_y/2 if 'y' in kwargs else True

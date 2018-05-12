@@ -53,6 +53,13 @@
 <span class="kn">import</span> <span class="nn">copy</span>
 
 <div class="viewcode-block" id="static_plot_grid_hist_selections"><a class="viewcode-back" href="../radarplots.html#radar_plots.static_plot_grid_hist_selections">[docs]</a><span class="k">def</span> <span class="nf">static_plot_grid_hist_selections</span><span class="p">(</span><span class="n">lst_det_left</span><span class="p">,</span> <span class="n">lst_det_right</span><span class="p">,</span> <span class="n">selection</span><span class="p">,</span> <span class="n">fname_det</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">    :param lst_det_left:</span>
+<span class="sd">    :param lst_det_right:</span>
+<span class="sd">    :param selection:</span>
+<span class="sd">    :param fname_det:</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Plot starts here:</span>
     <span class="n">cms</span> <span class="o">=</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">cm</span>
     <span class="n">color_map_left</span> <span class="o">=</span> <span class="n">cms</span><span class="o">.</span><span class="n">Blues</span>
@@ -507,7 +514,7 @@
     <span class="k">else</span><span class="p">:</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
 
-<span class="k">def</span> <span class="nf">static_track_init</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span> <span class="n">lst_new_detections</span><span class="p">,</span> <span class="n">lst_not_assigned</span><span class="p">,</span> <span class="n">best_fit_det</span><span class="p">,</span> <span class="n">gate</span><span class="p">,</span> <span class="n">track</span><span class="p">,</span> <span class="n">title</span><span class="p">):</span>
+<div class="viewcode-block" id="static_track_init"><a class="viewcode-back" href="../radarplots.html#radar_plots.static_track_init">[docs]</a><span class="k">def</span> <span class="nf">static_track_init</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span> <span class="n">lst_new_detections</span><span class="p">,</span> <span class="n">lst_not_assigned</span><span class="p">,</span> <span class="n">best_fit_det</span><span class="p">,</span> <span class="n">gate</span><span class="p">,</span> <span class="n">track</span><span class="p">,</span> <span class="n">title</span><span class="p">):</span>
     <span class="c1"># Plot starts here:</span>
     <span class="n">cms</span> <span class="o">=</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">cm</span>
     <span class="n">color_map_new_det</span> <span class="o">=</span> <span class="n">cms</span><span class="o">.</span><span class="n">Blues</span>
@@ -578,10 +585,10 @@
     <span class="n">f1ax1</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;y [meters]&#39;</span><span class="p">)</span>
     <span class="n">f1</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">)</span>
 
-    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
 
 
-<span class="k">def</span> <span class="nf">static_plotTrackMan_initialization</span><span class="p">(</span><span class="n">lst_detections</span><span class="p">,</span> <span class="n">lst_not_assigned</span><span class="p">,</span> <span class="n">new_track</span><span class="p">,</span> <span class="n">list_of_tracks</span><span class="p">):</span>
+<div class="viewcode-block" id="static_plotTrackMan_initialization"><a class="viewcode-back" href="../radarplots.html#radar_plots.static_plotTrackMan_initialization">[docs]</a><span class="k">def</span> <span class="nf">static_plotTrackMan_initialization</span><span class="p">(</span><span class="n">lst_detections</span><span class="p">,</span> <span class="n">lst_not_assigned</span><span class="p">,</span> <span class="n">new_track</span><span class="p">,</span> <span class="n">list_of_tracks</span><span class="p">):</span>
     <span class="c1"># Plot starts here:</span>
     <span class="n">cms</span> <span class="o">=</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">cm</span>
     <span class="n">color_map_new_det</span> <span class="o">=</span> <span class="n">cms</span><span class="o">.</span><span class="n">Blues</span>
@@ -672,7 +679,7 @@
     <span class="n">tit</span> <span class="o">=</span> <span class="s2">&quot;New Track Started: incoming dets =</span><span class="si">%d</span><span class="s2"> unassigned dets=</span><span class="si">%d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">number_of_new_dets_processed</span><span class="p">,</span> <span class="n">number_of_unassig_dets_processed</span><span class="p">)</span>
     <span class="n">f1</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="n">tit</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">)</span>
 
-    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
 </pre></div>
 
           </div>

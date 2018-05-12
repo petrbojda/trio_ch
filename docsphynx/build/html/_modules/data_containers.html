@@ -61,7 +61,11 @@
 <div class="viewcode-block" id="DetectionPoint.__init__"><a class="viewcode-back" href="../datacontainers.html#data_containers.DetectionPoint.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mcc</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">beam</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
                  <span class="n">nodet_permcc</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">trackID</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">rng</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
                  <span class="n">vel</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">azimuth</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">car_width</span><span class="o">=</span><span class="mf">1.88</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Creates a point as it was detected by the RADAR.</span>
+        <span class="sd">&quot;&quot;&quot; Creates a point which represents a Radar detection. Class is derived from a build-in class **Object**.</span>
+<span class="sd">        A creator assigns values to appropriate attributes from input positional arguments with defined default values.</span>
+
+<span class="sd">        The DetectionPoint is meant to represent a raw input data to the tracker. Its primary coordinate system is</span>
+<span class="sd">        of the polar *rho-theta* type with the origin in a radar antenna phase center.</span>
 
 <span class="sd">        :rtype: object</span>
 
@@ -99,7 +103,8 @@
 
 
 <div class="viewcode-block" id="DetectionPoint.set_XY"><a class="viewcode-back" href="../datacontainers.html#data_containers.DetectionPoint.set_XY">[docs]</a>    <span class="k">def</span> <span class="nf">set_XY</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; For an existing detection sets its _x and _y attributes independently</span>
+        <span class="sd">&quot;&quot;&quot; For an existing detection sets its *x* and *y* attributes independently. Calculated are values of azimuth and</span>
+<span class="sd">        range.</span>
 
 <span class="sd">        :param x: value to assign to _x</span>
 <span class="sd">        :param y: value to assign to _y</span>
@@ -112,57 +117,91 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_x</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_y</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span></div>
 
 
-    <span class="k">def</span> <span class="nf">set_XYvel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">vel</span><span class="p">):</span>
+<div class="viewcode-block" id="DetectionPoint.set_XYvel"><a class="viewcode-back" href="../datacontainers.html#data_containers.DetectionPoint.set_XYvel">[docs]</a>    <span class="k">def</span> <span class="nf">set_XYvel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">vel</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; For an existing detection sets its *x*, *y*  and *radar velocity* attributes independently. Calculated</span>
+<span class="sd">        are values of azimuth and range.</span>
+
+<span class="sd">        :param x: value to assign to _x</span>
+<span class="sd">        :param y: value to assign to _y</span>
+<span class="sd">        :param vel: value to assign radar velocity</span>
+<span class="sd">        :type x: float</span>
+<span class="sd">        :type y: float</span>
+<span class="sd">        :type vel: float</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_x</span> <span class="o">=</span> <span class="n">x</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_y</span> <span class="o">=</span> <span class="n">y</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_azimuth</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arctan</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_y</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">_x</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_x</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_y</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_vel</span> <span class="o">=</span> <span class="n">vel</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_vel</span> <span class="o">=</span> <span class="n">vel</span></div>
 
 
-    <span class="k">def</span> <span class="nf">equalsXY</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">detection_point</span><span class="p">):</span>
+<div class="viewcode-block" id="DetectionPoint.equalsXY"><a class="viewcode-back" href="../datacontainers.html#data_containers.DetectionPoint.equalsXY">[docs]</a>    <span class="k">def</span> <span class="nf">equalsXY</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">detection_point</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Tests for equality of attributes *x* and *y* between its own and inputed detections.</span>
+
+<span class="sd">        :param detection_point:</span>
+<span class="sd">        :return: **True** when both *x* and *y* are equal. Otherwise **False**.</span>
+
+<span class="sd">        :type detection_point: DetectionPoint</span>
+<span class="sd">        :rtype: bool</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">test</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_x</span> <span class="o">==</span> <span class="n">detection_point</span><span class="o">.</span><span class="n">_x</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_y</span> <span class="o">==</span> <span class="n">detection_point</span><span class="o">.</span><span class="n">_y</span><span class="p">)</span>
         <span class="c1"># TODO: add calculations for range and azimuth</span>
-        <span class="k">return</span> <span class="n">test</span>
+        <span class="k">return</span> <span class="n">test</span></div>
 
-    <span class="k">def</span> <span class="nf">get_mcc</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mcc</span>
+<div class="viewcode-block" id="DetectionPoint.get_mcc"><a class="viewcode-back" href="../datacontainers.html#data_containers.DetectionPoint.get_mcc">[docs]</a>    <span class="k">def</span> <span class="nf">get_mcc</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Returns detection&#39;s Master-Clock-Cycle value</span>
 
-    <span class="k">def</span> <span class="nf">get_xy_array</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="sd">        :return: mcc</span>
+<span class="sd">        :rtype: int</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mcc</span></div>
+
+<div class="viewcode-block" id="DetectionPoint.get_xy_array"><a class="viewcode-back" href="../datacontainers.html#data_containers.DetectionPoint.get_xy_array">[docs]</a>    <span class="k">def</span> <span class="nf">get_xy_array</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Returns one-dimensional numpy array of *x* and *y* coordinates and their first derivatives *dx* and *dy*.</span>
+<span class="sd">         The numpy array is meant to be a state vector of the tracker.</span>
+
+<span class="sd">          :return: numpy array [x,dx,y,dy]</span>
+<span class="sd">          :rtype: numpy.array of floats</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">dx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_vel</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_azimuth</span><span class="p">)</span>
         <span class="n">dy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_vel</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_azimuth</span><span class="p">)</span>
         <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">_x</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_y</span><span class="p">,</span> <span class="n">dy</span><span class="p">])</span>
-        <span class="k">return</span> <span class="n">x</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">x</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="DetectionPoint.test_in_range_of"><a class="viewcode-back" href="../datacontainers.html#data_containers.DetectionPoint.test_in_range_of">[docs]</a>    <span class="k">def</span> <span class="nf">test_in_range_of</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">detection</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        a method tests whether the differencies between selected properties of inputting *detection* and its own&#39;s  are</span>
-<span class="sd">        within a certain limits.</span>
-<span class="sd">        :param detection:</span>
+<span class="sd">        a method tests whether the differencies between selected attributes of inputting *detection* and the detection</span>
+<span class="sd">        from which the method is being called are within required limits. Limits are defined in a set of keyword</span>
+<span class="sd">        arguments, see the table.</span>
+
+<span class="sd">        :param detection: Inputted detection which is tested if it is in a given range from own detection</span>
 <span class="sd">        :param kwargs:</span>
 
-<span class="sd">        +-------------+-------------+----------+---------------------------------------------------+</span>
-<span class="sd">        | Key word    | Data        | Possible | Description                                       |</span>
-<span class="sd">        |             | Types       | Values   |                                                   |</span>
-<span class="sd">        +=============+=============+==========+===================================================+</span>
-<span class="sd">        | dist        | float       |    All   |  true when an euclidian distance from itself to   |</span>
-<span class="sd">        |             |             |          |  the inputted detection is in a given limit       |</span>
-<span class="sd">        +-------------+-------------+----------+---------------------------------------------------+</span>
-<span class="sd">        | vel         | float       |    All   |  true if a difference between radar velocities    |</span>
-<span class="sd">        |             |             |          |  are within a given limit                         |</span>
-<span class="sd">        +-------------+-------------+----------+---------------------------------------------------+</span>
-<span class="sd">        | az          | float       |    All   |  difference between radar azimuths                |</span>
-<span class="sd">        |             |             |          |  are within a given limit                         |</span>
-<span class="sd">        +-------------+-------------+----------+---------------------------------------------------+</span>
-<span class="sd">        | beam        | int         |  1-3     |  true when both dets are from a given beam        |</span>
-<span class="sd">        |             |             |          |  are within a given limit                         |</span>
-<span class="sd">        +-------------+-------------+----------+---------------------------------------------------+</span>
-<span class="sd">        | mcc         | string      |  &#39;older&#39; |  - returns true when inputted detection&#39;s mcc     |</span>
-<span class="sd">        |             |             |          |    is bigger than its own                         |</span>
-<span class="sd">        |             |             |  &#39;newer&#39; |  - vice-versa                                     |</span>
-<span class="sd">        +-------------+-------------+----------+---------------------------------------------------+</span>
+<span class="sd">        +-------------+-------------+------------+---------------------------------------------------+</span>
+<span class="sd">        | Key word    | Data        | Possible   | Description of what is returned                   |</span>
+<span class="sd">        |             | Types       | Values     |                                                   |</span>
+<span class="sd">        +=============+=============+============+===================================================+</span>
+<span class="sd">        | dist        | float       | limit of   |  **True** when an euclidian distance from itself  |</span>
+<span class="sd">        |             |             | distance   |  to the inputted detection is in a given limit    |</span>
+<span class="sd">        +-------------+-------------+------------+---------------------------------------------------+</span>
+<span class="sd">        | vel         | float       | limit of   |  **True** if a difference between radar           |</span>
+<span class="sd">        |             |             | difference |  velocities are within a given limit              |</span>
+<span class="sd">        +-------------+-------------+------------+---------------------------------------------------+</span>
+<span class="sd">        | az          | float       | limit of   |  **True** if a difference between radar azimuths  |</span>
+<span class="sd">        |             |             | difference |  are within a given limit                         |</span>
+<span class="sd">        +-------------+-------------+------------+---------------------------------------------------+</span>
+<span class="sd">        | beam        | int         | number     |  **True** when both detections are from           |</span>
+<span class="sd">        |             |             | of beam    |  a given beam                                     |</span>
+<span class="sd">        +-------------+-------------+------------+---------------------------------------------------+</span>
+<span class="sd">        | mcc         | string      |  &#39;older&#39;   |  - returns **True** when inputted detection&#39;s     |</span>
+<span class="sd">        |             |             |            |    mcc is bigger than its own                     |</span>
+<span class="sd">        |             |             |  &#39;newer&#39;   |  - vice-versa                                     |</span>
+<span class="sd">        +-------------+-------------+------------+---------------------------------------------------+</span>
 
-<span class="sd">        :return:</span>
+<span class="sd">        :return: Five inputs **AND** of all criteria.</span>
+
+<span class="sd">        :type detection: DetectionPoint</span>
+<span class="sd">        :rtype: bool</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="s1">&#39;dist&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
             <span class="n">dx</span> <span class="o">=</span> <span class="n">detection</span><span class="o">.</span><span class="n">_x</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_x</span>
@@ -217,7 +256,9 @@
 <div class="viewcode-block" id="ReferencePoint.__init__"><a class="viewcode-back" href="../datacontainers.html#data_containers.ReferencePoint.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mccL</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">mccR</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">TAR_dist</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">TAR_distX</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">TAR_distY</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
                  <span class="n">TAR_velX</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">TAR_velY</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">TAR_hdg</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
                  <span class="n">EGO_velX</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">EGO_velY</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">EGO_accX</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">EGO_accY</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">EGO_hdg</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Creates a point as delivered by a referential DGPS system.</span>
+        <span class="sd">&quot;&quot;&quot; Creates a point as received from a referential DGPS system. The class is derived from a python&#39;s build-in</span>
+<span class="sd">        class **Object**. A creator assigns values to appropriate attributes from input positional arguments</span>
+<span class="sd">        with defined default values.</span>
 
 <span class="sd">        :rtype: object</span>
 
@@ -267,7 +308,12 @@
 <div class="viewcode-block" id="TrackPoint"><a class="viewcode-back" href="../datacontainers.html#data_containers.TrackPoint">[docs]</a><span class="k">class</span> <span class="nc">TrackPoint</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 <div class="viewcode-block" id="TrackPoint.__init__"><a class="viewcode-back" href="../datacontainers.html#data_containers.TrackPoint.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mcc</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">beam</span><span class="o">=</span><span class="p">[],</span> <span class="n">x</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">dx</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">dy</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
                  <span class="n">rvelocity</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">razimuth</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">rrange</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Creates a point which is a part of the track.</span>
+        <span class="sd">&quot;&quot;&quot; Creates a Track Point with values of its properties defined in input arguments.</span>
+<span class="sd">         Class is derived from a python&#39;s build-in class **Object**. A creator assigns values of attributes from</span>
+<span class="sd">         input positional arguments with defined default values.</span>
+
+<span class="sd">         The TrackPoint meant to be used as points of potential target trajectories estimated by a tracker.</span>
+<span class="sd">         Its primary coordinate system is of the Cartesian *X-Y* type with the origin.</span>
 
 <span class="sd">        :rtype: object</span>
 
@@ -306,19 +352,65 @@
         <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dy</span><span class="p">])</span>
         <span class="k">return</span> <span class="n">x</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span></div>
 
-    <span class="k">def</span> <span class="nf">get_xy_array</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="TrackPoint.get_xy_array"><a class="viewcode-back" href="../datacontainers.html#data_containers.TrackPoint.get_xy_array">[docs]</a>    <span class="k">def</span> <span class="nf">get_xy_array</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Returns one-dimensional numpy array of *x* and *y* coordinates and their first derivatives *dx* and *dy*.</span>
+<span class="sd">         The numpy array is meant to be a state vector of the tracker.</span>
+
+<span class="sd">        :return: numpy array [x,dx,y,dy]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">dx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rvelocity</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">razimuth</span><span class="p">)</span>
         <span class="n">dy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rvelocity</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">razimuth</span><span class="p">)</span>
         <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span><span class="n">dx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">dy</span><span class="p">])</span>
-        <span class="k">return</span> <span class="n">x</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">x</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span></div>
 
-    <span class="k">def</span> <span class="nf">get_z_array</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="TrackPoint.get_z_array"><a class="viewcode-back" href="../datacontainers.html#data_containers.TrackPoint.get_z_array">[docs]</a>    <span class="k">def</span> <span class="nf">get_z_array</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Returns one-dimensional numpy array of *x* and *y* coordinates.</span>
+<span class="sd">         The numpy array is meant to be a measurement vector **z** of the tracker.</span>
+
+<span class="sd">         :return: numpy array [x,y]</span>
+<span class="sd">         &quot;&quot;&quot;</span>
         <span class="n">z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">])</span>
-        <span class="k">return</span> <span class="n">z</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="n">z</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span></div></div>
 
 <span class="k">class</span> <span class="nc">Gate</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">beam</span><span class="o">=</span><span class="p">[],</span> <span class="n">x</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">diffx</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">diffy</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">dx</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">dy</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">diffdx</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">diffdy</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
                  <span class="n">rvelocity</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">d_rvelocity</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">razimuth</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">d_razimuth</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">rrange</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">d_rrange</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Creates a Gate with values of its properties defined in input arguments.</span>
+<span class="sd">         Class is derived from a python&#39;s build-in class **Object**. A creator assigns values of attributes from</span>
+<span class="sd">         input positional arguments with defined default values.</span>
+
+<span class="sd">        :param beam:</span>
+<span class="sd">        :param x:</span>
+<span class="sd">        :param y:</span>
+<span class="sd">        :param diffx:</span>
+<span class="sd">        :param diffy:</span>
+<span class="sd">        :param dx:</span>
+<span class="sd">        :param dy:</span>
+<span class="sd">        :param diffdx:</span>
+<span class="sd">        :param diffdy:</span>
+<span class="sd">        :param rvelocity:</span>
+<span class="sd">        :param d_rvelocity:</span>
+<span class="sd">        :param razimuth:</span>
+<span class="sd">        :param d_razimuth:</span>
+<span class="sd">        :param rrange:</span>
+<span class="sd">        :param d_rrange:</span>
+
+<span class="sd">        :type beam:</span>
+<span class="sd">        :type x:</span>
+<span class="sd">        :type y:</span>
+<span class="sd">        :type diffx:</span>
+<span class="sd">        :type diffy:</span>
+<span class="sd">        :type dx:</span>
+<span class="sd">        :type dy:</span>
+<span class="sd">        :type diffdx:</span>
+<span class="sd">        :type diffdy:</span>
+<span class="sd">        :type rvelocity:</span>
+<span class="sd">        :type d_rvelocity:</span>
+<span class="sd">        :type razimuth:</span>
+<span class="sd">        :type d_razimuth:</span>
+<span class="sd">        :type rrange:</span>
+<span class="sd">        :type d_rrange:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_x</span> <span class="o">=</span> <span class="n">x</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_diff_x</span> <span class="o">=</span> <span class="n">diffx</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_y</span> <span class="o">=</span> <span class="n">y</span>

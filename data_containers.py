@@ -17,7 +17,11 @@ class DetectionPoint(object):
     def __init__(self, mcc=0, beam=0,
                  nodet_permcc=0, trackID=0, rng=0.0,
                  vel=0.0, azimuth=0.0, left=True, car_width=1.88):
-        """ Creates a point as it was detected by the RADAR.
+        """ Creates a point which represents a Radar detection. Class is derived from a build-in class **Object**.
+        A creator assigns values to appropriate attributes from input positional arguments with defined default values.
+
+        The DetectionPoint is meant to represent a raw input data to the tracker. Its primary coordinate system is
+        of the polar *rho-theta* type with the origin in a radar antenna phase center.
 
         :rtype: object
 
@@ -55,7 +59,8 @@ class DetectionPoint(object):
 
 
     def set_XY (self,x,y):
-        """ For an existing detection sets its _x and _y attributes independently
+        """ For an existing detection sets its *x* and *y* attributes independently. Calculated are values of azimuth and
+        range.
 
         :param x: value to assign to _x
         :param y: value to assign to _y
@@ -69,6 +74,16 @@ class DetectionPoint(object):
 
 
     def set_XYvel(self, x, y, vel):
+        """ For an existing detection sets its *x*, *y*  and *radar velocity* attributes independently. Calculated
+        are values of azimuth and range.
+
+        :param x: value to assign to _x
+        :param y: value to assign to _y
+        :param vel: value to assign radar velocity
+        :type x: float
+        :type y: float
+        :type vel: float
+        """
         self._x = x
         self._y = y
         self._azimuth = np.arctan(self._y / self._x)
@@ -77,14 +92,33 @@ class DetectionPoint(object):
 
 
     def equalsXY(self,detection_point):
+        """ Tests for equality of attributes *x* and *y* between its own and inputed detections.
+
+        :param detection_point:
+        :return: **True** when both *x* and *y* are equal. Otherwise **False**.
+
+        :type detection_point: DetectionPoint
+        :rtype: bool
+        """
         test = (self._x == detection_point._x) and (self._y == detection_point._y)
         # TODO: add calculations for range and azimuth
         return test
 
     def get_mcc(self):
+        """ Returns detection's Master-Clock-Cycle value
+
+        :return: mcc
+        :rtype: int
+        """
         return self._mcc
 
     def get_xy_array(self):
+        """ Returns one-dimensional numpy array of *x* and *y* coordinates and their first derivatives *dx* and *dy*.
+         The numpy array is meant to be a state vector of the tracker.
+
+          :return: numpy array [x,dx,y,dy]
+          :rtype: numpy.array of floats
+        """
         dx = self._vel * np.cos(self._azimuth)
         dy = self._vel * np.sin(self._azimuth)
         x = np.array([self._x, dx, self._y, dy])
@@ -92,34 +126,38 @@ class DetectionPoint(object):
 
     def test_in_range_of(self, detection, **kwargs):
         """
-        a method tests whether the differencies between selected properties of inputting *detection* and its own's  are
-        within a certain limits.
+        a method tests whether the differencies between selected attributes of inputting *detection* and the detection
+        from which the method is being called are within required limits. Limits are defined in a set of keyword
+        arguments, see the table.
 
-        :param detection: Inputted detection which
+        :param detection: Inputted detection which is tested if it is in a given range from own detection
         :param kwargs:
 
-        +-------------+-------------+----------+---------------------------------------------------+
-        | Key word    | Data        | Possible | Description                                       |
-        |             | Types       | Values   |                                                   |
-        +=============+=============+==========+===================================================+
-        | dist        | float       |    All   |  true when an euclidian distance from itself to   |
-        |             |             |          |  the inputted detection is in a given limit       |
-        +-------------+-------------+----------+---------------------------------------------------+
-        | vel         | float       |    All   |  true if a difference between radar velocities    |
-        |             |             |          |  are within a given limit                         |
-        +-------------+-------------+----------+---------------------------------------------------+
-        | az          | float       |    All   |  difference between radar azimuths                |
-        |             |             |          |  are within a given limit                         |
-        +-------------+-------------+----------+---------------------------------------------------+
-        | beam        | int         |  1-3     |  true when both dets are from a given beam        |
-        |             |             |          |  are within a given limit                         |
-        +-------------+-------------+----------+---------------------------------------------------+
-        | mcc         | string      |  'older' |  - returns true when inputted detection's mcc     |
-        |             |             |          |    is bigger than its own                         |
-        |             |             |  'newer' |  - vice-versa                                     |
-        +-------------+-------------+----------+---------------------------------------------------+
+        +-------------+-------------+------------+---------------------------------------------------+
+        | Key word    | Data        | Possible   | Description of what is returned                   |
+        |             | Types       | Values     |                                                   |
+        +=============+=============+============+===================================================+
+        | dist        | float       | limit of   |  **True** when an euclidian distance from itself  |
+        |             |             | distance   |  to the inputted detection is in a given limit    |
+        +-------------+-------------+------------+---------------------------------------------------+
+        | vel         | float       | limit of   |  **True** if a difference between radar           |
+        |             |             | difference |  velocities are within a given limit              |
+        +-------------+-------------+------------+---------------------------------------------------+
+        | az          | float       | limit of   |  **True** if a difference between radar azimuths  |
+        |             |             | difference |  are within a given limit                         |
+        +-------------+-------------+------------+---------------------------------------------------+
+        | beam        | int         | number     |  **True** when both detections are from           |
+        |             |             | of beam    |  a given beam                                     |
+        +-------------+-------------+------------+---------------------------------------------------+
+        | mcc         | string      |  'older'   |  - returns **True** when inputted detection's     |
+        |             |             |            |    mcc is bigger than its own                     |
+        |             |             |  'newer'   |  - vice-versa                                     |
+        +-------------+-------------+------------+---------------------------------------------------+
 
-        :return:
+        :return: Five inputs **AND** of all criteria.
+
+        :type detection: DetectionPoint
+        :rtype: bool
         """
         if 'dist' in kwargs:
             dx = detection._x - self._x
@@ -174,7 +212,9 @@ class ReferencePoint(object):
     def __init__(self, mccL=0, mccR=0, TAR_dist=0.0, TAR_distX=0.0, TAR_distY=0.0,
                  TAR_velX=0.0, TAR_velY=0.0, TAR_hdg=0.0,
                  EGO_velX=0.0, EGO_velY=0.0, EGO_accX=0.0, EGO_accY=0.0, EGO_hdg=0.0, ):
-        """ Creates a point as delivered by a referential DGPS system.
+        """ Creates a point as received from a referential DGPS system. The class is derived from a python's build-in
+        class **Object**. A creator assigns values to appropriate attributes from input positional arguments
+        with defined default values.
 
         :rtype: object
 
@@ -224,7 +264,12 @@ class ReferencePoint(object):
 class TrackPoint(object):
     def __init__(self, mcc=0, beam=[], x=0, y=0, dx=0, dy=0,
                  rvelocity=0, razimuth=0, rrange=0):
-        """ Creates a point which is a part of the track.
+        """ Creates a Track Point with values of its properties defined in input arguments.
+         Class is derived from a python's build-in class **Object**. A creator assigns values of attributes from
+         input positional arguments with defined default values.
+
+         The TrackPoint meant to be used as points of potential target trajectories estimated by a tracker.
+         Its primary coordinate system is of the Cartesian *X-Y* type with the origin.
 
         :rtype: object
 
@@ -264,18 +309,64 @@ class TrackPoint(object):
         return x.reshape(4, 1)
 
     def get_xy_array(self):
+        """ Returns one-dimensional numpy array of *x* and *y* coordinates and their first derivatives *dx* and *dy*.
+         The numpy array is meant to be a state vector of the tracker.
+
+        :return: numpy array [x,dx,y,dy]
+        """
         dx = self.rvelocity * np.cos(self.razimuth)
         dy = self.rvelocity * np.sin(self.razimuth)
         x = np.array([self.x,dx, self.y, dy])
         return x.reshape(4, 1)
 
     def get_z_array(self):
+        """ Returns one-dimensional numpy array of *x* and *y* coordinates.
+         The numpy array is meant to be a measurement vector **z** of the tracker.
+
+         :return: numpy array [x,y]
+         """
         z = np.array([self.x, self.y])
         return z.reshape(2, 1)
 
 class Gate(object):
     def __init__(self, beam=[], x=0, y=0, diffx=0, diffy=0, dx=0, dy=0, diffdx=0, diffdy=0,
                  rvelocity=0, d_rvelocity = 0, razimuth=0, d_razimuth=0, rrange=0, d_rrange=0):
+        """ Creates a Gate with values of its properties defined in input arguments.
+         Class is derived from a python's build-in class **Object**. A creator assigns values of attributes from
+         input positional arguments with defined default values.
+
+        :param beam:
+        :param x:
+        :param y:
+        :param diffx:
+        :param diffy:
+        :param dx:
+        :param dy:
+        :param diffdx:
+        :param diffdy:
+        :param rvelocity:
+        :param d_rvelocity:
+        :param razimuth:
+        :param d_razimuth:
+        :param rrange:
+        :param d_rrange:
+
+        :type beam:
+        :type x:
+        :type y:
+        :type diffx:
+        :type diffy:
+        :type dx:
+        :type dy:
+        :type diffdx:
+        :type diffdy:
+        :type rvelocity:
+        :type d_rvelocity:
+        :type razimuth:
+        :type d_razimuth:
+        :type rrange:
+        :type d_rrange:
+        """
         self._x = x
         self._diff_x = diffx
         self._y = y

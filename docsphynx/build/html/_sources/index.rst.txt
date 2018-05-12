@@ -1,10 +1,10 @@
-.. Automotive Rearlooking RADAR Tracker documentation master file, created by
-   sphinx-quickstart on Thu Sep 21 23:12:41 2017.
+.. Analytic RCW Tracker documentation master file, created by
+   sphinx-quickstart on Sat May 12 01:16:51 2018.
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to Automotive Rear-Looking RADAR Tracker's Documentation!
-=================================================================
+Welcome to Analytic RCW Tracker's documentation!
+================================================
 
 .. toctree::
    :maxdepth: 4
@@ -12,8 +12,6 @@ Welcome to Automotive Rear-Looking RADAR Tracker's Documentation!
 
    intro
    modules
-
-
 
 Indices and tables
 ==================

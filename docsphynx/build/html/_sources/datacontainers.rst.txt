@@ -18,17 +18,23 @@ Defines a class which represents a raw radar detection.
 .. autoclass:: DetectionPoint
     :members:
 
+    .. automethod:: __init__
+
 ReferencePoint
 --------------
 
 .. autoclass:: ReferencePoint
     :members:
 
+    .. automethod:: __init__
+
 TrackPoint
 ----------
 
 .. autoclass:: TrackPoint
     :members:
+
+    .. automethod:: __init__
 
 
 DetectionList
@@ -37,11 +43,15 @@ DetectionList
 .. autoclass:: DetectionList
     :members:
 
+    .. automethod:: __init__
+
 UnAssignedDetectionList
 -----------------------
 
 .. autoclass:: UnAssignedDetectionList
     :members:
+
+    .. automethod:: __init__
 
 Track
 -----
@@ -49,3 +59,4 @@ Track
 .. autoclass:: Track
     :members:
 
+    .. automethod:: __init__

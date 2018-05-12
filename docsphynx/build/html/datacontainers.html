@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Data Containers Module &#8212; Automotive Rearlooking RADAR Tracker 1.2.1 documentation</title>
+    <title>Data Containers Module &#8212; Analytic RCW Tracker 1.0 documentation</title>
     
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '1.2.1',
+        VERSION:     '1.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -56,6 +56,9 @@ class ‘list’ with additional methods. Points are inherited from a basic ‘o
 <dl class="class">
 <dt id="data_containers.DetectionPoint">
 <em class="property">class </em><code class="descclassname">data_containers.</code><code class="descname">DetectionPoint</code><span class="sig-paren">(</span><em>mcc=0</em>, <em>beam=0</em>, <em>nodet_permcc=0</em>, <em>trackID=0</em>, <em>rng=0.0</em>, <em>vel=0.0</em>, <em>azimuth=0.0</em>, <em>left=True</em>, <em>car_width=1.88</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/data_containers.html#DetectionPoint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#data_containers.DetectionPoint" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="data_containers.DetectionPoint.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>mcc=0</em>, <em>beam=0</em>, <em>nodet_permcc=0</em>, <em>trackID=0</em>, <em>rng=0.0</em>, <em>vel=0.0</em>, <em>azimuth=0.0</em>, <em>left=True</em>, <em>car_width=1.88</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/data_containers.html#DetectionPoint.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#data_containers.DetectionPoint.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creates a point as it was detected by the RADAR.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -79,6 +82,8 @@ class ‘list’ with additional methods. Points are inherited from a basic ‘o
 </tr>
 </tbody>
 </table>
+</dd></dl>
+
 <dl class="method">
 <dt id="data_containers.DetectionPoint.set_XY">
 <code class="descname">set_XY</code><span class="sig-paren">(</span><em>x</em>, <em>y</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/data_containers.html#DetectionPoint.set_XY"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#data_containers.DetectionPoint.set_XY" title="Permalink to this definition">¶</a></dt>
@@ -97,6 +102,78 @@ class ‘list’ with additional methods. Points are inherited from a basic ‘o
 </table>
 </dd></dl>
 
+<dl class="method">
+<dt id="data_containers.DetectionPoint.test_in_range_of">
+<code class="descname">test_in_range_of</code><span class="sig-paren">(</span><em>detection</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/data_containers.html#DetectionPoint.test_in_range_of"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#data_containers.DetectionPoint.test_in_range_of" title="Permalink to this definition">¶</a></dt>
+<dd><p>a method tests whether the differencies between selected properties of inputting <em>detection</em> and its own’s  are
+within a certain limits.
+:param detection:
+:param kwargs:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="15%" />
+<col width="15%" />
+<col width="11%" />
+<col width="59%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Key word</th>
+<th class="head">Data
+Types</th>
+<th class="head">Possible
+Values</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>dist</td>
+<td>float</td>
+<td>All</td>
+<td>true when an euclidian distance from itself to
+the inputted detection is in a given limit</td>
+</tr>
+<tr class="row-odd"><td>vel</td>
+<td>float</td>
+<td>All</td>
+<td>true if a difference between radar velocities
+are within a given limit</td>
+</tr>
+<tr class="row-even"><td>az</td>
+<td>float</td>
+<td>All</td>
+<td>difference between radar azimuths
+are within a given limit</td>
+</tr>
+<tr class="row-odd"><td>beam</td>
+<td>int</td>
+<td>1-3</td>
+<td>true when both dets are from a given beam
+are within a given limit</td>
+</tr>
+<tr class="row-even"><td>mcc</td>
+<td>string</td>
+<td><p class="first">‘older’</p>
+<p class="last">‘newer’</p>
+</td>
+<td><ul class="first last simple">
+<li>returns true when inputted detection’s mcc
+is bigger than its own</li>
+<li>vice-versa</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 </dd></dl>
 
 </div>
@@ -105,6 +182,9 @@ class ‘list’ with additional methods. Points are inherited from a basic ‘o
 <dl class="class">
 <dt id="data_containers.ReferencePoint">
 <em class="property">class </em><code class="descclassname">data_containers.</code><code class="descname">ReferencePoint</code><span class="sig-paren">(</span><em>mccL=0</em>, <em>mccR=0</em>, <em>TAR_dist=0.0</em>, <em>TAR_distX=0.0</em>, <em>TAR_distY=0.0</em>, <em>TAR_velX=0.0</em>, <em>TAR_velY=0.0</em>, <em>TAR_hdg=0.0</em>, <em>EGO_velX=0.0</em>, <em>EGO_velY=0.0</em>, <em>EGO_accX=0.0</em>, <em>EGO_accY=0.0</em>, <em>EGO_hdg=0.0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/data_containers.html#ReferencePoint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#data_containers.ReferencePoint" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="data_containers.ReferencePoint.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>mccL=0</em>, <em>mccR=0</em>, <em>TAR_dist=0.0</em>, <em>TAR_distX=0.0</em>, <em>TAR_distY=0.0</em>, <em>TAR_velX=0.0</em>, <em>TAR_velY=0.0</em>, <em>TAR_hdg=0.0</em>, <em>EGO_velX=0.0</em>, <em>EGO_velY=0.0</em>, <em>EGO_accX=0.0</em>, <em>EGO_accY=0.0</em>, <em>EGO_hdg=0.0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/data_containers.html#ReferencePoint.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#data_containers.ReferencePoint.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creates a point as delivered by a referential DGPS system.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -134,12 +214,17 @@ class ‘list’ with additional methods. Points are inherited from a basic ‘o
 </table>
 </dd></dl>
 
+</dd></dl>
+
 </div>
 <div class="section" id="trackpoint">
 <h2>TrackPoint<a class="headerlink" href="#trackpoint" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="data_containers.TrackPoint">
 <em class="property">class </em><code class="descclassname">data_containers.</code><code class="descname">TrackPoint</code><span class="sig-paren">(</span><em>mcc=0</em>, <em>beam=[]</em>, <em>x=0</em>, <em>y=0</em>, <em>dx=0</em>, <em>dy=0</em>, <em>rvelocity=0</em>, <em>razimuth=0</em>, <em>rrange=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/data_containers.html#TrackPoint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#data_containers.TrackPoint" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="data_containers.TrackPoint.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>mcc=0</em>, <em>beam=[]</em>, <em>x=0</em>, <em>y=0</em>, <em>dx=0</em>, <em>dy=0</em>, <em>rvelocity=0</em>, <em>razimuth=0</em>, <em>rrange=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/data_containers.html#TrackPoint.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#data_containers.TrackPoint.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creates a point which is a part of the track.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -162,6 +247,8 @@ class ‘list’ with additional methods. Points are inherited from a basic ‘o
 </tr>
 </tbody>
 </table>
+</dd></dl>
+
 <dl class="method">
 <dt id="data_containers.TrackPoint.get_array">
 <code class="descname">get_array</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/data_containers.html#TrackPoint.get_array"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#data_containers.TrackPoint.get_array" title="Permalink to this definition">¶</a></dt>
@@ -184,7 +271,12 @@ class ‘list’ with additional methods. Points are inherited from a basic ‘o
 <dl class="class">
 <dt id="data_containers.DetectionList">
 <em class="property">class </em><code class="descclassname">data_containers.</code><code class="descname">DetectionList</code><a class="reference internal" href="_modules/data_containers.html#DetectionList"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#data_containers.DetectionList" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="data_containers.DetectionList.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/data_containers.html#DetectionList.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#data_containers.DetectionList.__init__" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
+
+</dd></dl>
 
 </div>
 <div class="section" id="unassigneddetectionlist">
@@ -192,18 +284,26 @@ class ‘list’ with additional methods. Points are inherited from a basic ‘o
 <dl class="class">
 <dt id="data_containers.UnAssignedDetectionList">
 <em class="property">class </em><code class="descclassname">data_containers.</code><code class="descname">UnAssignedDetectionList</code><span class="sig-paren">(</span><em>Tsampling</em>, <em>gate</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/data_containers.html#UnAssignedDetectionList"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#data_containers.UnAssignedDetectionList" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
+<dd><dl class="method">
+<dt id="data_containers.UnAssignedDetectionList.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>Tsampling</em>, <em>gate</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/data_containers.html#UnAssignedDetectionList.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#data_containers.UnAssignedDetectionList.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a new list of unassigned detections. Class is derived from a build-in class <strong>List</strong>. Sets dimensions
+of a gate which will be used when deciding whether or not the detection fits the estimated position and a new
+track can be created.</p>
+<table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>Tsampling</strong> – </li>
-<li><strong>gate</strong> – </li>
+<li><strong>Tsampling</strong> (<em>float</em>) – Sampling period of the radar</li>
+<li><strong>gate</strong> (<em>Gate</em>) – Pattern defining dimensions of the decision-gate, center-values are zeroized, assigned are dimensions only.</li>
 </ul>
 </td>
 </tr>
 </tbody>
 </table>
+</dd></dl>
+
 <dl class="method">
 <dt id="data_containers.UnAssignedDetectionList.new_detection">
 <code class="descname">new_detection</code><span class="sig-paren">(</span><em>detection</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/data_containers.html#UnAssignedDetectionList.new_detection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#data_containers.UnAssignedDetectionList.new_detection" title="Permalink to this definition">¶</a></dt>
@@ -219,10 +319,75 @@ class ‘list’ with additional methods. Points are inherited from a basic ‘o
 </dd></dl>
 
 <dl class="method">
+<dt id="data_containers.UnAssignedDetectionList.test_det_in_gate_3points">
+<code class="descname">test_det_in_gate_3points</code><span class="sig-paren">(</span><em>detection</em>, <em>detection_1</em>, <em>detection_2</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/data_containers.html#UnAssignedDetectionList.test_det_in_gate_3points"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#data_containers.UnAssignedDetectionList.test_det_in_gate_3points" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests whether or not the <em>detection</em> fits a two-points linear projection computed as an extrapolation of
+<em>detection_1</em> and <em>detection_2</em>. If it fits, function computes parameter <strong>aim</strong>. The closer the <em>detection</em> is to
+the center of the projected gate the higher a value of the <strong>aim</strong> is.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>detection</strong> (<a class="reference internal" href="#data_containers.DetectionPoint" title="data_containers.DetectionPoint"><em>DetectionPoint</em></a>) – the detection to be tested.</li>
+<li><strong>detection_1</strong> (<a class="reference internal" href="#data_containers.DetectionPoint" title="data_containers.DetectionPoint"><em>DetectionPoint</em></a>) – the first detection defines a 2-points projection</li>
+<li><strong>detection_2</strong> (<a class="reference internal" href="#data_containers.DetectionPoint" title="data_containers.DetectionPoint"><em>DetectionPoint</em></a>) – the second detection defines a 2-points projection</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>False</strong> when <em>detection</em> doesn’t fit or the projection or a dictionary which can create a new track if it fits.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">dictionary</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Returned dictionary structure:</strong></p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="16%" />
+<col width="21%" />
+<col width="63%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Key</th>
+<th class="head">type</th>
+<th class="head">Description of a parameter</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>det1</td>
+<td>DetectionPoint</td>
+<td>the first detection of the new track</td>
+</tr>
+<tr class="row-odd"><td>det2</td>
+<td>DetectionPoint</td>
+<td>the second detection of the new track</td>
+</tr>
+<tr class="row-even"><td>det3</td>
+<td>DetectionPoint</td>
+<td>the third detection of the new track</td>
+</tr>
+<tr class="row-odd"><td>dist</td>
+<td>float</td>
+<td>parameter aim</td>
+</tr>
+<tr class="row-even"><td>gate</td>
+<td>Gate</td>
+<td>the gate which results from 2-pts extrapolation</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
 <dt id="data_containers.UnAssignedDetectionList.two_point_projection">
 <code class="descname">two_point_projection</code><span class="sig-paren">(</span><em>det1</em>, <em>det2</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/data_containers.html#UnAssignedDetectionList.two_point_projection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#data_containers.UnAssignedDetectionList.two_point_projection" title="Permalink to this definition">¶</a></dt>
 <dd><p>Extrapolates two detections in terms of the first order polynomial.
-The extrapolation is computed from x,y coordinates.</p>
+The extrapolation is computed from x,y coordinates. Calling <a class="reference internal" href="#data_containers.DetectionPoint.test_in_range_of" title="data_containers.DetectionPoint.test_in_range_of"><code class="xref py py-meth docutils literal"><span class="pre">data_containers.DetectionPoint.test_in_range_of()</span></code></a>
+the function tests the two detections whether differences of their parameters are within defined limits.
+If they are the then projection is computer otherwise this function returns <em>False</em>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -233,7 +398,7 @@ The extrapolation is computed from x,y coordinates.</p>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Projected point, X and Y coordinates are set only.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>False</strong> when the two inputting detections cannot project or the  projected point, X and Y coordinates are set only.</p>
 </td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#data_containers.DetectionPoint" title="data_containers.DetectionPoint">DetectionPoint</a></p>
@@ -251,7 +416,140 @@ The extrapolation is computed from x,y coordinates.</p>
 <dl class="class">
 <dt id="data_containers.Track">
 <em class="property">class </em><code class="descclassname">data_containers.</code><code class="descname">Track</code><span class="sig-paren">(</span><em>trackID</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/data_containers.html#Track"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#data_containers.Track" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><dl class="method">
+<dt id="data_containers.Track.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>trackID</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/data_containers.html#Track.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#data_containers.Track.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class Track is derived from a pyhon’s build-in List. Contains TrackPoints objects <a class="reference internal" href="#data_containers.TrackPoint" title="data_containers.TrackPoint"><code class="xref py py-meth docutils literal"><span class="pre">data_containers.TrackPoint()</span></code></a>.
+Attribute <em>_active</em> indicates current status of the track.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>trackID</strong> (<em>int</em>) – Identification number of the track</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="data_containers.Track.activate">
+<code class="descname">activate</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/data_containers.html#Track.activate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#data_containers.Track.activate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets attribute of the track to <strong>active</strong>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="data_containers.Track.append_detection">
+<code class="descname">append_detection</code><span class="sig-paren">(</span><em>detection</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/data_containers.html#Track.append_detection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#data_containers.Track.append_detection" title="Permalink to this definition">¶</a></dt>
+<dd><p>Appends a detection to a Track. This function creates an object <a class="reference internal" href="#data_containers.TrackPoint" title="data_containers.TrackPoint"><code class="xref py py-meth docutils literal"><span class="pre">data_containers.TrackPoint()</span></code></a> from an
+input <a class="reference internal" href="#data_containers.DetectionPoint" title="data_containers.DetectionPoint"><code class="xref py py-meth docutils literal"><span class="pre">data_containers.DetectionPoint()</span></code></a> and appends it to the track.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>detection</strong> (<a class="reference internal" href="#data_containers.DetectionPoint" title="data_containers.DetectionPoint"><em>DetectionPoint</em></a>) – Individual detection to be appended.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Track ID</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">int</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="data_containers.Track.append_point">
+<code class="descname">append_point</code><span class="sig-paren">(</span><em>mcc</em>, <em>x</em>, <em>y</em>, <em>dx</em>, <em>dy</em>, <em>beam</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/data_containers.html#Track.append_point"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#data_containers.Track.append_point" title="Permalink to this definition">¶</a></dt>
+<dd><p>Appends a new track point to the Track. The track point is defined by its <em>mcc</em>, <em>x</em> and <em>y</em> coordinates separately.
+This function creates an object <a class="reference internal" href="#data_containers.TrackPoint" title="data_containers.TrackPoint"><code class="xref py py-meth docutils literal"><span class="pre">data_containers.TrackPoint()</span></code></a> and appends it to the track.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>mcc</strong> (<em>int</em>) – measurement cycle count</li>
+<li><strong>x</strong> (<em>float</em>) – <em>x</em> coordinate of the point</li>
+<li><strong>y</strong> (<em>float</em>) – <em>y</em> coordinate of the point</li>
+<li><strong>dx</strong> (<em>float</em>) – derivative of <em>x</em></li>
+<li><strong>dy</strong> (<em>float</em>) – derivative of <em>y</em></li>
+<li><strong>beam</strong> (<em>int</em>) – radar beam which detected the point</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Track ID</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">int</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="data_containers.Track.append_point_from_radardata_str">
+<code class="descname">append_point_from_radardata_str</code><span class="sig-paren">(</span><em>radardata</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/data_containers.html#Track.append_point_from_radardata_str"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#data_containers.Track.append_point_from_radardata_str" title="Permalink to this definition">¶</a></dt>
+<dd><p>Appends a new track point to the Track. The track point is defined by a dictionary <strong>radardata</strong>.
+This function creates an object <a class="reference internal" href="#data_containers.TrackPoint" title="data_containers.TrackPoint"><code class="xref py py-meth docutils literal"><span class="pre">data_containers.TrackPoint()</span></code></a> and appends it to the track.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="20%" />
+<col width="15%" />
+<col width="65%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Key</th>
+<th class="head">type</th>
+<th class="head">Description of a parameter</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>mcc</td>
+<td>integer</td>
+<td>measurement cycle count</td>
+</tr>
+<tr class="row-odd"><td>x</td>
+<td>float</td>
+<td>coordinate of the point</td>
+</tr>
+<tr class="row-even"><td>y</td>
+<td>float</td>
+<td>coordinate of the point</td>
+</tr>
+<tr class="row-odd"><td>razimuth</td>
+<td>float</td>
+<td>coordinate of the point</td>
+</tr>
+<tr class="row-even"><td>rvelocity</td>
+<td>float</td>
+<td>coordinate of the point</td>
+</tr>
+<tr class="row-odd"><td>beam</td>
+<td>int</td>
+<td>radar beam which detected the point</td>
+</tr>
+</tbody>
+</table>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>radardata</strong> (<em>dictionary</em>) – data-structure which contains parameters of a new TrackPoint</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Track ID</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">int</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="data_containers.Track.deactivate">
+<code class="descname">deactivate</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/data_containers.html#Track.deactivate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#data_containers.Track.deactivate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets attribute of the track to <strong>deactivated</strong>.</p>
+</dd></dl>
+
+</dd></dl>
 
 </div>
 </div>
@@ -307,7 +605,7 @@ The extrapolation is computed from x,y coordinates.</p>
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2017, Petr Bojda.
+      &copy;2018, Petr Bojda.
       
       |
       Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.2</a>

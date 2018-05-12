@@ -27,7 +27,7 @@ class TrackManager(list):
 
 
     def append_track(self,track):
-        """ A new track is being appended to the list of tracks, a new tracking filter is also created
+        """ Appends an existing track to the list of tracks, a new tracking filter is also created
         alongside the track and is assigned to it.
 
         :param track:

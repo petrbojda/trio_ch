@@ -91,6 +91,36 @@ class DetectionPoint(object):
         return x.reshape(4, 1)
 
     def test_in_range_of(self, detection, **kwargs):
+        """
+        a method tests whether the differencies between selected properties of inputting *detection* and its own's  are
+        within a certain limits.
+
+        :param detection: Inputted detection which
+        :param kwargs:
+
+        +-------------+-------------+----------+---------------------------------------------------+
+        | Key word    | Data        | Possible | Description                                       |
+        |             | Types       | Values   |                                                   |
+        +=============+=============+==========+===================================================+
+        | dist        | float       |    All   |  true when an euclidian distance from itself to   |
+        |             |             |          |  the inputted detection is in a given limit       |
+        +-------------+-------------+----------+---------------------------------------------------+
+        | vel         | float       |    All   |  true if a difference between radar velocities    |
+        |             |             |          |  are within a given limit                         |
+        +-------------+-------------+----------+---------------------------------------------------+
+        | az          | float       |    All   |  difference between radar azimuths                |
+        |             |             |          |  are within a given limit                         |
+        +-------------+-------------+----------+---------------------------------------------------+
+        | beam        | int         |  1-3     |  true when both dets are from a given beam        |
+        |             |             |          |  are within a given limit                         |
+        +-------------+-------------+----------+---------------------------------------------------+
+        | mcc         | string      |  'older' |  - returns true when inputted detection's mcc     |
+        |             |             |          |    is bigger than its own                         |
+        |             |             |  'newer' |  - vice-versa                                     |
+        +-------------+-------------+----------+---------------------------------------------------+
+
+        :return:
+        """
         if 'dist' in kwargs:
             dx = detection._x - self._x
             dy = detection._y - self._y
@@ -684,9 +714,15 @@ class DetectionList(list):
 class UnAssignedDetectionList(DetectionList):
     def __init__(self, Tsampling, gate):
         """
+        Creates a new list of unassigned detections. Class is derived from a build-in class **List**. Sets dimensions
+        of a gate which will be used when deciding whether or not the detection fits the estimated position and a new
+        track can be created.
 
-        :param Tsampling:
-        :param gate:
+        :param Tsampling: Sampling period of the radar
+        :param gate: Pattern defining dimensions of the decision-gate, center-values are zeroized, assigned are dimensions only.
+
+        :type Tsampling: float
+        :type gate: Gate
         """
         super().__init__()
         self._Tsampling = Tsampling
@@ -698,12 +734,15 @@ class UnAssignedDetectionList(DetectionList):
                                           self._gate._diff_x, self._gate._diff_y)
 
     def two_point_projection(self, det1, det2):
-        """ Extrapolates two detections in terms of the first order polynomial.
-        The extrapolation is computed from x,y coordinates.
+        """
+        Extrapolates two detections in terms of the first order polynomial.
+        The extrapolation is computed from x,y coordinates. Calling :meth:`data_containers.DetectionPoint.test_in_range_of`
+        the function tests the two detections whether differences of their parameters are within defined limits.
+        If they are the then projection is computer otherwise this function returns *False*.
 
         :param start_detection: The first point of the extrapolation. X and Y coordinates are being used only.
         :param end_detection: The second point of the extrapolation. X and Y coordinates are being used only.
-        :return: Projected point, X and Y coordinates are set only.
+        :return: **False** when the two inputting detections cannot project or the  projected point, X and Y coordinates are set only.
 
         :type start_detection: DetectionPoint
         :type end_detection: DetectionPoint
@@ -725,6 +764,39 @@ class UnAssignedDetectionList(DetectionList):
             return False
 
     def test_det_in_gate_3points(self,detection, detection_1, detection_2):
+        """
+        Tests whether or not the *detection* fits a two-points linear projection computed as an extrapolation of
+        *detection_1* and *detection_2*. If it fits, function computes parameter **aim**. The closer the *detection* is to
+        the center of the projected gate the higher a value of the **aim** is.
+
+        :param detection: the detection to be tested.
+        :param detection_1: the first detection defines a 2-points projection
+        :param detection_2: the second detection defines a 2-points projection
+        :return: **False** when *detection* doesn't fit or the projection or a dictionary which can create a new track if it fits.
+
+        :type detection: DetectionPoint
+        :type detection_1: DetectionPoint
+        :type detection_2: DetectionPoint
+        :rtype: dictionary
+
+        **Returned dictionary structure:**
+
+        +-------------+-----------------+--------------------------------------------------+
+        | Key         | type            | Description of a parameter                       |
+        |             |                 |                                                  |
+        +=============+=================+==================================================+
+        | det1        | DetectionPoint  | the first detection of the new track             |
+        +-------------+-----------------+--------------------------------------------------+
+        | det2        | DetectionPoint  | the second detection of the new track            |
+        +-------------+-----------------+--------------------------------------------------+
+        | det3        | DetectionPoint  | the third detection of the new track             |
+        +-------------+-----------------+--------------------------------------------------+
+        | dist        | float           | parameter aim                                    |
+        +-------------+-----------------+--------------------------------------------------+
+        | gate        | Gate            | the gate which results from 2-pts extrapolation  |
+        +-------------+-----------------+--------------------------------------------------+
+
+        """
         expected_point = self.two_point_projection(detection_1, detection_2)
         gate = Gate( beam=[], x=0, y=0, diffx=self._gate._diff_x, diffy=self._gate._diff_y, dx=0, dy=0,
                      diffdx=0, diffdy=0, rvelocity=0, d_rvelocity = self._gate._diff_rvel, razimuth=0,
@@ -741,7 +813,8 @@ class UnAssignedDetectionList(DetectionList):
 
 
     def new_detection(self, detection):
-        """Tests whether or not the list of unassigned detections can form a new track.
+        """
+        Tests whether or not the list of unassigned detections can form a new track.
 
         :param detection: The detection which is going to be tested.
         :type detection: DetectionPoint
@@ -912,6 +985,13 @@ class ReferenceList(list):
 
 class Track(list):
     def __init__(self, trackID):
+        """
+        Class Track is derived from a pyhon's build-in List. Contains TrackPoints objects :meth:`data_containers.TrackPoint`.
+        Attribute *_active* indicates current status of the track.
+
+        :param trackID: Identification number of the track
+        :type trackID: int
+        """
         super().__init__()
         self._tracker = None
         self._predicted_gate = Gate(beam=[], x=0, y=0, diffx=2, diffy=2, dx=0, dy=0, diffdx=0, diffdy=0,
@@ -929,12 +1009,36 @@ class Track(list):
         self._active = True
 
     def activate(self):
+        """
+        Sets attribute of the track to **active**.
+        """
         self._active = True
 
     def deactivate(self):
+        """
+        Sets attribute of the track to **deactivated**.
+        """
         self._active = False
 
     def append_point(self, mcc, x, y, dx, dy, beam):
+        """Appends a new track point to the Track. The track point is defined by its *mcc*, *x* and *y* coordinates separately.
+        This function creates an object :meth:`data_containers.TrackPoint` and appends it to the track.
+
+        :param mcc: measurement cycle count
+        :type mcc: int
+        :param x: *x* coordinate of the point
+        :type x: float
+        :param y: *y* coordinate of the point
+        :type y: float
+        :param dx: derivative of *x*
+        :type dx: float
+        :param dy: derivative of *y*
+        :type dy: float
+        :param beam: radar beam which detected the point
+        :type beam: int
+        :return: Track ID
+        :rtype: int
+        """
         self.append(TrackPoint(mcc, x, y, dx, dy, beam))
         self._y_interval = (min([elem.y for elem in self]), max([elem.y for elem in self]))
         self._x_interval = (min([elem.x for elem in self]), max([elem.x for elem in self]))
@@ -947,6 +1051,14 @@ class Track(list):
         return self._trackID
 
     def append_detection(self, detection):
+        """Appends a detection to a Track. This function creates an object :meth:`data_containers.TrackPoint` from an
+        input :meth:`data_containers.DetectionPoint` and appends it to the track.
+
+        :param detection: Individual detection to be appended.
+        :type detection: DetectionPoint
+        :return: Track ID
+        :rtype: int
+        """
         self.append(TrackPoint(mcc=detection._mcc,
                                x=detection._x,
                                y=detection._y,
@@ -962,6 +1074,32 @@ class Track(list):
         return self._trackID
 
     def append_point_from_radardata_str(self, radardata):
+        """Appends a new track point to the Track. The track point is defined by a dictionary **radardata**.
+        This function creates an object :meth:`data_containers.TrackPoint` and appends it to the track.
+
+        +-------------+----------+-------------------------------------------+
+        | Key         | type     | Description of a parameter                |
+        |             |          |                                           |
+        +=============+==========+===========================================+
+        | mcc         | integer  |  measurement cycle count                  |
+        |             |          |                                           |
+        +-------------+----------+-------------------------------------------+
+        | x           | float    | coordinate of the point                   |
+        +-------------+----------+-------------------------------------------+
+        | y           | float    | coordinate of the point                   |
+        +-------------+----------+-------------------------------------------+
+        | razimuth    | float    | coordinate of the point                   |
+        +-------------+----------+-------------------------------------------+
+        | rvelocity   | float    | coordinate of the point                   |
+        +-------------+----------+-------------------------------------------+
+        | beam        | int      | radar beam which detected the point       |
+        +-------------+----------+-------------------------------------------+
+
+        :param radardata: data-structure which contains parameters of a new TrackPoint
+        :type radardata: dictionary
+        :return: Track ID
+        :rtype: int
+        """
         self.append(TrackPoint(mcc=radardata['mcc'],
                                x=radardata['x'],
                                y=radardata['y'],

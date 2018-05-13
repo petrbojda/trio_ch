@@ -62,7 +62,8 @@ class ‘list’ with additional methods. Points are inherited from a basic ‘o
 <dd><p>Creates a point which represents a Radar detection. Class is derived from a build-in class <strong>Object</strong>.
 A creator assigns values to appropriate attributes from input positional arguments with defined default values.</p>
 <p>The DetectionPoint is meant to represent a raw input data to the tracker. Its primary coordinate system is
-of the polar <em>rho-theta</em> type with the origin in a radar antenna phase center.</p>
+of the polar <em>rho-theta</em> type with the origin in a radar antenna phase center. It means radar <em>range</em>, <em>azimuth</em>
+and <em>velocity</em> are primary attributes. Values of <em>x</em> and <em>y</em> are computed.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -325,8 +326,10 @@ with defined default values.</p>
 <dt>Creates a Track Point with values of its properties defined in input arguments.</dt>
 <dd><p class="first">Class is derived from a python’s build-in class <strong>Object</strong>. A creator assigns values of attributes from
 input positional arguments with defined default values.</p>
-<p class="last">The TrackPoint meant to be used as points of potential target trajectories estimated by a tracker.
-Its primary coordinate system is of the Cartesian <em>X-Y</em> type with the origin.</p>
+<p class="last">The TrackPoint is meant to be used as a point of potential target trajectories estimated by the tracker.
+Its primary coordinate system is of the Cartesian <em>X-Y</em> type with the origin defined in the phase center of
+a radar antenna. Therefore <em>x</em> and <em>y</em> are primary attributes and radar <em>range</em>, <em>azimuth</em> and <em>velocity</em>
+are computed to keep reference with a <a class="reference internal" href="#data_containers.DetectionPoint" title="data_containers.DetectionPoint"><code class="xref py py-meth docutils literal"><span class="pre">data_containers.DetectionPoint()</span></code></a> if needed.</p>
 </dd>
 </dl>
 <table class="docutils field-list" frame="void" rules="none">
@@ -401,6 +404,54 @@ The numpy array is meant to be a measurement vector <strong>z</strong> of the tr
 </dd></dl>
 
 </div>
+<div class="section" id="gate">
+<h2>Gate<a class="headerlink" href="#gate" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="data_containers.Gate">
+<em class="property">class </em><code class="descclassname">data_containers.</code><code class="descname">Gate</code><span class="sig-paren">(</span><em>beam=[]</em>, <em>x=0</em>, <em>y=0</em>, <em>diffx=0</em>, <em>diffy=0</em>, <em>dx=0</em>, <em>dy=0</em>, <em>diffdx=0</em>, <em>diffdy=0</em>, <em>rvelocity=0</em>, <em>d_rvelocity=0</em>, <em>razimuth=0</em>, <em>d_razimuth=0</em>, <em>rrange=0</em>, <em>d_rrange=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/data_containers.html#Gate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#data_containers.Gate" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="data_containers.Gate.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>beam=[]</em>, <em>x=0</em>, <em>y=0</em>, <em>diffx=0</em>, <em>diffy=0</em>, <em>dx=0</em>, <em>dy=0</em>, <em>diffdx=0</em>, <em>diffdy=0</em>, <em>rvelocity=0</em>, <em>d_rvelocity=0</em>, <em>razimuth=0</em>, <em>d_razimuth=0</em>, <em>rrange=0</em>, <em>d_rrange=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/data_containers.html#Gate.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#data_containers.Gate.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Creates a Gate with values of its properties defined in input arguments.</dt>
+<dd><p class="first">Class is derived from a python’s build-in class <strong>Object</strong>. A creator assigns values of attributes from
+input positional arguments with defined default values.</p>
+<p class="last">The class Gate is being used when a decision needs to be made whether or not a particular detection fits in
+tracker’s assumed positon or if a new track can be formed from three unassigned detections. Since all the computations
+now are in a Cartesian coordinate system Gate’s primary coordinate system is of the Cartesian <em>X-Y</em> type with
+the origin defined in the phase center of a radar antenna.</p>
+</dd>
+</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>beam</strong> (<em>int</em><em> or </em><em>list of int</em>) – a list of beams of the gate</li>
+<li><strong>x</strong> (<em>float</em>) – coordinate of the center point of the gate in <em>x</em></li>
+<li><strong>y</strong> (<em>float</em>) – coordinate of the center point of the gate in <em>y</em></li>
+<li><strong>diffx</strong> (<em>float</em>) – dimension of the decision-making window of the gate in <em>x</em></li>
+<li><strong>diffy</strong> (<em>float</em>) – dimension of the decision-making window of the gate in <em>y</em></li>
+<li><strong>dx</strong> (<em>float</em>) – an absolute value of a derivative of <em>x</em></li>
+<li><strong>dy</strong> (<em>float</em>) – an absolute value of a derivative of <em>y</em></li>
+<li><strong>diffdx</strong> (<em>float</em>) – dimension of the decision-making window of the gate in <em>dx</em></li>
+<li><strong>diffdy</strong> (<em>float</em>) – dimension of the decision-making window of the gate in <em>dy</em></li>
+<li><strong>rvelocity</strong> (<em>float</em>) – an absolute value of a derivative of <em>radar velocity</em></li>
+<li><strong>d_rvelocity</strong> (<em>float</em>) – dimension of the decision-making window of the gate in <em>radar velocity</em></li>
+<li><strong>razimuth</strong> (<em>float</em>) – an absolute value of a derivative of <em>radar azimuth</em></li>
+<li><strong>d_razimuth</strong> (<em>float</em>) – dimension of the decision-making window of the gate in <em>radar azimuth</em></li>
+<li><strong>rrange</strong> (<em>float</em>) – an absolute value of a derivative of <em>radar range</em></li>
+<li><strong>d_rrange</strong> (<em>float</em>) – dimension of the decision-making window of the gate in <em>radar range</em></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
 <div class="section" id="detectionlist">
 <h2>DetectionList<a class="headerlink" href="#detectionlist" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
@@ -431,7 +482,7 @@ track can be created.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>Tsampling</strong> (<em>float</em>) – Sampling period of the radar</li>
-<li><strong>gate</strong> (<em>Gate</em>) – Pattern defining dimensions of the decision-gate, center-values are zeroized, assigned are dimensions only.</li>
+<li><strong>gate</strong> (<a class="reference internal" href="#data_containers.Gate" title="data_containers.Gate"><em>Gate</em></a>) – Pattern defining dimensions of the decision-gate, center-values are zeroized, assigned are dimensions only.</li>
 </ul>
 </td>
 </tr>
@@ -701,6 +752,7 @@ This function creates an object <a class="reference internal" href="#data_contai
 <li><a class="reference internal" href="#detectionpoint">DetectionPoint</a></li>
 <li><a class="reference internal" href="#referencepoint">ReferencePoint</a></li>
 <li><a class="reference internal" href="#trackpoint">TrackPoint</a></li>
+<li><a class="reference internal" href="#gate">Gate</a></li>
 <li><a class="reference internal" href="#detectionlist">DetectionList</a></li>
 <li><a class="reference internal" href="#unassigneddetectionlist">UnAssignedDetectionList</a></li>
 <li><a class="reference internal" href="#track">Track</a></li>

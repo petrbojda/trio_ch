@@ -65,7 +65,8 @@
 <span class="sd">        A creator assigns values to appropriate attributes from input positional arguments with defined default values.</span>
 
 <span class="sd">        The DetectionPoint is meant to represent a raw input data to the tracker. Its primary coordinate system is</span>
-<span class="sd">        of the polar *rho-theta* type with the origin in a radar antenna phase center.</span>
+<span class="sd">        of the polar *rho-theta* type with the origin in a radar antenna phase center. It means radar *range*, *azimuth*</span>
+<span class="sd">        and *velocity* are primary attributes. Values of *x* and *y* are computed.</span>
 
 <span class="sd">        :rtype: object</span>
 
@@ -312,8 +313,10 @@
 <span class="sd">         Class is derived from a python&#39;s build-in class **Object**. A creator assigns values of attributes from</span>
 <span class="sd">         input positional arguments with defined default values.</span>
 
-<span class="sd">         The TrackPoint meant to be used as points of potential target trajectories estimated by a tracker.</span>
-<span class="sd">         Its primary coordinate system is of the Cartesian *X-Y* type with the origin.</span>
+<span class="sd">         The TrackPoint is meant to be used as a point of potential target trajectories estimated by the tracker.</span>
+<span class="sd">         Its primary coordinate system is of the Cartesian *X-Y* type with the origin defined in the phase center of</span>
+<span class="sd">         a radar antenna. Therefore *x* and *y* are primary attributes and radar *range*, *azimuth* and *velocity*</span>
+<span class="sd">         are computed to keep reference with a :meth:`data_containers.DetectionPoint` if needed.</span>
 
 <span class="sd">        :rtype: object</span>
 
@@ -372,44 +375,49 @@
         <span class="n">z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">])</span>
         <span class="k">return</span> <span class="n">z</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span></div></div>
 
-<span class="k">class</span> <span class="nc">Gate</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">beam</span><span class="o">=</span><span class="p">[],</span> <span class="n">x</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">diffx</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">diffy</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">dx</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">dy</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">diffdx</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">diffdy</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+<div class="viewcode-block" id="Gate"><a class="viewcode-back" href="../datacontainers.html#data_containers.Gate">[docs]</a><span class="k">class</span> <span class="nc">Gate</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="Gate.__init__"><a class="viewcode-back" href="../datacontainers.html#data_containers.Gate.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">beam</span><span class="o">=</span><span class="p">[],</span> <span class="n">x</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">diffx</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">diffy</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">dx</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">dy</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">diffdx</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">diffdy</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
                  <span class="n">rvelocity</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">d_rvelocity</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">razimuth</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">d_razimuth</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">rrange</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">d_rrange</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Creates a Gate with values of its properties defined in input arguments.</span>
 <span class="sd">         Class is derived from a python&#39;s build-in class **Object**. A creator assigns values of attributes from</span>
 <span class="sd">         input positional arguments with defined default values.</span>
 
-<span class="sd">        :param beam:</span>
-<span class="sd">        :param x:</span>
-<span class="sd">        :param y:</span>
-<span class="sd">        :param diffx:</span>
-<span class="sd">        :param diffy:</span>
-<span class="sd">        :param dx:</span>
-<span class="sd">        :param dy:</span>
-<span class="sd">        :param diffdx:</span>
-<span class="sd">        :param diffdy:</span>
-<span class="sd">        :param rvelocity:</span>
-<span class="sd">        :param d_rvelocity:</span>
-<span class="sd">        :param razimuth:</span>
-<span class="sd">        :param d_razimuth:</span>
-<span class="sd">        :param rrange:</span>
-<span class="sd">        :param d_rrange:</span>
+<span class="sd">         The class Gate is being used when a decision needs to be made whether or not a particular detection fits in</span>
+<span class="sd">         tracker&#39;s assumed positon or if a new track can be formed from three unassigned detections. Since all the computations</span>
+<span class="sd">         now are in a Cartesian coordinate system Gate&#39;s primary coordinate system is of the Cartesian *X-Y* type with</span>
+<span class="sd">         the origin defined in the phase center of a radar antenna.</span>
 
-<span class="sd">        :type beam:</span>
-<span class="sd">        :type x:</span>
-<span class="sd">        :type y:</span>
-<span class="sd">        :type diffx:</span>
-<span class="sd">        :type diffy:</span>
-<span class="sd">        :type dx:</span>
-<span class="sd">        :type dy:</span>
-<span class="sd">        :type diffdx:</span>
-<span class="sd">        :type diffdy:</span>
-<span class="sd">        :type rvelocity:</span>
-<span class="sd">        :type d_rvelocity:</span>
-<span class="sd">        :type razimuth:</span>
-<span class="sd">        :type d_razimuth:</span>
-<span class="sd">        :type rrange:</span>
-<span class="sd">        :type d_rrange:</span>
+<span class="sd">        :param beam: a list of beams of the gate</span>
+<span class="sd">        :param x: coordinate of the center point of the gate in *x*</span>
+<span class="sd">        :param y: coordinate of the center point of the gate in *y*</span>
+<span class="sd">        :param diffx: dimension of the decision-making window of the gate in *x*</span>
+<span class="sd">        :param diffy: dimension of the decision-making window of the gate in *y*</span>
+<span class="sd">        :param dx: an absolute value of a derivative of *x*</span>
+<span class="sd">        :param dy: an absolute value of a derivative of *y*</span>
+<span class="sd">        :param diffdx: dimension of the decision-making window of the gate in *dx*</span>
+<span class="sd">        :param diffdy: dimension of the decision-making window of the gate in *dy*</span>
+<span class="sd">        :param rvelocity: an absolute value of a derivative of *radar velocity*</span>
+<span class="sd">        :param d_rvelocity: dimension of the decision-making window of the gate in *radar velocity*</span>
+<span class="sd">        :param razimuth: an absolute value of a derivative of *radar azimuth*</span>
+<span class="sd">        :param d_razimuth: dimension of the decision-making window of the gate in *radar azimuth*</span>
+<span class="sd">        :param rrange: an absolute value of a derivative of *radar range*</span>
+<span class="sd">        :param d_rrange: dimension of the decision-making window of the gate in *radar range*</span>
+
+<span class="sd">        :type beam: int or list of int</span>
+<span class="sd">        :type x: float</span>
+<span class="sd">        :type y: float</span>
+<span class="sd">        :type diffx: float</span>
+<span class="sd">        :type diffy: float</span>
+<span class="sd">        :type dx: float</span>
+<span class="sd">        :type dy: float</span>
+<span class="sd">        :type diffdx: float</span>
+<span class="sd">        :type diffdy: float</span>
+<span class="sd">        :type rvelocity: float</span>
+<span class="sd">        :type d_rvelocity: float</span>
+<span class="sd">        :type razimuth: float</span>
+<span class="sd">        :type d_razimuth: float</span>
+<span class="sd">        :type rrange: float</span>
+<span class="sd">        :type d_rrange: float</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_x</span> <span class="o">=</span> <span class="n">x</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_diff_x</span> <span class="o">=</span> <span class="n">diffx</span>
@@ -426,7 +434,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_diff_rvel</span> <span class="o">=</span> <span class="n">d_rvelocity</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_rrng</span> <span class="o">=</span> <span class="n">rrange</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_diff_rrng</span> <span class="o">=</span> <span class="n">d_rrange</span>
-        <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Gate.__init__: diff_x = </span><span class="si">%s</span><span class="s2">, diff_y = </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">_diff_x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_diff_y</span><span class="p">)</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Gate.__init__: diff_x = </span><span class="si">%s</span><span class="s2">, diff_y = </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">_diff_x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_diff_y</span><span class="p">)</span></div>
 
 
     <span class="k">def</span> <span class="nf">set_center_point_from_det</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">detection</span><span class="p">):</span>
@@ -507,7 +515,7 @@
 
     <span class="k">def</span> <span class="nf">get_center_array</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">xy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">_x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_y</span><span class="p">])</span>
-        <span class="k">return</span> <span class="n">xy</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">xy</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span></div>
 
 
 

@@ -21,7 +21,8 @@ class DetectionPoint(object):
         A creator assigns values to appropriate attributes from input positional arguments with defined default values.
 
         The DetectionPoint is meant to represent a raw input data to the tracker. Its primary coordinate system is
-        of the polar *rho-theta* type with the origin in a radar antenna phase center.
+        of the polar *rho-theta* type with the origin in a radar antenna phase center. It means radar *range*, *azimuth*
+        and *velocity* are primary attributes. Values of *x* and *y* are computed.
 
         :rtype: object
 
@@ -268,8 +269,10 @@ class TrackPoint(object):
          Class is derived from a python's build-in class **Object**. A creator assigns values of attributes from
          input positional arguments with defined default values.
 
-         The TrackPoint meant to be used as points of potential target trajectories estimated by a tracker.
-         Its primary coordinate system is of the Cartesian *X-Y* type with the origin.
+         The TrackPoint is meant to be used as a point of potential target trajectories estimated by the tracker.
+         Its primary coordinate system is of the Cartesian *X-Y* type with the origin defined in the phase center of
+         a radar antenna. Therefore *x* and *y* are primary attributes and radar *range*, *azimuth* and *velocity*
+         are computed to keep reference with a :meth:`data_containers.DetectionPoint` if needed.
 
         :rtype: object
 
@@ -335,37 +338,42 @@ class Gate(object):
          Class is derived from a python's build-in class **Object**. A creator assigns values of attributes from
          input positional arguments with defined default values.
 
-        :param beam:
-        :param x:
-        :param y:
-        :param diffx:
-        :param diffy:
-        :param dx:
-        :param dy:
-        :param diffdx:
-        :param diffdy:
-        :param rvelocity:
-        :param d_rvelocity:
-        :param razimuth:
-        :param d_razimuth:
-        :param rrange:
-        :param d_rrange:
+         The class Gate is being used when a decision needs to be made whether or not a particular detection fits in
+         tracker's assumed positon or if a new track can be formed from three unassigned detections. Since all the computations
+         now are in a Cartesian coordinate system Gate's primary coordinate system is of the Cartesian *X-Y* type with
+         the origin defined in the phase center of a radar antenna.
 
-        :type beam:
-        :type x:
-        :type y:
-        :type diffx:
-        :type diffy:
-        :type dx:
-        :type dy:
-        :type diffdx:
-        :type diffdy:
-        :type rvelocity:
-        :type d_rvelocity:
-        :type razimuth:
-        :type d_razimuth:
-        :type rrange:
-        :type d_rrange:
+        :param beam: a list of beams of the gate
+        :param x: coordinate of the center point of the gate in *x*
+        :param y: coordinate of the center point of the gate in *y*
+        :param diffx: dimension of the decision-making window of the gate in *x*
+        :param diffy: dimension of the decision-making window of the gate in *y*
+        :param dx: an absolute value of a derivative of *x*
+        :param dy: an absolute value of a derivative of *y*
+        :param diffdx: dimension of the decision-making window of the gate in *dx*
+        :param diffdy: dimension of the decision-making window of the gate in *dy*
+        :param rvelocity: an absolute value of a derivative of *radar velocity*
+        :param d_rvelocity: dimension of the decision-making window of the gate in *radar velocity*
+        :param razimuth: an absolute value of a derivative of *radar azimuth*
+        :param d_razimuth: dimension of the decision-making window of the gate in *radar azimuth*
+        :param rrange: an absolute value of a derivative of *radar range*
+        :param d_rrange: dimension of the decision-making window of the gate in *radar range*
+
+        :type beam: int or list of int
+        :type x: float
+        :type y: float
+        :type diffx: float
+        :type diffy: float
+        :type dx: float
+        :type dy: float
+        :type diffdx: float
+        :type diffdy: float
+        :type rvelocity: float
+        :type d_rvelocity: float
+        :type razimuth: float
+        :type d_razimuth: float
+        :type rrange: float
+        :type d_rrange: float
         """
         self._x = x
         self._diff_x = diffx

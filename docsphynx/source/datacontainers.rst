@@ -36,6 +36,14 @@ TrackPoint
 
     .. automethod:: __init__
 
+Gate
+----------
+
+.. autoclass:: Gate
+    :members:
+
+    .. automethod:: __init__
+
 
 DetectionList
 -------------

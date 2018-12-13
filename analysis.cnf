@@ -3,14 +3,14 @@
 # by Petr Bojda, 3-2-2017. 
 
 [Datasets]
-data_new: data01/
-data_old: data00/
+data_new: Data_2017_02/
+data_old: Data_2017_12/
 
 
 [Paths]
-home_dir: /home/petr/Projects/TRIO/Radar/
-data_dir: /home/petr/Projects/TRIO/Radar/data/
-modules_dir: /home/petr/Projects/TRIO/Radar/srcpy/
+home_dir: /home/petr/Projects/Valeo/RCW/
+data_dir: /home/petr/Projects/Valeo/RCW/data/
+modules_dir: /home/petr/Projects/Valeo/RCW/trio_ch/
 
 [Available_scenarios]
 # List of available scenarios 

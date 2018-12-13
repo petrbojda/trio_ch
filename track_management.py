@@ -127,23 +127,24 @@ class TrackManager(list):
                 pass
 
     def port_data(self,requested_data):
+        logger = logging.getLogger(__name__)
         if requested_data == "track_init":
             if self:
-                print("track_mgmt: porting track_init data. Number of tracks: ", len(self), "The last track ported.")
+                logger.debug("track_mgmt: porting track_init data. Number of tracks: %s. The last track ported.", self[-1])
                 return self._lst_not_assigned_detections, self[-1]
             else:
-                print("track_mgmt: porting track_init data. No track in the list, None track ported.")
+                logger.debug("track_mgmt: porting track_init data. No track in the list, None track ported.")
                 return self._lst_not_assigned_detections, None
         if requested_data == "tracks_array":
             if self:
                 list_of_tracks = []
-                print("track_mgmt: porting tracks_aray data. Number of tracks: ", len(self), "The last track ported.")
+                logger.debug("track_mgmt: porting tracks_aray data. Number of tracks: %s. The last track ported.", len(self))
                 for elem in self:
                     list_of_tracks.append(elem.get_array_trackpoints())
                 return list_of_tracks
 
             else:
-                print("track_mgmt: porting tracks_aray data. No track in the list, None ported.")
+                logger.debug("track_mgmt: porting tracks_aray data. No track in the list, None ported.")
                 return None
 
     def predict(self,mcc):

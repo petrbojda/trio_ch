@@ -6,6 +6,7 @@ import radar_plots as rp
 import numpy as np
 import logging
 import logging.config
+import scipy.io as sio
 
 class NoLoggerConfiguration(Exception): pass
 
@@ -150,22 +151,19 @@ def main(config_data):
         track_mgmt_LR.predict(i)
 
         lst_not_assigned_LR, new_track_LR = track_mgmt_LR.port_data("track_init")
-        list_of_tracks = track_mgmt_LR.port_data("tracks_array")
+
         if new_track_LR:
             logger.debug("Type of ported new_track list %s", type(new_track_LR))
             logger.debug("Type of ported new_track element %s", type(new_track_LR[-1]))
         else:
             logger.debug("New_track not ported/created")
-        # rp.static_plotTrackMan_initialization(lst_det_per_loop_cycle_LR,
-        #                                       lst_not_assigned_LR,
-        #                                       new_track_LR,
-        #                                       list_of_tracks)
 
         # This line is redundant if only one mcc is being processed per loop cycle.
         # However if mcc_step is different than 1, it might be a good idea to keep it here:
         i_prev = i + 1
 
-
+    list_of_tracks = track_mgmt_LR.port_data("tracks_array")
+    sio.savemat("tracks.mat", {'track':list_of_tracks})
 
 #     TODO: graphical representation of the results
 
